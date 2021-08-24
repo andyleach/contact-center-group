@@ -66,7 +66,7 @@ class CreateLeadStatusesTable extends Migration
             [
                 'id' => LeadStatus::DISMISSED,
                 'label' => 'Dismissed',
-                'description' => 'We have dismissed the lead.',
+                'description' => 'We have decided that we will not work the lead.',
                 'is_billable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
