@@ -38,19 +38,22 @@ class CreateLeadStatusesTable extends Migration
             ],
             [
                 'id' => LeadStatus::COMPLETED,
+                'label' => 'Completed',
                 'description' => 'We have completed working the lead.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => LeadStatus::CLOSED_AGED,
-                'label' => 'We have closed the lead because it aged out.',
+                'label' => 'Closed(Aged)',
+                'description' => 'We have closed the lead because it aged out.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => LeadStatus::CLOSED_SUBSCRIPTION_TERMINATED,
-                'label' => 'We have closed out the lead because we are no longer working with the client.',
+                'label' => 'Closed (Subscription Terminated',
+                'description' => 'We have closed out the lead because we are no longer working with the client.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
