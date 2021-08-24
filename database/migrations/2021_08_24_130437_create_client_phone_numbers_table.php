@@ -23,7 +23,6 @@ class CreateClientPhoneNumbersTable extends Migration
                 ->comment('The number we should forward to in the event that we will not work an inbound call');
             $table->string('transfer_number', 11)
                 ->comment('The number we should perform a warm transfer with');
-            $table->unsignedBigInteger('client_id');
             $table->foreignIdFor(Client::class, 'client_id');
             $table->timestamps();
         });

@@ -17,15 +17,14 @@ class CreateCustomerEmailsTable extends Migration
     {
         Schema::create('customer_emails', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
             $table->string('email');
-            $table->unsignedBigInteger('email_status_id');
+            $table->foreignIdFor(Customer::class, 'customer_id');
+            $table->foreignIdFor(CustomerEmailStatus::class, 'email_status_id');
             $table->timestamps();
 
             $table->unique(['customer_id', 'email']);
 
-            $table->foreignIdFor(Customer::class, 'customer_id');
-            $table->foreignIdFor(CustomerEmailStatus::class, 'email_status_id');
+
         });
     }
 

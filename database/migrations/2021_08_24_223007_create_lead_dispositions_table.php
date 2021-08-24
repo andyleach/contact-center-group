@@ -15,6 +15,8 @@ class CreateLeadDispositionsTable extends Migration
     {
         Schema::create('lead_dispositions', function (Blueprint $table) {
             $table->id();
+            $table->string('label')->unique();
+            $table->string('description', 255)->default('');
             $table->timestamps();
         });
     }

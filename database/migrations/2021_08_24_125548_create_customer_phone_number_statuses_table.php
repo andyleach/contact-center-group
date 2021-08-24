@@ -16,6 +16,7 @@ class CreateCustomerPhoneNumberStatusesTable extends Migration
         Schema::create('customer_phone_number_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->string('description', 255)->default('');
             $table->timestamps();
         });
     }

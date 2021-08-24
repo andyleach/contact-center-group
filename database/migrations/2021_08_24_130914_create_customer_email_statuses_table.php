@@ -18,6 +18,7 @@ class CreateCustomerEmailStatusesTable extends Migration
         Schema::create('customer_email_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->string('description', 255)->default('');
             $table->timestamps();
         });
     }

@@ -19,8 +19,6 @@ class CreateCustomersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('full_name');
-            $table->unsignedBigInteger('client_id');
-            $table->foreignIdFor(Client::class, 'client_id');
             $table->timestamps();
         });
     }
