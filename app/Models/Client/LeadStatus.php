@@ -30,4 +30,5 @@ class LeadStatus extends Model
     const COMPLETED = 3;
     const CLOSED_SUBSCRIPTION_TERMINATED = 4;
     const CLOSED_AGED = 5;
+    const DISMISSED = 6;
 }

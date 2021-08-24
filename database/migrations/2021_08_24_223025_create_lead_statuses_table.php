@@ -18,6 +18,7 @@ class CreateLeadStatusesTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
+            $table->boolean('is_billable')->default(false);
             $table->timestamps();
         });
 
@@ -26,6 +27,7 @@ class CreateLeadStatusesTable extends Migration
                 'id' => LeadStatus::PENDING,
                 'label' => 'Pending',
                 'description' => 'The lead has been created, but work has not begun.',
+                'is_billable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -33,6 +35,7 @@ class CreateLeadStatusesTable extends Migration
                 'id' => LeadStatus::WORKING,
                 'label' => 'Working',
                 'description' => 'We have begun working on the lead in our system.',
+                'is_billable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -40,13 +43,15 @@ class CreateLeadStatusesTable extends Migration
                 'id' => LeadStatus::COMPLETED,
                 'label' => 'Completed',
                 'description' => 'We have completed working the lead.',
+                'is_billable' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => LeadStatus::CLOSED_AGED,
-                'label' => 'Closed(Aged)',
+                'label' => 'Closed (Aged)',
                 'description' => 'We have closed the lead because it aged out.',
+                'is_billable' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -54,9 +59,18 @@ class CreateLeadStatusesTable extends Migration
                 'id' => LeadStatus::CLOSED_SUBSCRIPTION_TERMINATED,
                 'label' => 'Closed (Subscription Terminated',
                 'description' => 'We have closed out the lead because we are no longer working with the client.',
+                'is_billable' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
+            [
+                'id' => LeadStatus::DISMISSED,
+                'label' => 'Dismissed',
+                'description' => 'We have dismissed the lead.',
+                'is_billable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 
