@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Client\LeadStatus;
 
 class CreateLeadStatusesTable extends Migration
 {
@@ -19,6 +20,41 @@ class CreateLeadStatusesTable extends Migration
             $table->string('description', 255)->default('');
             $table->timestamps();
         });
+
+        LeadStatus::query()->insert([
+            [
+                'id' => LeadStatus::PENDING,
+                'label' => 'Pending',
+                'description' => 'The lead has been created, but work has not begun.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::WORKING,
+                'label' => 'Working',
+                'description' => 'We have begun working on the lead in our system.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::COMPLETED,
+                'description' => 'We have completed working the lead.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::CLOSED_AGED,
+                'label' => 'We have closed the lead because it aged out.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::CLOSED_SUBSCRIPTION_TERMINATED,
+                'label' => 'We have closed out the lead because we are no longer working with the client.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
     }
 
     /**
