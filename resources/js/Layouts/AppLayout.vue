@@ -59,6 +59,18 @@
                                                 </jet-dropdown-link>
 
                                                 <div class="border-t border-gray-100"></div>
+                                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                                    Configure Team
+                                                </div>
+
+                                                <jet-dropdown-link :href="route('lead-dispositions.index')">
+                                                    Lead Dispositions
+                                                </jet-dropdown-link>
+                                                <jet-dropdown-link :href="route('task-dispositions.index')">
+                                                    Task Dispositions
+                                                </jet-dropdown-link>
+
+                                                <div class="border-t border-gray-100"></div>
 
                                                 <!-- Team Switcher -->
                                                 <div class="block px-4 py-2 text-xs text-gray-400">

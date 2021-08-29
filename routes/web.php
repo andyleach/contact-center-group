@@ -27,3 +27,8 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+    Route::resource('lead-dispositions', \App\Http\Controllers\LeadDispositionsController::class);
+    Route::resource('task-dispositions', \App\Http\Controllers\TaskDispositionsController::class);
+});
