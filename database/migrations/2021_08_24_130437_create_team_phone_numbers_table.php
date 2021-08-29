@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Client\Client;
 
-class CreateClientPhoneNumbersTable extends Migration
+class CreateTeamPhoneNumbersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +13,7 @@ class CreateClientPhoneNumbersTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_phone_numbers', function (Blueprint $table) {
+        Schema::create('team_phone_numbers', function (Blueprint $table) {
             $table->id();
             $table->string('phone_number', 13)
                 ->unique()
@@ -23,7 +22,7 @@ class CreateClientPhoneNumbersTable extends Migration
                 ->comment('The number we should forward to in the event that we will not work an inbound call');
             $table->string('transfer_number', 13)
                 ->comment('The number we should perform a warm transfer with');
-            $table->foreignIdFor(Client::class, 'client_id');
+            $table->foreignIdFor(\App\Models\Team::class, 'team_id');
             $table->timestamps();
         });
     }
@@ -35,6 +34,6 @@ class CreateClientPhoneNumbersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_phone_numbers');
+        Schema::dropIfExists('team_phone_numbers');
     }
 }

@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Client\Customer;
-use App\Models\Client\CustomerPhoneNumberStatus;
+use App\Models\Team\Customer;
+use App\Models\Team\CustomerPhoneNumberStatus;
 
 class CreateCustomerPhoneNumbersTable extends Migration
 {
