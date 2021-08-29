@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Client\Client;
+use App\Models\Team\Client;
 
 class CreateCustomersTable extends Migration
 {
@@ -19,7 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('full_name');
-            $table->foreignIdFor(Client::class, 'client_id');
+            $table->foreignIdFor(\App\Models\Team::class, 'team_id');
             $table->timestamps();
         });
     }

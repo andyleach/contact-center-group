@@ -15,9 +15,9 @@ class CreateLeadsTable extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Client\Customer::class, 'customer_id');
-            $table->foreignIdFor(\App\Models\Client\LeadStatus::class, 'lead_status_id');
-            $table->foreignIdFor(\App\Models\Client\LeadDisposition::class, 'lead_disposition_id');
+            $table->foreignIdFor(\App\Models\Team\Customer::class, 'customer_id');
+            $table->foreignIdFor(\App\Models\Team\LeadStatus::class, 'lead_status_id');
+            $table->foreignIdFor(\App\Models\Team\LeadDisposition::class, 'lead_disposition_id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('full_name');
