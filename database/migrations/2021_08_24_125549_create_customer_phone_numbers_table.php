@@ -17,15 +17,12 @@ class CreateCustomerPhoneNumbersTable extends Migration
     {
         Schema::create('customer_phone_numbers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
             $table->string('phone_number');
-            $table->unsignedBigInteger('phone_number_status_id');
+            $table->foreignIdFor(Customer::class, 'customer_id');
+            $table->foreignIdFor(CustomerPhoneNumberStatus::class, 'phone_number_status_id');
             $table->timestamps();
 
             $table->unique(['customer_id', 'phone_number']);
-
-            $table->foreignIdFor(Customer::class, 'customer_id');
-            $table->foreignIdFor(CustomerPhoneNumberStatus::class, 'phone_number_status_id');
         });
     }
 

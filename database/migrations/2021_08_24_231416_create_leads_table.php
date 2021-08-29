@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Client\Client;
 
-class CreateCustomersTable extends Migration
+class CreateLeadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +13,14 @@ class CreateCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('leads', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Client\Customer::class, 'customer_id');
+            $table->foreignIdFor(\App\Models\Client\LeadStatus::class, 'lead_status_id');
+            $table->foreignIdFor(\App\Models\Client\LeadDisposition::class, 'lead_disposition_id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('full_name');
-            $table->foreignIdFor(Client::class, 'client_id');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('leads');
     }
 }
