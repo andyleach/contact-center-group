@@ -20,6 +20,7 @@ class CreateLeadStatusesTable extends Migration
             $table->string('description', 255)->default('');
             $table->boolean('is_billable')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         LeadStatus::query()->insert([

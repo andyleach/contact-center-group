@@ -19,6 +19,7 @@ class CreateTaskStatusesTable extends Migration
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         TaskStatus::query()->insert([
