@@ -18,7 +18,7 @@ class CreateTaskDispositionsTable extends Migration
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
             $table->foreignIdFor(\App\Models\Team::class, 'team_id');
-            $table->foreignIdFor(\App\Models\Team\TaskStatus::class, 'task_status_id');
+            $table->foreignIdFor(\App\Models\System\TaskStatus::class, 'task_status_id');
             $table->timestamps();
         });
     }

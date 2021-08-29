@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team\LeadDisposition;
-use App\Models\Team\LeadStatus;
+use App\Models\System\LeadStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;

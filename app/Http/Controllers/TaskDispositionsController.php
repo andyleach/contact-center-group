@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Team\LeadDisposition;
 use App\Models\Team\TaskDisposition;
-use App\Models\Team\TaskStatus;
+use App\Models\System\TaskStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
