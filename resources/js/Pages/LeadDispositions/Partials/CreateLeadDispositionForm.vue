@@ -12,9 +12,11 @@
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="label" value="Disposition Name" />
                 <jet-input id="label" type="text" class="mt-1 block w-full" v-model="form.label" autofocus />
+                <jet-input-error :message="form.errors.label" class="mt-2" />
+
                 <jet-label for="description" value="Disposition Description" />
                 <jet-input id="description" type="text" class="mt-1 block w-full" v-model="form.description" autofocus />
-                <jet-input-error :message="form.errors.name" class="mt-2" />
+                <jet-input-error :message="form.errors.description" class="mt-2" />
             </div>
         </template>
 
