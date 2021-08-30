@@ -8,7 +8,7 @@
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-
+                <CreateLeadDispositionForm />
             </div>
         </div>
     </app-layout>
@@ -16,10 +16,12 @@
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue'
+import CreateLeadDispositionForm from "./Partials/CreateLeadDispositionForm";
 
 export default {
     components: {
         AppLayout,
+        CreateLeadDispositionForm,
     },
 }
 </script>

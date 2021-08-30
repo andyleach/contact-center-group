@@ -44,7 +44,9 @@ class LeadDispositionsController extends Controller
      */
     public function store(Request $request)
     {
-
+        return Inertia::render('LeadDispositions/Create', [
+            'leadStatuses' => LeadStatus::all(),
+        ]);
     }
 
     /**
