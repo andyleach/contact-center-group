@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models\Team;
+namespace App\Models\System;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LeadStatus extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * Prospect: a person in the database who has not interacted with anyone

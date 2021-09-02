@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models\Team;
+namespace App\Models\System;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class TaskStatus extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     const DRAFT = 1;
     const PENDING = 2;

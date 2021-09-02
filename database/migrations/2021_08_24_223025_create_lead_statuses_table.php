@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Team\LeadStatus;
+use App\Models\System\LeadStatus;
 
 class CreateLeadStatusesTable extends Migration
 {
@@ -20,6 +20,7 @@ class CreateLeadStatusesTable extends Migration
             $table->string('description', 255)->default('');
             $table->boolean('is_billable')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         LeadStatus::query()->insert([
