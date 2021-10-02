@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models\Team;
+namespace App\Models\Task;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TaskStatus extends Model
 {
@@ -18,4 +19,11 @@ class TaskStatus extends Model
     const CLOSED = 7;
     const CLOSE_FAILED = 8;
     const REMOVED = 9;
+
+    /**
+     * @return HasMany
+     */
+    public function tasks(): HasMany {
+        return $this->hasMany(Task::class, 'task_status_id');
+    }
 }

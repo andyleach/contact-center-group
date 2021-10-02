@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Team;
 
-use App\Models\Team;
+use App\Models\Team\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

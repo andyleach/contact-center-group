@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Team\LeadStatus;
+use App\Models\Lead\LeadStatus;
 
 class CreateLeadStatusesTable extends Migration
 {

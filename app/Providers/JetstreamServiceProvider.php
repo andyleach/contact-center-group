@@ -9,6 +9,7 @@ use App\Actions\Jetstream\DeleteUser;
 use App\Actions\Jetstream\InviteTeamMember;
 use App\Actions\Jetstream\RemoveTeamMember;
 use App\Actions\Jetstream\UpdateTeamName;
+use App\Models\Team\Team;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
 
@@ -32,6 +33,8 @@ class JetstreamServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configurePermissions();
+
+        Jetstream::useTeamModel(Team::class);
 
         Jetstream::createTeamsUsing(CreateTeam::class);
         Jetstream::updateTeamNamesUsing(UpdateTeamName::class);

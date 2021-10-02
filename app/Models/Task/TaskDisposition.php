@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Team;
+namespace App\Models\Task;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LeadDisposition extends Model
+class TaskDisposition extends Model
 {
     use HasFactory;
 }

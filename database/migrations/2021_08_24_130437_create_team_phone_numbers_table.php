@@ -22,7 +22,7 @@ class CreateTeamPhoneNumbersTable extends Migration
                 ->comment('The number we should forward to in the event that we will not work an inbound call');
             $table->string('transfer_number', 13)
                 ->comment('The number we should perform a warm transfer with');
-            $table->foreignIdFor(\App\Models\Team::class, 'team_id');
+            $table->foreignIdFor(\App\Models\Team\Team::class, 'team_id');
             $table->timestamps();
         });
     }
