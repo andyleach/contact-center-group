@@ -15,6 +15,10 @@
                             :available-roles="availableRoles"
                             :user-permissions="permissions" />
 
+                <team-phone-numbers-manager
+                    :team="team"
+                    :user-permissions="permissions" />
+
                 <template v-if="permissions.canDeleteTeam && ! team.personal_team">
                     <jet-section-border />
 
@@ -31,6 +35,7 @@
     import JetSectionBorder from '@/Jetstream/SectionBorder.vue'
     import TeamMemberManager from '@/Pages/Teams/Partials/TeamMemberManager.vue'
     import UpdateTeamNameForm from '@/Pages/Teams/Partials/UpdateTeamNameForm.vue'
+    import TeamPhoneNumbersManager from "./Partials/TeamPhoneNumbersManager";
 
     export default {
         props: [
@@ -40,6 +45,7 @@
         ],
 
         components: {
+            TeamPhoneNumbersManager,
             AppLayout,
             DeleteTeamForm,
             JetSectionBorder,
