@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Task\TaskType;
 use App\Models\Task\TaskStatus;
 use App\Models\Task\TaskTypeMedium;
+use App\Models\Task\TaskEventType;
+use App\Models\Task\TaskEventReason;
+use App\Models\User;
+use App\Models\Task\TaskDisposition;
 
 class CreateTasksTable extends Migration
 {
@@ -38,7 +42,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
-            $table->foreignIdFor(\App\Models\Task\TaskTypeMedium::class, 'task_type_medium_id');
+            $table->foreignIdFor(TaskTypeMedium::class, 'task_type_medium_id');
 
             $table->timestamps();
         });
@@ -59,12 +63,20 @@ class CreateTasksTable extends Migration
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->
+            $table->foreignIdFor(TaskType::class, 'task_type_id');
+            $table->foreignIdFor(TaskStatus::class, 'task_status_id');
+            $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id');
+            $table->foreignIdFor(User::class, 'user_id');
+            $table->timestamp('assigned_at');
+            $table->timestamp('closed_at');
             $table->timestamps();
         });
 
         Schema::create('task_events', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(TaskEventType::class, 'task_event_type_id');
+            $table->foreignIdFor(TaskEventReason::class, 'task_event_reason_id');
+            $table->foreignIdFor(User::class, 'user_id')->nullable();
             $table->timestamps();
         });
 
@@ -72,6 +84,10 @@ class CreateTasksTable extends Migration
          * Begin initializing lookup tables
          */
         $this->initializeTaskTypes();
+        $this->initializeTaskStatuses();
+        $this->initializeTaskTypeMedium();
+        $this->initializeTaskEventTypes();
+        $this->initializeTaskEventReason();
     }
 
     /**
@@ -91,6 +107,34 @@ class CreateTasksTable extends Migration
         Schema::dropIfExists('task_dispositions');
     }
 
+    public function initializeTaskEventTypes() {
+        TaskEventType::query()
+            ->insert([
+                [
+                    'id' => TaskEventType::TASK_ASSIGNED,
+                    'label' => 'Task Assigned',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+    }
+
+    public function initializeTaskEventReason() {
+        TaskEventType::query()
+            ->insert([
+                [
+                    'id' => TaskEventReason::NOT_APPLICABLE,
+                    'label' => 'Not Applicable',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+    }
+
+
+    /**
+     *
+     */
     public function initializeTaskTypeMedium() {
         TaskTypeMedium::query()->insert([
             [

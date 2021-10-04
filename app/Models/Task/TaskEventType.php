@@ -10,6 +10,8 @@ class TaskEventType extends Model
 {
     use HasFactory;
 
+    const TASK_ASSIGNED = 1;
+
     /**
      * @return HasMany
      */

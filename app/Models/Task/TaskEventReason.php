@@ -10,6 +10,8 @@ class TaskEventReason extends Model
 {
     use HasFactory;
 
+    const NOT_APPLICABLE = 1;
+
     /**
      * @return HasMany
      */
