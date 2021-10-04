@@ -19,4 +19,8 @@ class TaskAssignmentException extends Exception
     public static function taskHasAlreadyBeenAssigned(): TaskAssignmentException {
         return new TaskAssignmentException('The task has already been assigned');
     }
+
+    public static function unableToCancelAssignment(): TaskAssignmentException {
+        return new TaskAssignmentException('Unable to cancel assignment');
+    }
 }

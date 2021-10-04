@@ -9,7 +9,6 @@ use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class AssignTaskToUser {
     /**
@@ -24,6 +23,7 @@ class AssignTaskToUser {
             ->where('task_status_id', TaskStatus::PENDING)
             ->whereNull('user_id', $user->id)
             ->update([
+                'task_status_id' => TaskStatus::ASSIGNED,
                 'user_id' => $user->id,
                 'assigned_at' => now()
             ]);

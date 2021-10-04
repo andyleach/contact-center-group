@@ -3,6 +3,7 @@
 namespace App\Events\Task;
 
 use App\Models\Task\TaskEvent;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -27,12 +28,20 @@ class AbstractTaskEvent {
     }
 
     /**
+     * Only broadcast when we have an agent to broadcast to
+     *
+     * @return bool
+     */
+    public function broadcastWhen(): bool {
+        return is_a($this->taskEvent->user, User::class);
+    }
+
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
+    public function broadcastOn() {
+        return new PrivateChannel('user.' . $this->taskEvent->user_id);
     }
 }

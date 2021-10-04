@@ -2,10 +2,24 @@
 
 namespace App\Models\Task;
 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $task_event_type_id
+ * @property int $task_event_reason_id
+ * @property int $user_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @property TaskEventType $taskEventType
+ * @property TaskEventReason $taskEventReason
+ * @property User $user
+ */
 class TaskEvent extends Model
 {
     use HasFactory;
