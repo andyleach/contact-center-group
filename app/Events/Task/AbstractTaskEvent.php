@@ -3,7 +3,6 @@
 namespace App\Events\Task;
 
 use App\Models\Task\TaskEvent;
-use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -34,6 +33,10 @@ class AbstractTaskEvent {
      */
     public function broadcastWhen(): bool {
         return $this->taskEvent->user()->exists();
+    }
+
+    public function broadcastWith(): array {
+        return [];
     }
 
     /**
