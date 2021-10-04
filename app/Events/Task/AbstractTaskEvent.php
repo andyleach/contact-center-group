@@ -33,7 +33,7 @@ class AbstractTaskEvent {
      * @return bool
      */
     public function broadcastWhen(): bool {
-        return is_a($this->taskEvent->user, User::class);
+        return $this->taskEvent->user()->exists();
     }
 
     /**

@@ -37,4 +37,11 @@ class TaskEvent extends Model
     public function taskEventReason(): BelongsTo {
         return $this->belongsTo(TaskEventReason::class, 'task_event_reason_id');
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
