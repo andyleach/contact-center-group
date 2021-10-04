@@ -11,6 +11,8 @@ use Illuminate\Support\Collection;
 /**
  * @param int $id
  * @param string $label
+ * @param string $description
+ * @param bool   $is_expirable
  * @param Carbon $created_at
  * @param Carbon $updated_at
  *
@@ -29,6 +31,7 @@ class TaskStatus extends Model
     const CLOSED = 7;
     const CLOSE_FAILED = 8;
     const REMOVED = 9;
+    const EXPIRED = 10;
 
     /**
      * @return HasMany

@@ -22,6 +22,7 @@ class TaskEventType extends Model
 
     const TASK_ASSIGNED = 1;
     const TASK_ASSIGNMENT_CANCELLED = 2;
+    const TASK_EXPIRED = 3;
 
     /**
      * @return HasMany

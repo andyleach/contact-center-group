@@ -58,6 +58,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
+            $table->boolean('is_expirable')->index();
             $table->timestamps();
         });
 
@@ -67,8 +68,9 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(TaskStatus::class, 'task_status_id');
             $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id');
             $table->foreignIdFor(User::class, 'user_id');
-            $table->timestamp('assigned_at');
-            $table->timestamp('closed_at');
+            $table->timestamp('assigned_at')->index();
+            $table->timestamp('expires_at')->index();
+            $table->timestamp('closed_at')->index();
             $table->timestamps();
         });
 
@@ -203,6 +205,7 @@ class CreateTasksTable extends Migration
                 'id' => TaskStatus::DRAFT,
                 'label' => 'Draft',
                 'description' => 'The task in the process of being created and is not yet ready to be worked.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -210,6 +213,7 @@ class CreateTasksTable extends Migration
                 'id' => TaskStatus::PENDING,
                 'label' => 'Pending',
                 'description' => 'The task has been created and is now awaiting assignment.',
+                'is_expirable' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -217,6 +221,7 @@ class CreateTasksTable extends Migration
                 'id' => TaskStatus::ASSIGNED,
                 'label' => 'Assigned',
                 'description' => 'The user has been assigned to the task but has not yet accepted the task.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -224,6 +229,7 @@ class CreateTasksTable extends Migration
                 'id' => TaskStatus::IN_PROCESS,
                 'label' => 'In Process',
                 'description' => 'The user has accepted the task.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -231,6 +237,7 @@ class CreateTasksTable extends Migration
                 'id' => TaskStatus::WRAPPING_UP,
                 'label' => 'Wrapping Up',
                 'description' => '',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -240,6 +247,7 @@ class CreateTasksTable extends Migration
                 'description' => 'The user has closed the task, and the application is processing the closure. '
                     . 'The Pending Close status typically lasts only a moment. If the Pending Close status persists, '
                     .'the application has probably experienced an error in the closing process.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -248,6 +256,7 @@ class CreateTasksTable extends Migration
                 'label' => 'Closed',
                 'description' => 'The user has closed the task, and the application has successfully completed '
                     . 'the closure process.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -256,6 +265,7 @@ class CreateTasksTable extends Migration
                 'label' => 'Close Failed',
                 'description' => 'The user has closed the task, but the application encountered an error during '
                     . 'the closure process.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -265,6 +275,16 @@ class CreateTasksTable extends Migration
                 'description' => 'Any task with the Draft or Pending task status can change to the Removed task '
                     . 'status. Tasks with the In Process task status cannot be removed. After a task is removed, '
                     . 'it cannot change to another task status.',
+                'is_expirable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => TaskStatus::EXPIRED,
+                'label' => 'Expired',
+                'description' => 'Any task with the Pending status can be marked as having Expired, if that task'
+                    .' has crossed the point in which it is no longer viable to be worked.',
+                'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
