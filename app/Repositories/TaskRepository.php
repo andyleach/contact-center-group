@@ -7,7 +7,7 @@ use App\Events\Task\TaskAssigned;
 use App\Events\Task\TaskAssignmentCancelled;
 use App\Events\Task\TaskExpired;
 use App\Exceptions\Task\TaskAssignmentException;
-use App\Exceptions\Task\TaskNotExpirableException;
+use App\Exceptions\Task\TaskInProcessException;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
@@ -54,11 +54,11 @@ class TaskRepository implements TaskRepositoryInterface {
 
     /**
      * @param Task $task
-     * @param int|null $task_event_reason_id
+     * @param int $task_event_reason_id
      * @return Task
      * @throws TaskAssignmentException
      */
-    public function cancelTaskAssignment(Task $task, int $task_event_reason_id = null): Task {
+    public function cancelTaskAssignment(Task $task, int $task_event_reason_id = TaskEventReason::NOT_APPLICABLE): Task {
         $assignedUser = $task->user;
 
         $rowsUpdated = Task::query()
@@ -74,11 +74,7 @@ class TaskRepository implements TaskRepositoryInterface {
             throw TaskAssignmentException::unableToCancelAssignment();
         }
 
-        if (null === $task_event_reason_id) {
-            $task_event_reason_id = TaskEventReason::NOT_APPLICABLE;
-        }
-
-        $taskEvent = $task->taskEvent()->create([
+        $taskEvent = $task->taskEvents()->create([
             'task_event_type_id' => TaskEventType::TASK_ASSIGNMENT_CANCELLED,
             'task_event_reason_id' => $task_event_reason_id,
             'user_id' => $assignedUser->id,
@@ -97,7 +93,7 @@ class TaskRepository implements TaskRepositoryInterface {
      *
      * @return Task
      *
-     * @throws TaskNotExpirableException
+     * @throws TaskInProcessException
      */
     public function expire(Task $task, int $task_event_reason_id = TaskEventReason::NOT_APPLICABLE): Task {
         $rowsUpdated = Task::query()
@@ -111,10 +107,10 @@ class TaskRepository implements TaskRepositoryInterface {
             ]);
 
         if (0 === $rowsUpdated) {
-            throw new TaskNotExpirableException();
+            throw new TaskInProcessException();
         }
 
-        $taskEvent = $task->taskEvent()->create([
+        $taskEvent = $task->taskEvents()->create([
             'task_event_type_id' => TaskEventType::TASK_EXPIRED,
             'task_event_reason_id' => $task_event_reason_id,
             'user_id' => null,

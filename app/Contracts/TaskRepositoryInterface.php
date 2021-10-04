@@ -33,11 +33,11 @@ interface TaskRepositoryInterface {
 
     /**
      * @param Task $task
-     * @param int|null $task_event_reason_id
+     * @param int $task_event_reason_id
      * @return Task
      * @throws TaskAssignmentException
      */
-    public function cancelTaskAssignment(Task $task, int $task_event_reason_id = null): Task;
+    public function cancelTaskAssignment(Task $task, int $task_event_reason_id = TaskEventReason::NOT_APPLICABLE): Task;
 
     /**
      * Marks a task as having expired and notifies the rest of the system
