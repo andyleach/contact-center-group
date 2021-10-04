@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,7 +17,9 @@ use Illuminate\Support\Collection;
  * @property int $task_status_id
  * @property int $task_type_id
  * @property int $task_disposition_id
-
+ * @property Carbon $assigned_at
+ * @property Carbon $expires_at
+ * @property Carbon $closed_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
@@ -36,6 +39,8 @@ class Task extends Model
     protected $dispatchesEvents = [
         'created' => TaskCreated::class,
     ];
+
+    protected $fillable = ['user_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
 
     /**
      * @return BelongsTo
@@ -59,10 +64,10 @@ class Task extends Model
     }
 
     /**
-     * @return BelongsTo
+     * @return HasMany
      */
-    public function taskEvent(): BelongsTo {
-        return $this->belongsTo(TaskEvent::class, 'task_event_id');
+    public function taskEvents(): HasMany {
+        return $this->hasMany(TaskEvent::class, 'task_id');
     }
 
     /**

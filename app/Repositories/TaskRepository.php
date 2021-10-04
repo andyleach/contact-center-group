@@ -28,7 +28,7 @@ class TaskRepository implements TaskRepositoryInterface {
         $rowsUpdated = Task::query()
             ->where('id', $task->id)
             ->where('task_status_id', TaskStatus::PENDING)
-            ->whereNull('user_id', $user->id)
+            ->whereNull('user_id')
             ->update([
                 'task_status_id' => TaskStatus::ASSIGNED,
                 'user_id' => $user->id,
@@ -39,13 +39,15 @@ class TaskRepository implements TaskRepositoryInterface {
             throw TaskAssignmentException::taskHasAlreadyBeenAssigned();
         }
 
-        $taskEvent = $task->taskEvent()->create([
+        $taskEvent = $task->taskEvents()->create([
             'task_event_type_id' => TaskEventType::TASK_ASSIGNED,
             'task_event_reason_id' => TaskEventReason::NOT_APPLICABLE,
             'user_id' => $user->id,
         ]);
 
         TaskAssigned::dispatch($taskEvent);
+
+        $task->refresh();
 
         return $task;
     }

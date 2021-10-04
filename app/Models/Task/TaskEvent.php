@@ -24,6 +24,10 @@ class TaskEvent extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'task_event_type_id', 'task_event_reason_id', 'user_id',
+    ];
+
     /**
      * @return BelongsTo
      */
