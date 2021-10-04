@@ -15,7 +15,7 @@ class TaskStatus extends Model
     const ASSIGNED = 3;
     const IN_PROCESS = 4;
     const WRAPPING_UP = 5;
-    const PENDING_CLOSE = 6;
+    const CLOSE_PENDING = 6;
     const CLOSED = 7;
     const CLOSE_FAILED = 8;
     const REMOVED = 9;

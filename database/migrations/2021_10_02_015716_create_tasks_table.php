@@ -59,6 +59,7 @@ class CreateTasksTable extends Migration
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->
             $table->timestamps();
         });
 
@@ -190,7 +191,7 @@ class CreateTasksTable extends Migration
                 'updated_at' => now(),
             ],
             [
-                'id' => TaskStatus::PENDING_CLOSE,
+                'id' => TaskStatus::CLOSE_PENDING,
                 'label' => 'Pending Close',
                 'description' => 'The user has closed the task, and the application is processing the closure. '
                     . 'The Pending Close status typically lasts only a moment. If the Pending Close status persists, '
