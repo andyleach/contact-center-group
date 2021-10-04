@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Team\Customer;
 use App\Models\Lead\LeadStatus;
 use App\Models\Lead\LeadDisposition;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +17,6 @@ class CreateLeadsTable extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Customer::class, 'customer_id');
             $table->foreignIdFor(LeadStatus::class, 'lead_status_id');
             $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id');
             $table->string('first_name');

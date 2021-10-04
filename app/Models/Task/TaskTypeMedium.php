@@ -10,6 +10,8 @@ class TaskTypeMedium extends Model
 {
     use HasFactory;
 
+    protected $table = 'task_type_mediums';
+
     const NOT_APPLICABLE = 1;
     CONST CALL = 2;
     CONST SMS = 3;

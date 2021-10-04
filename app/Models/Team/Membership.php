@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Team;
 
 use Laravel\Jetstream\Membership as JetstreamMembership;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Team;
 
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\TeamInvitation as JetstreamTeamInvitation;

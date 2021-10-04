@@ -120,7 +120,7 @@ class CreateTasksTable extends Migration
     }
 
     public function initializeTaskEventReason() {
-        TaskEventType::query()
+        TaskEventReason::query()
             ->insert([
                 [
                     'id' => TaskEventReason::NOT_APPLICABLE,
