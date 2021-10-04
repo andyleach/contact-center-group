@@ -36,7 +36,7 @@ class TaskRepository implements TaskRepositoryInterface {
             ]);
 
         if (0 == $rowsUpdated) {
-            throw TaskAssignmentException::taskHasAlreadyBeenAssigned();
+            throw TaskAssignmentException::taskCouldNotBeAssigned();
         }
 
         $taskEvent = $task->taskEvents()->create([
@@ -107,7 +107,7 @@ class TaskRepository implements TaskRepositoryInterface {
             ]);
 
         if (0 === $rowsUpdated) {
-            throw new TaskInProcessException();
+            throw TaskInProcessException::default();
         }
 
         $taskEvent = $task->taskEvents()->create([
