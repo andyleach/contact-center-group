@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Task;
 
-use App\Contracts\TaskRepositoryInterface;
+use App\Actions\Task\CancelTaskAssignment;
 use App\Events\Task\TaskAssignmentCancelled;
 use App\Exceptions\Task\TaskAssignmentException;
 use App\Models\Task\Task;
@@ -14,19 +14,19 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class TaskAssignmentCancellationTest extends TestCase {
+class CancelTaskAssignmentTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var TaskRepositoryInterface $taskRepository
+     * @var CancelTaskAssignment $action
      */
-    protected TaskRepositoryInterface $taskRepository;
+    protected CancelTaskAssignment $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->taskRepository = app(TaskRepositoryInterface::class);
+        $this->action = app(CancelTaskAssignment::class);
     }
 
     /**
@@ -44,7 +44,7 @@ class TaskAssignmentCancellationTest extends TestCase {
         ]);
 
         $this->expectsEvents(TaskAssignmentCancelled::class);
-        $task = $this->taskRepository->cancelTaskAssignment($task);
+        $task = $this->action->handle($task);
         $this->assertInstanceOf(Task::class, $task);
 
         $this->assertDatabaseHas(Task::class, [
@@ -76,6 +76,6 @@ class TaskAssignmentCancellationTest extends TestCase {
         ]);
 
         $this->expectException(TaskAssignmentException::class);
-        $this->taskRepository->cancelTaskAssignment($task);
+        $this->action->handle($task);
     }
 }

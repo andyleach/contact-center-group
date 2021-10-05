@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Task;
 
+use App\Actions\Task\MarkTaskAsExpired;
 use App\Contracts\TaskRepositoryInterface;
 use App\Events\Task\TaskExpired;
 use App\Exceptions\Task\TaskInProcessException;
@@ -19,15 +20,15 @@ class TaskExpirationTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var TaskRepositoryInterface $taskRepository
+     * @var MarkTaskAsExpired $action
      */
-    protected TaskRepositoryInterface $taskRepository;
+    protected MarkTaskAsExpired $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->taskRepository = app(TaskRepositoryInterface::class);
+        $this->action = app(MarkTaskAsExpired::class);
     }
 
     /**
@@ -41,7 +42,7 @@ class TaskExpirationTest extends TestCase {
         ]);
 
         $this->expectsEvents(TaskExpired::class);
-        $this->taskRepository->expire($task);
+        $this->action->handle($task);
 
         $this->assertInstanceOf(Task::class, $task);
 
@@ -70,6 +71,6 @@ class TaskExpirationTest extends TestCase {
         ]);
 
         $this->expectException(TaskInProcessException::class);
-        $this->taskRepository->expire($task);
+        $this->action->handle($task);
     }
 }

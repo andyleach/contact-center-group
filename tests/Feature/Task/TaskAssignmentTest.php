@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Task;
 
+use App\Actions\Task\AssignTaskToUser;
 use App\Contracts\TaskRepositoryInterface;
 use App\Events\Task\TaskAssigned;
 use App\Exceptions\Task\TaskAssignmentException;
@@ -18,15 +19,15 @@ class TaskAssignmentTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var TaskRepositoryInterface $taskRepository
+     * @var AssignTaskToUser $action
      */
-    protected TaskRepositoryInterface $taskRepository;
+    protected AssignTaskToUser $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->taskRepository = app(TaskRepositoryInterface::class);
+        $this->action = app(AssignTaskToUser::class);
     }
 
     /**
@@ -43,7 +44,7 @@ class TaskAssignmentTest extends TestCase {
         // The TaskAssigned event should be thrown
         $this->expectsEvents(TaskAssigned::class);
         // A user_id should be assigned to the task when assigned
-        $task = $this->taskRepository->assignTask($task, $user);
+        $task = $this->action->handle($task, $user);
 
         $this->assertInstanceOf(Task::class, $task, 'A task was not returned');
 
@@ -82,7 +83,7 @@ class TaskAssignmentTest extends TestCase {
         // Ensure that an exception is thrown
         $this->expectException(TaskAssignmentException::class);
         $this->doesntExpectEvents(TaskAssigned::class);
-        $currentTask = $this->taskRepository->assignTask($task, $user);
+        $currentTask = $this->action->handle($task, $user);
 
         $this->assertEquals($oldTask, $currentTask->toArray());
 
