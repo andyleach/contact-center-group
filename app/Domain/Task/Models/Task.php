@@ -47,6 +47,10 @@ use Illuminate\Support\Collection;
  * @method static Builder|Task whereUpdatedAt($value)
  * @method static Builder|Task whereUserId($value)
  * @mixin \Eloquent
+ * @property array $unstructured_data
+ * @property string $available_at
+ * @method static Builder|Task whereAvailableAt($value)
+ * @method static Builder|Task whereUnstructuredData($value)
  */
 class Task extends Model
 {

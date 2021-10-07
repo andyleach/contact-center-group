@@ -16,7 +16,7 @@ class TaskData {
     public array $unstructured_data = [];
 
     /**
-     * @var Carbon|null The time the task will become available for working
+     * @var Carbon The time the task will become available for working
      */
-    public ?Carbon $available_at = null;
+    public Carbon $available_at;
 }
