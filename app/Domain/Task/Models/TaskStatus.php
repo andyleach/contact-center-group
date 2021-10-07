@@ -9,14 +9,33 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * App\Domain\Task\Models\TaskStatus
+ *
  * @param int $id
  * @param string $label
  * @param string $description
  * @param bool   $is_expirable
  * @param Carbon $created_at
  * @param Carbon $updated_at
- *
  * @param Collection|array<Task> $tasks
+ * @property int $id
+ * @property string $label
+ * @property string $description
+ * @property int $is_expirable
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Domain\Task\Models\Task[] $tasks
+ * @property-read int|null $tasks_count
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereIsExpirable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class TaskStatus extends Model
 {

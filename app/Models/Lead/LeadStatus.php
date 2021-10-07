@@ -5,6 +5,26 @@ namespace App\Models\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Lead\LeadStatus
+ *
+ * @property int $id
+ * @property string $label
+ * @property string $description
+ * @property int $is_billable
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereIsBillable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class LeadStatus extends Model
 {
     use HasFactory;

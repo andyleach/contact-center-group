@@ -9,12 +9,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * App\Domain\Task\Models\TaskEventReason
+ *
  * @param int $id
  * @param string $label
  * @param Carbon $created_at
  * @param Carbon $updated_at
- *
  * @param Collection|array<TaskEvent> $taskEvents
+ * @property int $id
+ * @property string $label
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Domain\Task\Models\TaskEvent[] $taskEvents
+ * @property-read int|null $task_events_count
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class TaskEventReason extends Model
 {

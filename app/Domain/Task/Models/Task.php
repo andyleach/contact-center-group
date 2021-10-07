@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
+ * App\Domain\Task\Models\Task
+ *
  * @property int $id
  * @property int $user_id
  * @property int $task_status_id
@@ -23,12 +25,28 @@ use Illuminate\Support\Collection;
  * @property Carbon $closed_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
- *
  * @property User $user
  * @property TaskStatus $taskStatus
  * @property TaskType $taskType
  * @property Collection|array<TaskEvent> $taskEvents
  * @property TaskDisposition $taskDisposition
+ * @property-read int|null $task_events_count
+ * @method static Builder|Task assignable()
+ * @method static Builder|Task expirable()
+ * @method static Builder|Task newModelQuery()
+ * @method static Builder|Task newQuery()
+ * @method static Builder|Task query()
+ * @method static Builder|Task whereAssignedAt($value)
+ * @method static Builder|Task whereClosedAt($value)
+ * @method static Builder|Task whereCreatedAt($value)
+ * @method static Builder|Task whereExpiresAt($value)
+ * @method static Builder|Task whereId($value)
+ * @method static Builder|Task whereTaskDispositionId($value)
+ * @method static Builder|Task whereTaskStatusId($value)
+ * @method static Builder|Task whereTaskTypeId($value)
+ * @method static Builder|Task whereUpdatedAt($value)
+ * @method static Builder|Task whereUserId($value)
+ * @mixin \Eloquent
  */
 class Task extends Model
 {
