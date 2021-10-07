@@ -56,6 +56,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $availability_type_id
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailabilityTypeId($value)
  */
 class User extends Authenticatable
 {
