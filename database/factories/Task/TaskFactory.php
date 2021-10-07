@@ -2,9 +2,9 @@
 
 namespace Database\Factories\Task;
 
-use App\Models\Task\Task;
-use App\Models\Task\TaskStatus;
-use App\Models\Task\TaskType;
+use App\Domain\Task\Models\Task;
+use App\Domain\Task\Models\TaskStatus;
+use App\Domain\Task\Models\TaskType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskFactory extends Factory
@@ -24,10 +24,12 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'task_type_id' => TaskType::OUTBOUND_CALL,
+            'task_type_id' => null,
             'task_status_id' => TaskStatus::PENDING,
             'task_disposition_id' => null,
             'user_id' => null,
+            'unstructured_data' => [],
+            'available_at' => now(),
             'assigned_at' => null,
             'expires_at' => null,
             'closed_at' => null,

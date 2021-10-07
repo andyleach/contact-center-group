@@ -2,14 +2,26 @@
 
 namespace App\Providers;
 
-use App\Contracts\TaskRepositoryInterface;
-use App\Repositories\TaskRepository;
+use App\Domain\Task\Actions\AssignTaskToUser;
+use App\Domain\Task\Actions\CancelTaskAssignment;
+use App\Domain\Task\Actions\CreateTaskForQueue;
+use App\Domain\Task\Actions\MarkTaskAsExpired;
+use App\Domain\Task\Actions\RemoveTaskFromQueue;
+use App\Domain\Task\Contracts\AssignsTaskToUserContract;
+use App\Domain\Task\Contracts\CancelsTaskAssignmentContract;
+use App\Domain\Task\Contracts\CreatesTaskForQueueContract;
+use App\Domain\Task\Contracts\MarksTaskAsExpiredContract;
+use App\Domain\Task\Contracts\RemovesTaskFromQueueContract;
 use Illuminate\Support\ServiceProvider;
 
 class TaskServiceProvider extends ServiceProvider
 {
     public $bindings = [
-        TaskRepositoryInterface::class => TaskRepository::class
+        AssignsTaskToUserContract::class => AssignTaskToUser::class,
+        CancelsTaskAssignmentContract::class => CancelTaskAssignment::class,
+        MarksTaskAsExpiredContract::class => MarkTaskAsExpired::class,
+        RemovesTaskFromQueueContract::class => RemoveTaskFromQueue::class,
+        CreatesTaskForQueueContract::class => CreateTaskForQueue::class
     ];
 
     /**

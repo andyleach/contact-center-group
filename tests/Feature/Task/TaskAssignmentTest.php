@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\Task;
 
-use App\Actions\Task\AssignTaskToUser;
 use App\Contracts\TaskRepositoryInterface;
-use App\Events\Task\TaskAssigned;
-use App\Exceptions\Task\TaskAssignmentException;
-use App\Models\Task\Task;
-use App\Models\Task\TaskEvent;
-use App\Models\Task\TaskEventReason;
-use App\Models\Task\TaskEventType;
-use App\Models\Task\TaskStatus;
+use App\Domain\Task\Actions\AssignTaskToUser;
+use App\Domain\Task\Events\TaskAssigned;
+use App\Domain\Task\Exceptions\TaskAssignmentException;
+use App\Domain\Task\Models\Task;
+use App\Domain\Task\Models\TaskEvent;
+use App\Domain\Task\Models\TaskEventReason;
+use App\Domain\Task\Models\TaskEventType;
+use App\Domain\Task\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

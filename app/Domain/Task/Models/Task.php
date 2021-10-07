@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Domain\Task\Models;
+
+use App\Domain\Task\Events\TaskCreated;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $task_status_id
+ * @property int $task_type_id
+ * @property int $task_disposition_id
+ * @property Carbon $assigned_at
+ * @property Carbon $expires_at
+ * @property Carbon $closed_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @property User $user
+ * @property TaskStatus $taskStatus
+ * @property TaskType $taskType
+ * @property Collection|array<TaskEvent> $taskEvents
+ * @property TaskDisposition $taskDisposition
+ */
+class Task extends Model
+{
+    use HasFactory;
+
+    /**
+     * @var string[] $dispatchesEvents
+     */
+    protected $dispatchesEvents = [
+        'created' => TaskCreated::class,
+    ];
+
+    protected $casts = [
+        'unstructured_data' => 'json'
+    ];
+
+    protected $fillable = ['user_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function taskStatus(): BelongsTo {
+        return $this->belongsTo(TaskStatus::class, 'task_status_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function taskType(): BelongsTo {
+        return $this->belongsTo(TaskType::class, 'task_type_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function taskEvents(): HasMany {
+        return $this->hasMany(TaskEvent::class, 'task_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function taskDisposition(): BelongsTo {
+        return $this->belongsTo(TaskDisposition::class, 'task_disposition_id');
+    }
+
+    /**
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeAssignable(Builder $query): Builder {
+        return $query->where('task_status_id', TaskStatus::PENDING)
+            ->where('available_at', '<=', now())
+            ->where('expires_at', '>', now());
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeExpirable(Builder $query): Builder {
+        return $query->whereHas('taskStatus', function($query) {
+                $query->where('is_expirable', true);
+            })
+            ->where('expires_at', '<=', now());
+    }
+}

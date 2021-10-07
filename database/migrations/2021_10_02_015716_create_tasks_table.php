@@ -1,16 +1,16 @@
 <?php
 
+use App\Domain\Task\Models\Task;
+use App\Domain\Task\Models\TaskDisposition;
+use App\Domain\Task\Models\TaskEventReason;
+use App\Domain\Task\Models\TaskEventType;
+use App\Domain\Task\Models\TaskStatus;
+use App\Domain\Task\Models\TaskType;
+use App\Domain\Task\Models\TaskTypeMedium;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Task\TaskType;
-use App\Models\Task\TaskStatus;
-use App\Models\Task\TaskTypeMedium;
-use App\Models\Task\TaskEventType;
-use App\Models\Task\TaskEventReason;
-use App\Models\User;
-use App\Models\Task\TaskDisposition;
-use App\Models\Task\Task;
 
 class CreateTasksTable extends Migration
 {
@@ -69,6 +69,8 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(TaskStatus::class, 'task_status_id');
             $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')->nullable();
             $table->foreignIdFor(User::class, 'user_id')->nullable();
+            $table->json('unstructured_data');
+            $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
             $table->timestamp('expires_at')->index()->nullable();
             $table->timestamp('closed_at')->index()->nullable();

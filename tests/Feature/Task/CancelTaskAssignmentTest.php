@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Task;
 
-use App\Actions\Task\CancelTaskAssignment;
-use App\Events\Task\TaskAssignmentCancelled;
-use App\Exceptions\Task\TaskAssignmentException;
-use App\Models\Task\Task;
-use App\Models\Task\TaskEvent;
-use App\Models\Task\TaskEventReason;
-use App\Models\Task\TaskEventType;
-use App\Models\Task\TaskStatus;
+use App\Domain\Task\Actions\CancelTaskAssignment;
+use App\Domain\Task\Events\TaskAssignmentCancelled;
+use App\Domain\Task\Exceptions\TaskAssignmentException;
+use App\Domain\Task\Models\Task;
+use App\Domain\Task\Models\TaskEvent;
+use App\Domain\Task\Models\TaskEventReason;
+use App\Domain\Task\Models\TaskEventType;
+use App\Domain\Task\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
