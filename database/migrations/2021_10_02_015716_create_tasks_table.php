@@ -120,6 +120,24 @@ class CreateTasksTable extends Migration
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
+                [
+                    'id' => TaskEventType::TASK_ASSIGNMENT_CANCELLED,
+                    'label' => 'Task Assignment Cancelled',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'id' => TaskEventType::TASK_EXPIRED,
+                    'label' => 'Task Expired',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'id' => TaskEventType::TASK_REMOVED,
+                    'label' => 'Task Removed',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
             ]);
     }
 
@@ -230,14 +248,6 @@ class CreateTasksTable extends Migration
                 'id' => TaskStatus::IN_PROCESS,
                 'label' => 'In Process',
                 'description' => 'The user has accepted the task.',
-                'is_expirable' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id' => TaskStatus::WRAPPING_UP,
-                'label' => 'Wrapping Up',
-                'description' => '',
                 'is_expirable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
  * @property User $user
  * @property TaskStatus $taskStatus
  * @property TaskType $taskType
- * @property Collection|array<TaskEvent> $taskEvent
+ * @property Collection|array<TaskEvent> $taskEvents
  * @property TaskDisposition $taskDisposition
  */
 class Task extends Model
