@@ -4,7 +4,7 @@ namespace App\Domain\Task\Actions;
 
 use App\Domain\Task\Contracts\CreatesTaskForQueueContract;
 use App\Domain\Task\DataTransferObjects\TaskData;
-use App\Domain\Task\Models\Task;
+use App\Models\Task\Task;
 
 class CreateTaskForQueue implements CreatesTaskForQueueContract {
 

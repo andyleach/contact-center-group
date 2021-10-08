@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Task\Models;
+namespace App\Models\Task;
 
-use App\Models\User;
+use App\Models\User\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

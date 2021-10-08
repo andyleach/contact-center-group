@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Task\Models;
+namespace App\Models\Task;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

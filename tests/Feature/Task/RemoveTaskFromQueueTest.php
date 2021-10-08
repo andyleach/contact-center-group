@@ -5,11 +5,11 @@ namespace Tests\Feature\Task;
 use App\Domain\Task\Actions\RemoveTaskFromQueue;
 use App\Domain\Task\Events\TaskRemoved;
 use App\Domain\Task\Exceptions\TaskRemovalException;
-use App\Domain\Task\Models\Task;
-use App\Domain\Task\Models\TaskEvent;
-use App\Domain\Task\Models\TaskEventReason;
-use App\Domain\Task\Models\TaskEventType;
-use App\Domain\Task\Models\TaskStatus;
+use App\Models\Task\Task;
+use App\Models\Task\TaskEvent;
+use App\Models\Task\TaskEventReason;
+use App\Models\Task\TaskEventType;
+use App\Models\Task\TaskStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

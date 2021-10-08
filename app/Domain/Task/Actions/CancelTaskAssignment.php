@@ -5,10 +5,10 @@ namespace App\Domain\Task\Actions;
 use App\Domain\Task\Contracts\CancelsTaskAssignmentContract;
 use App\Domain\Task\Events\TaskAssignmentCancelled;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
-use App\Domain\Task\Models\Task;
-use App\Domain\Task\Models\TaskEventReason;
-use App\Domain\Task\Models\TaskEventType;
-use App\Domain\Task\Models\TaskStatus;
+use App\Models\Task\Task;
+use App\Models\Task\TaskEventReason;
+use App\Models\Task\TaskEventType;
+use App\Models\Task\TaskStatus;
 
 class CancelTaskAssignment implements CancelsTaskAssignmentContract {
     /**

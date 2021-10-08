@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Task\Models;
+namespace App\Models\Task;
 
 use App\Domain\Task\Events\TaskCreated;
 use App\Models\User;
@@ -110,8 +110,11 @@ class Task extends Model
      */
     public function scopeAssignable(Builder $query): Builder {
         return $query->where('task_status_id', TaskStatus::PENDING)
-            ->where('available_at', '<=', now())
-            ->where('expires_at', '>', now());
+            ->where('available_at', '>=', now())
+            ->where(function($query) {
+                $query->where('expires_at', '>=', now())
+                    ->orWhereNull('expires_at');
+            });
     }
 
     /**
@@ -121,7 +124,6 @@ class Task extends Model
     public function scopeExpirable(Builder $query): Builder {
         return $query->whereHas('taskStatus', function($query) {
                 $query->where('is_expirable', true);
-            })
-            ->where('expires_at', '<=', now());
+            })->where('expires_at', '<=', now());
     }
 }

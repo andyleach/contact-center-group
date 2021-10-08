@@ -2,7 +2,7 @@
 
 namespace App\Domain\Task\Events;
 
-use App\Domain\Task\Models\TaskEvent;
+use App\Models\Task\TaskEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;

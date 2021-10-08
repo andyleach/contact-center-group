@@ -5,10 +5,10 @@ namespace App\Domain\Task\Actions;
 use App\Domain\Task\Contracts\AssignsTaskToUserContract;
 use App\Domain\Task\Events\TaskAssigned;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
-use App\Domain\Task\Models\Task;
-use App\Domain\Task\Models\TaskEventReason;
-use App\Domain\Task\Models\TaskEventType;
-use App\Domain\Task\Models\TaskStatus;
+use App\Models\Task\Task;
+use App\Models\Task\TaskEventReason;
+use App\Models\Task\TaskEventType;
+use App\Models\Task\TaskStatus;
 use App\Models\User;
 
 class AssignTaskToUser implements AssignsTaskToUserContract {
@@ -24,9 +24,7 @@ class AssignTaskToUser implements AssignsTaskToUserContract {
     public function handle(Task $task, User $user): Task {
         $rowsUpdated = Task::query()
             ->where('id', $task->id)
-            ->where('task_status_id', TaskStatus::PENDING)
-            ->whereNull('user_id')
-            ->where
+            ->assignable()
             ->update([
                 'task_status_id' => TaskStatus::ASSIGNED,
                 'user_id' => $user->id,

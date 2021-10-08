@@ -1,12 +1,12 @@
 <?php
 
-use App\Domain\Task\Models\Task;
-use App\Domain\Task\Models\TaskDisposition;
-use App\Domain\Task\Models\TaskEventReason;
-use App\Domain\Task\Models\TaskEventType;
-use App\Domain\Task\Models\TaskStatus;
-use App\Domain\Task\Models\TaskType;
-use App\Domain\Task\Models\TaskTypeMedium;
+use App\Models\Task\Task;
+use App\Models\Task\TaskDisposition;
+use App\Models\Task\TaskEventReason;
+use App\Models\Task\TaskEventType;
+use App\Models\Task\TaskStatus;
+use App\Models\Task\TaskType;
+use App\Models\Task\TaskTypeMedium;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

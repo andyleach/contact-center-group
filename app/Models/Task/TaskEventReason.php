@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Task\Models;
+namespace App\Models\Task;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +20,7 @@ use Illuminate\Support\Collection;
  * @property string $label
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Domain\Task\Models\TaskEvent[] $taskEvents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task\TaskEvent[] $taskEvents
  * @property-read int|null $task_events_count
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason newQuery()

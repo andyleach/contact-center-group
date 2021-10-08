@@ -6,11 +6,11 @@ use App\Contracts\TaskRepositoryInterface;
 use App\Domain\Task\Actions\AssignTaskToUser;
 use App\Domain\Task\Events\TaskAssigned;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
-use App\Domain\Task\Models\Task;
-use App\Domain\Task\Models\TaskEvent;
-use App\Domain\Task\Models\TaskEventReason;
-use App\Domain\Task\Models\TaskEventType;
-use App\Domain\Task\Models\TaskStatus;
+use App\Models\Task\Task;
+use App\Models\Task\TaskEvent;
+use App\Models\Task\TaskEventReason;
+use App\Models\Task\TaskEventType;
+use App\Models\Task\TaskStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -39,7 +39,9 @@ class TaskAssignmentTest extends TestCase {
 
         // A task with a status of pending should update one row
         /** @var Task $task */
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'assigned_at' => now()->subSecond()
+        ]);
 
         // The TaskAssigned event should be thrown
         $this->expectsEvents(TaskAssigned::class);

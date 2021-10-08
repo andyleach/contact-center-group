@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Task\Models;
+namespace App\Models\Task;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
  * @property int $is_expirable
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Domain\Task\Models\Task[] $tasks
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task\Task[] $tasks
  * @property-read int|null $tasks_count
  * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus newQuery()
