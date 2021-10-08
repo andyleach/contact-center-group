@@ -25,8 +25,9 @@ class UserAvailabilityType extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['label'];
+
     const UNAVAILABLE = 1;
     const AVAILABLE = 2;
-
-    protected $fillable = ['label'];
+    const WINDING_DOWN = 3;
 }

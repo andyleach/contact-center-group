@@ -2,12 +2,16 @@
 
 namespace App\Domain\User\Events;
 
-use App\Models\User;
-use \Illuminate\Foundation\Events\Dispatchable,
+use App\Models\User\User,
+    \Illuminate\Foundation\Events\Dispatchable,
     \Illuminate\Broadcasting\InteractsWithSockets,
     \Illuminate\Queue\SerializesModels,
     Illuminate\Broadcasting\PrivateChannel;
 
+/**
+ * Indicates that the user is no longer available to perform work. No new tasks will be assigned and any tasks
+ * still assigned to them will be returned to the pool
+ */
 class UserWentUnavailable {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

@@ -2,10 +2,11 @@
 
 namespace App\Domain\User\Actions;
 
+use App\Models\User\User;
+use App\Models\User\UserAvailabilityType;
 use App\Domain\User\Events\UserWentAvailable;
 use App\Domain\User\Events\UserWentUnavailable;
-use App\Models\User;
-use App\Models\User\UserAvailabilityType;
+use App\Domain\User\Events\UserBeganWindingDown;
 
 class ChangeUserAvailability {
     /**
@@ -17,10 +18,12 @@ class ChangeUserAvailability {
         $user->availability_type_id = $availability_type_id;
         $user->save();
 
-        if (UserAvailabilityType::UNAVAILABLE) {
+        if (UserAvailabilityType::UNAVAILABLE === $availability_type_id) {
             UserWentUnavailable::dispatch($user);
-        } else if (User\UserAvailabilityType::AVAILABLE) {
+        } else if (UserAvailabilityType::AVAILABLE === $availability_type_id) {
             UserWentAvailable::dispatch($user);
+        } else if (UserAvailabilityType::WINDING_DOWN === $availability_type_id) {
+            UserBeganWindingDown::dispatch($user);
         }
 
         return $user;

@@ -9,9 +9,10 @@ use App\Models\User\User,
     Illuminate\Broadcasting\PrivateChannel;
 
 /**
- * The agent is now available for work, and tasks will soon begin being assigned to the user
+ * Indicates to the system that the user has begun winding down.  The system will stop assigning new tasks and allow
+ * the user to complete the balance of those still assigned to them.
  */
-class UserWentAvailable {
+class UserBeganWindingDown {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
