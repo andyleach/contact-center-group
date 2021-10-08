@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEvent whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEvent whereUserId($value)
  * @mixin \Eloquent
+ * @property int|null $agent_id
+ * @property-read Agent|null $agent
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEvent whereAgentId($value)
  */
 class TaskEvent extends Model
 {

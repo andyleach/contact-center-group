@@ -52,6 +52,10 @@ use Illuminate\Support\Collection;
  * @property string $available_at
  * @method static Builder|Task whereAvailableAt($value)
  * @method static Builder|Task whereUnstructuredData($value)
+ * @property int|null $agent_id
+ * @property-read Agent|null $agent
+ * @method static \Database\Factories\Task\TaskFactory factory(...$parameters)
+ * @method static Builder|Task whereAgentId($value)
  */
 class Task extends Model
 {
