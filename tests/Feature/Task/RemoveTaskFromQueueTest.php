@@ -3,6 +3,7 @@
 namespace Tests\Feature\Task;
 
 use App\Domain\Task\Actions\RemoveTaskFromQueue;
+use App\Domain\Task\Contracts\RemovesTaskFromQueueContract;
 use App\Domain\Task\Events\TaskRemoved;
 use App\Domain\Task\Exceptions\TaskRemovalException;
 use App\Models\Task\Task;
@@ -17,15 +18,15 @@ class RemoveTaskFromQueueTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var RemoveTaskFromQueue $action
+     * @var RemovesTaskFromQueueContract $action
      */
-    protected RemoveTaskFromQueue $action;
+    protected RemovesTaskFromQueueContract $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->action = app(RemoveTaskFromQueue::class);
+        $this->action = app(RemovesTaskFromQueueContract::class);
     }
 
     /**

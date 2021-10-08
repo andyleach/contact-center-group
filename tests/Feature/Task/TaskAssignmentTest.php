@@ -3,6 +3,7 @@
 namespace Tests\Feature\Task;
 
 use App\Domain\Task\Actions\AssignTaskToAgent;
+use App\Domain\Task\Contracts\AssignsTaskToAgentContract;
 use App\Domain\Task\Events\TaskAssigned;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
 use App\Models\Agent\Agent;
@@ -26,7 +27,7 @@ class TaskAssignmentTest extends TestCase {
     public function setUp(): void {
         parent::setUp();
 
-        $this->action = app(AssignTaskToAgent::class);
+        $this->action = app(AssignsTaskToAgentContract::class);
     }
 
     /**

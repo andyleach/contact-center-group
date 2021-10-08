@@ -3,6 +3,7 @@
 namespace Tests\Feature\Task;
 
 use App\Domain\Task\Actions\MarkTaskAsExpired;
+use App\Domain\Task\Contracts\MarksTaskAsExpiredContract;
 use App\Domain\Task\Events\TaskExpired;
 use App\Domain\Task\Exceptions\TaskInProcessException;
 use App\Models\Task\Task;
@@ -17,15 +18,15 @@ class TaskExpirationTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var MarkTaskAsExpired $action
+     * @var MarksTaskAsExpiredContract $action
      */
-    protected MarkTaskAsExpired $action;
+    protected MarksTaskAsExpiredContract $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->action = app(MarkTaskAsExpired::class);
+        $this->action = app(MarksTaskAsExpiredContract::class);
     }
 
     /**

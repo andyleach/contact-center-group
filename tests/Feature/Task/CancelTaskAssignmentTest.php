@@ -3,6 +3,7 @@
 namespace Tests\Feature\Task;
 
 use App\Domain\Task\Actions\CancelTaskAssignment;
+use App\Domain\Task\Contracts\CancelsTaskAssignmentContract;
 use App\Domain\Task\Events\TaskAssignmentCancelled;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
 use App\Models\Agent\Agent;
@@ -18,15 +19,15 @@ class CancelTaskAssignmentTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var CancelTaskAssignment $action
+     * @var CancelsTaskAssignmentContract $action
      */
-    protected CancelTaskAssignment $action;
+    protected CancelsTaskAssignmentContract $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->action = app(CancelTaskAssignment::class);
+        $this->action = app(CancelsTaskAssignmentContract::class);
     }
 
     /**
