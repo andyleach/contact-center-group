@@ -1,42 +1,37 @@
 <?php
 
-namespace App\Domain\Task\Events;
+namespace App\Domain\Agent\Events;
 
-use App\Models\Task\TaskEvent;
+use App\Models\Agent\Agent;
+use App\Models\User\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AbstractTaskEvent {
+/**
+ * Indicates to the system that the user has begun winding down.  The system will stop assigning new tasks and allow
+ * the user to complete the balance of those still assigned to them.
+ */
+class AgentBeganWindingDown {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var TaskEvent $taskEvent
+     * @var Agent $agent
      */
-    public TaskEvent $taskEvent;
+    public Agent $agent;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(TaskEvent $taskEvent)
-    {
-        $this->taskEvent = $taskEvent;
-    }
-
-    /**
-     * Only broadcast when we have an agent to broadcast to
-     *
-     * @return bool
-     */
-    public function broadcastWhen(): bool {
-        return $this->taskEvent->agent()->exists();
+    public function __construct(Agent $agent) {
+        $this->agent = $agent;
     }
 
     public function broadcastWith(): array {
-        return [];
+        return $this->agent->toArray();
     }
 
     /**
@@ -45,6 +40,6 @@ class AbstractTaskEvent {
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn() {
-        return new PrivateChannel('user.' . $this->taskEvent->agent_id);
+        return new PrivateChannel('agent.' . $this->agent->id);
     }
 }

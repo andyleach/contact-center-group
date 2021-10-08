@@ -7,7 +7,7 @@ use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
 use App\Models\Task\TaskType;
 use App\Models\Task\TaskTypeMedium;
-use App\Models\User;
+use App\Models\Agent\Agent;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -68,7 +68,6 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(TaskType::class, 'task_type_id');
             $table->foreignIdFor(TaskStatus::class, 'task_status_id');
             $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')->nullable();
-            $table->foreignIdFor(User::class, 'user_id')->nullable();
             $table->json('unstructured_data');
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
@@ -82,7 +81,7 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(Task::class, 'task_id');
             $table->foreignIdFor(TaskEventType::class, 'task_event_type_id');
             $table->foreignIdFor(TaskEventReason::class, 'task_event_reason_id');
-            $table->foreignIdFor(User::class, 'user_id')->nullable();
+            $table->foreignIdFor(Agent::class, 'agent_id')->nullable();
             $table->timestamps();
         });
 

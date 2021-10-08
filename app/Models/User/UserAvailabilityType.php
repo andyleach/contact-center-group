@@ -27,7 +27,5 @@ class UserAvailabilityType extends Model
 
     protected $fillable = ['label'];
 
-    const UNAVAILABLE = 1;
-    const AVAILABLE = 2;
-    const WINDING_DOWN = 3;
+
 }

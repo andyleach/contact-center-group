@@ -2,6 +2,6 @@
 
 namespace App\Domain\Task\Contracts;
 
-interface AssignsTaskToUserContract {
+interface AssignsTaskToAgentContract {
 
 }

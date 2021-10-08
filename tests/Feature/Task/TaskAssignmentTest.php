@@ -3,9 +3,10 @@
 namespace Tests\Feature\Task;
 
 use App\Contracts\TaskRepositoryInterface;
-use App\Domain\Task\Actions\AssignTaskToUser;
+use App\Domain\Task\Actions\AssignTaskToAgent;
 use App\Domain\Task\Events\TaskAssigned;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
+use App\Models\Agent\Agent;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;
@@ -19,23 +20,23 @@ class TaskAssignmentTest extends TestCase {
     use RefreshDatabase;
 
     /**
-     * @var AssignTaskToUser $action
+     * @var AssignTaskToAgent $action
      */
-    protected AssignTaskToUser $action;
+    protected AssignTaskToAgent $action;
 
 
     public function setUp(): void {
         parent::setUp();
 
-        $this->action = app(AssignTaskToUser::class);
+        $this->action = app(AssignTaskToAgent::class);
     }
 
     /**
      *
      */
     public function test_a_task_can_be_assigned_to_a_user() {
-        /** @var User $user */
-        $user = User::factory()->create();
+        /** @var Agent $agent */
+        $agent = Agent::factory()->create();
 
         // A task with a status of pending should update one row
         /** @var Task $task */
@@ -46,7 +47,7 @@ class TaskAssignmentTest extends TestCase {
         // The TaskAssigned event should be thrown
         $this->expectsEvents(TaskAssigned::class);
         // A user_id should be assigned to the task when assigned
-        $task = $this->action->handle($task, $user);
+        $task = $this->action->handle($task, $agent);
 
         $this->assertInstanceOf(Task::class, $task, 'A task was not returned');
 
@@ -59,7 +60,7 @@ class TaskAssignmentTest extends TestCase {
         // A task event should be created
         $this->assertDatabaseHas(TaskEvent::class, [
             'task_event_type_id' => TaskEventType::TASK_ASSIGNED,
-            'user_id'            => $user->id,
+            'agent_id'            => $agent->id,
             'task_event_reason_id' => TaskEventReason::NOT_APPLICABLE,
             'task_id' => $task->id
         ]);
@@ -69,8 +70,8 @@ class TaskAssignmentTest extends TestCase {
      *
      */
     public function test_that_a_task_not_in_pending_status_cannot_be_assigned() {
-        /** @var User $user */
-        $user = User::factory()->create();
+        /** @var Agent $agent */
+        $agent = Agent::factory()->create();
 
         /**
          * Create a task with a status that is not pending
@@ -85,15 +86,14 @@ class TaskAssignmentTest extends TestCase {
         // Ensure that an exception is thrown
         $this->expectException(TaskAssignmentException::class);
         $this->doesntExpectEvents(TaskAssigned::class);
-        $currentTask = $this->action->handle($task, $user);
+        $currentTask = $this->action->handle($task, $agent);
 
         $this->assertEquals($oldTask, $currentTask->toArray());
-
 
         /// A task event should be created
         $this->assertDatabaseMissing(TaskEvent::class, [
             'task_event_type_id' => TaskEventType::TASK_ASSIGNED,
-            'user_id'            => $user->id,
+            'user_id'            => $agent->id,
             'task_event_reason_id' => TaskEventReason::NOT_APPLICABLE,
             'task_id' => $task->id
         ]);

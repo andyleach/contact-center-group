@@ -18,14 +18,14 @@ class CancelTaskAssignment implements CancelsTaskAssignmentContract {
      * @throws TaskAssignmentException
      */
     public function handle(Task $task, int $task_event_reason_id = TaskEventReason::NOT_APPLICABLE): Task {
-        $assignedUser = $task->user;
+        $assignedUser = $task->agent;
 
         $rowsUpdated = Task::query()
             ->where('id', $task->id)
             ->where('task_status_id', TaskStatus::ASSIGNED)
             ->update([
                 'task_status_id' => TaskStatus::PENDING,
-                'user_id' => null,
+                'agent_id' => null,
                 'assigned_at' => null
             ]);
 
@@ -36,7 +36,7 @@ class CancelTaskAssignment implements CancelsTaskAssignmentContract {
         $taskEvent = $task->taskEvents()->create([
             'task_event_type_id' => TaskEventType::TASK_ASSIGNMENT_CANCELLED,
             'task_event_reason_id' => $task_event_reason_id,
-            'user_id' => $assignedUser->id,
+            'agent_id' => $assignedUser->id,
         ]);
 
         TaskAssignmentCancelled::dispatch($taskEvent);

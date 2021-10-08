@@ -2,6 +2,7 @@
 
 namespace App\Models\Task;
 
+use App\Models\Agent\Agent;
 use App\Models\User\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +39,7 @@ class TaskEvent extends Model
     use HasFactory;
 
     protected $fillable = [
-        'task_event_type_id', 'task_event_reason_id', 'user_id',
+        'task_event_type_id', 'task_event_reason_id', 'agent_id',
     ];
 
     /**
@@ -58,7 +59,7 @@ class TaskEvent extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'user_id');
+    public function agent(): BelongsTo {
+        return $this->belongsTo(Agent::class, 'agent_id');
     }
 }

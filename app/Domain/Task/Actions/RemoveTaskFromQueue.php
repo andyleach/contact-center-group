@@ -34,7 +34,7 @@ class RemoveTaskFromQueue implements RemovesTaskFromQueueContract {
         $taskEvent = $task->taskEvents()->create([
             'task_event_type_id' => TaskEventType::TASK_REMOVED,
             'task_event_reason_id' => $task_event_reason_id,
-            'user_id' => null,
+            'agent_id' => null,
         ]);
 
         TaskRemoved::dispatch($taskEvent);

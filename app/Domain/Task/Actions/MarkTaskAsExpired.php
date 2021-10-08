@@ -36,7 +36,7 @@ class MarkTaskAsExpired implements MarksTaskAsExpiredContract {
         $taskEvent = $task->taskEvents()->create([
             'task_event_type_id' => TaskEventType::TASK_EXPIRED,
             'task_event_reason_id' => $task_event_reason_id,
-            'user_id' => null,
+            'agent_id' => null,
         ]);
 
         TaskExpired::dispatch($taskEvent);

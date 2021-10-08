@@ -5,6 +5,7 @@ namespace Tests\Feature\Task;
 use App\Domain\Task\Actions\CancelTaskAssignment;
 use App\Domain\Task\Events\TaskAssignmentCancelled;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
+use App\Models\Agent\Agent;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;
@@ -33,13 +34,12 @@ class CancelTaskAssignmentTest extends TestCase {
      *
      */
     public function test_that_a_task_assignment_can_be_cancelled() {
-        /** @var User $user */
-        $user = User::factory()->create();
+        $agent = Agent::factory()->create([]);
 
         /** @var Task $task */
         $task = Task::factory()->create([
             'task_status_id' => TaskStatus::ASSIGNED,
-            'user_id' => $user->id,
+            'agent_id' => $agent->id,
             'assigned_at' => now()
         ]);
 
@@ -49,7 +49,7 @@ class CancelTaskAssignmentTest extends TestCase {
 
         $this->assertDatabaseHas(Task::class, [
             'task_status_id' => TaskStatus::PENDING,
-            'user_id' => null,
+            'agent_id' => null,
             'assigned_at' => null,
         ]);
 
@@ -57,7 +57,7 @@ class CancelTaskAssignmentTest extends TestCase {
             'task_id' => $task->id,
             'task_event_type_id' => TaskEventType::TASK_ASSIGNMENT_CANCELLED,
             'task_event_reason_id' => TaskEventReason::NOT_APPLICABLE,
-            'user_id' => $user->id,
+            'agent_id' => $agent->id,
         ]);
     }
 
@@ -65,13 +65,10 @@ class CancelTaskAssignmentTest extends TestCase {
      *
      */
     public function test_that_a_failure_to_cancel_task_assignment_throws_exception() {
-        /** @var User $user */
-        $user = User::factory()->create();
-
         /** @var Task $task */
         $task = Task::factory()->create([
             'task_status_id' => TaskStatus::PENDING,
-            'user_id' => null,
+            'agent_id' => null,
             'assigned_at' => null
         ]);
 

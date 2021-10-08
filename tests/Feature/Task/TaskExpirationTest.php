@@ -47,7 +47,7 @@ class TaskExpirationTest extends TestCase {
 
         $this->assertDatabaseHas(Task::class, [
             'task_status_id' => TaskStatus::EXPIRED,
-            'user_id' => null,
+            'agent_id' => null,
             'assigned_at' => null,
         ]);
 
@@ -55,7 +55,7 @@ class TaskExpirationTest extends TestCase {
             'task_id' => $task->id,
             'task_event_type_id' => TaskEventType::TASK_EXPIRED,
             'task_event_reason_id' => TaskEventReason::NOT_APPLICABLE,
-            'user_id' => null,
+            'agent_id' => null,
         ]);
     }
 

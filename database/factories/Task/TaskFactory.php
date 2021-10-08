@@ -27,7 +27,7 @@ class TaskFactory extends Factory
             'task_type_id' => TaskType::OUTBOUND_CALL,
             'task_status_id' => TaskStatus::PENDING,
             'task_disposition_id' => null,
-            'user_id' => null,
+            'agent_id' => null,
             'unstructured_data' => [],
             'available_at' => now(),
             'assigned_at' => null,

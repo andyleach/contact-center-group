@@ -3,6 +3,7 @@
 namespace App\Models\Task;
 
 use App\Domain\Task\Events\TaskCreated;
+use App\Models\Agent\Agent;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -67,13 +68,13 @@ class Task extends Model
         'unstructured_data' => 'json'
     ];
 
-    protected $fillable = ['user_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
+    protected $fillable = ['agent_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
 
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'user_id');
+    public function agent(): BelongsTo {
+        return $this->belongsTo(Agent::class, 'agent_id');
     }
 
     /**
