@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Task;
 
-use App\Contracts\TaskRepositoryInterface;
 use App\Domain\Task\Actions\MarkTaskAsExpired;
 use App\Domain\Task\Events\TaskExpired;
 use App\Domain\Task\Exceptions\TaskInProcessException;
@@ -11,7 +10,6 @@ use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
-use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

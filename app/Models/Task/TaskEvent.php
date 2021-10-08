@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon $updated_at
  * @property TaskEventType $taskEventType
  * @property TaskEventReason $taskEventReason
- * @property User $user
  * @property int $task_id
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEvent newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEvent newQuery()

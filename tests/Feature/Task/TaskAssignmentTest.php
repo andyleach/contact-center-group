@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Task;
 
-use App\Contracts\TaskRepositoryInterface;
 use App\Domain\Task\Actions\AssignTaskToAgent;
 use App\Domain\Task\Events\TaskAssigned;
 use App\Domain\Task\Exceptions\TaskAssignmentException;
@@ -12,7 +11,6 @@ use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

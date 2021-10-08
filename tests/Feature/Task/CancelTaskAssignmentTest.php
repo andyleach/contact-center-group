@@ -11,7 +11,6 @@ use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -34,6 +33,7 @@ class CancelTaskAssignmentTest extends TestCase {
      *
      */
     public function test_that_a_task_assignment_can_be_cancelled() {
+        /** @var Agent $agent */
         $agent = Agent::factory()->create([]);
 
         /** @var Task $task */
