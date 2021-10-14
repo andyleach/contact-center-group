@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Lead\LeadType;
 use App\Models\Lead\LeadStatus;
 use App\Models\Lead\LeadDisposition;
 use Illuminate\Database\Migrations\Migration;
@@ -22,6 +23,13 @@ class CreateLeadsTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('lead_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('label')->unique();
+            $table->string('description', 255)->default('');
+            $table->timestamps();
+        });
+
         Schema::create('lead_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
@@ -32,6 +40,7 @@ class CreateLeadsTable extends Migration
 
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(LeadType::class, 'lead_type_id');
             $table->foreignIdFor(LeadStatus::class, 'lead_status_id');
             $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id');
             $table->string('first_name');
