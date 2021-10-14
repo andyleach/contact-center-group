@@ -61,6 +61,7 @@ class CreateLeadsTable extends Migration
     {
         Schema::dropIfExists('lead_statuses');
         Schema::dropIfExists('lead_dispositions');
+        Schema::dropIfExists('lead_types');
         Schema::dropIfExists('leads');
     }
 
