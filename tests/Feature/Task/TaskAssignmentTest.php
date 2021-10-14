@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Task;
 
-use App\Domain\Task\Actions\AssignTaskToAgent;
-use App\Domain\Task\Contracts\AssignsTaskToAgentContract;
-use App\Domain\Task\Events\TaskAssigned;
-use App\Domain\Task\Exceptions\TaskAssignmentException;
+use App\Actions\Task\AssignTaskToAgent;
+use App\Contracts\Task\AssignsTaskToAgentContract;
+use App\Events\Task\TaskAssigned;
+use App\Exceptions\Task\TaskAssignmentException;
 use App\Models\Agent\Agent;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEvent;

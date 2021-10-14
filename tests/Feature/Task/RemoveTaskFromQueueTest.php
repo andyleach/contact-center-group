@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Task;
 
-use App\Domain\Task\Actions\RemoveTaskFromQueue;
-use App\Domain\Task\Contracts\RemovesTaskFromQueueContract;
-use App\Domain\Task\Events\TaskRemoved;
-use App\Domain\Task\Exceptions\TaskRemovalException;
+use App\Contracts\Task\RemovesTaskFromQueueContract;
+use App\Events\Task\TaskRemoved;
+use App\Exceptions\Task\TaskRemovalException;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;

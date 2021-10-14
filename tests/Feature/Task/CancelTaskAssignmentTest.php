@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Task;
 
-use App\Domain\Task\Actions\CancelTaskAssignment;
-use App\Domain\Task\Contracts\CancelsTaskAssignmentContract;
-use App\Domain\Task\Events\TaskAssignmentCancelled;
-use App\Domain\Task\Exceptions\TaskAssignmentException;
+use App\Contracts\Task\CancelsTaskAssignmentContract;
+use App\Events\Task\TaskAssignmentCancelled;
+use App\Exceptions\Task\TaskAssignmentException;
 use App\Models\Agent\Agent;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEvent;

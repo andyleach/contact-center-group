@@ -2,7 +2,7 @@
 
 namespace App\Models\Task;
 
-use App\Domain\Task\Events\TaskCreated;
+use App\Events\Task\TaskCreated;
 use App\Models\Agent\Agent;
 use App\Models\User;
 use Carbon\Carbon;

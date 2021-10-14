@@ -2,16 +2,16 @@
 
 namespace App\Providers;
 
-use App\Domain\Task\Actions\AssignTaskToAgent;
-use App\Domain\Task\Actions\CancelTaskAssignment;
-use App\Domain\Task\Actions\CreateTaskForQueue;
-use App\Domain\Task\Actions\MarkTaskAsExpired;
-use App\Domain\Task\Actions\RemoveTaskFromQueue;
-use App\Domain\Task\Contracts\AssignsTaskToAgentContract;
-use App\Domain\Task\Contracts\CancelsTaskAssignmentContract;
-use App\Domain\Task\Contracts\CreatesTaskForQueueContract;
-use App\Domain\Task\Contracts\MarksTaskAsExpiredContract;
-use App\Domain\Task\Contracts\RemovesTaskFromQueueContract;
+use App\Actions\Task\AssignTaskToAgent;
+use App\Actions\Task\CancelTaskAssignment;
+use App\Actions\Task\CreateTaskForQueue;
+use App\Actions\Task\MarkTaskAsExpired;
+use App\Actions\Task\RemoveTaskFromQueue;
+use App\Contracts\Task\AssignsTaskToAgentContract;
+use App\Contracts\Task\CancelsTaskAssignmentContract;
+use App\Contracts\Task\CreatesTaskForQueueContract;
+use App\Contracts\Task\MarksTaskAsExpiredContract;
+use App\Contracts\Task\RemovesTaskFromQueueContract;
 use Illuminate\Support\ServiceProvider;
 
 class TaskServiceProvider extends ServiceProvider

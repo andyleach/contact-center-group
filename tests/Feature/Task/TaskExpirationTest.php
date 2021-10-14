@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Task;
 
-use App\Domain\Task\Actions\MarkTaskAsExpired;
-use App\Domain\Task\Contracts\MarksTaskAsExpiredContract;
-use App\Domain\Task\Events\TaskExpired;
-use App\Domain\Task\Exceptions\TaskInProcessException;
+use App\Contracts\Task\MarksTaskAsExpiredContract;
+use App\Events\Task\TaskExpired;
+use App\Exceptions\Task\TaskInProcessException;
 use App\Models\Task\Task;
 use App\Models\Task\TaskEvent;
 use App\Models\Task\TaskEventReason;

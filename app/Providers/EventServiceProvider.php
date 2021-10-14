@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Domain\Task\Events\TaskAssigned;
-use App\Domain\Task\Events\TaskAssignmentCancelled;
-use App\Domain\Task\Events\TaskClosed;
-use App\Domain\Task\Events\TaskCloseFailed;
-use App\Domain\Task\Events\TaskClosePending;
-use App\Domain\Task\Events\TaskCreated;
-use App\Domain\Task\Events\TaskExpired;
-use App\Domain\Task\Events\TaskInProcess;
-use App\Domain\Task\Events\TaskRemoved;
+use App\Events\Task\TaskAssigned;
+use App\Events\Task\TaskAssignmentCancelled;
+use App\Events\Task\TaskClosed;
+use App\Events\Task\TaskCloseFailed;
+use App\Events\Task\TaskClosePending;
+use App\Events\Task\TaskCreated;
+use App\Events\Task\TaskExpired;
+use App\Events\Task\TaskInProcess;
+use App\Events\Task\TaskRemoved;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
