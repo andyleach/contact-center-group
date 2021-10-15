@@ -46,7 +46,6 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
-            $table->boolean('requires_client_number');
             $table->foreignIdFor(TaskTypeMedium::class, 'task_type_medium_id');
             $table->softDeletes();
             $table->timestamps();

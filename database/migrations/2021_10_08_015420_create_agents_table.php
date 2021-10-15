@@ -18,6 +18,7 @@ class CreateAgentsTable extends Migration
         Schema::create('agent_availability_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->boolean('is_task_assignment_allowed')->default(0)->index();
             $table->timestamps();
         });
 
@@ -40,18 +41,21 @@ class CreateAgentsTable extends Migration
             [
                 'id' => AgentAvailabilityType::UNAVAILABLE,
                 'label' => 'Unavailable',
+                'is_task_assignment_allowed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => AgentAvailabilityType::AVAILABLE,
                 'label' => 'Available',
+                'is_task_assignment_allowed' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => AgentAvailabilityType::WINDING_DOWN,
                 'label' => 'Winding Down',
+                'is_task_assignment_allowed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
