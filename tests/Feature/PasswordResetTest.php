@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Fortify;
+namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;

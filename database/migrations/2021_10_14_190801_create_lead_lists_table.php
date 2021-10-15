@@ -42,7 +42,9 @@ class CreateLeadListsTable extends Migration
             $table->string('label');
             $table->foreignIdFor(LeadListStatus::class, 'lead_list_status_id');
             $table->foreignIdFor(LeadListType::class, 'lead_list_type_id');
+            $table->unsignedBigInteger('max_leads_to_import_in_day');
             $table->unsignedBigInteger('client_id');
+            $table->softDeletes();
             $table->timestamps();
         });
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Fortify;
+namespace Tests\Feature;
 
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
