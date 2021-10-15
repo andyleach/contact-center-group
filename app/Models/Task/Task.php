@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -79,6 +80,13 @@ class Task extends Model
      */
     public function agent(): BelongsTo {
         return $this->belongsTo(Agent::class, 'agent_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function taskDetails(): HasOne {
+        return $this->hasOne(TaskDetail::class, 'task_id');
     }
 
     /**
