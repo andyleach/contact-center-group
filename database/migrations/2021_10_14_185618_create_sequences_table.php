@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Sequence\Sequence;
+use App\Models\Client\Client;
 
 class CreateSequencesTable extends Migration
 {
@@ -16,11 +17,12 @@ class CreateSequencesTable extends Migration
     {
         Schema::create('sequences', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id');
             $table->string('label');
             $table->text('description');
             $table->json('actions');
             $table->unsignedFloat('cost_per_lead_in_usd');
+            $table->foreignIdFor(Client::class, 'client_id');
+            $table->softDeletes();
             $table->timestamps();
         });
 

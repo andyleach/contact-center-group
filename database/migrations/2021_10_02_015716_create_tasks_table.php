@@ -24,18 +24,21 @@ class CreateTasksTable extends Migration
         Schema::create('task_event_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('task_event_reasons', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('task_type_mediums', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -44,7 +47,7 @@ class CreateTasksTable extends Migration
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
             $table->foreignIdFor(TaskTypeMedium::class, 'task_type_medium_id');
-
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -52,6 +55,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -60,6 +64,7 @@ class CreateTasksTable extends Migration
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
             $table->boolean('is_expirable')->index();
+            $table->softDeletes();
             $table->timestamps();
         });
 

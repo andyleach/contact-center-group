@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Client\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +22,7 @@ class CreateLeadListsTable extends Migration
         Schema::create('lead_list_event_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -28,22 +30,24 @@ class CreateLeadListsTable extends Migration
             $table->id();
             $table->string('label');
             $table->foreignIdFor(LeadListEventType::class, 'lead_list_event_type_id');
+            $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('lead_list_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('lead_lists', function (Blueprint $table) {
             $table->id();
             $table->string('label');
+            $table->unsignedBigInteger('max_leads_to_import_in_day');
             $table->foreignIdFor(LeadListStatus::class, 'lead_list_status_id');
             $table->foreignIdFor(LeadListType::class, 'lead_list_type_id');
-            $table->unsignedBigInteger('max_leads_to_import_in_day');
-            $table->unsignedBigInteger('client_id');
+            $table->foreignIdFor(Client::class, 'client_id');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -53,6 +57,7 @@ class CreateLeadListsTable extends Migration
             $table->string('label')->unique();
             $table->foreignIdFor(LeadList::class, 'lead_list_id');
             $table->foreignIdFor(Lead::class, 'lead_id');
+            $table->softDeletes();
             $table->timestamps();
         });
 
