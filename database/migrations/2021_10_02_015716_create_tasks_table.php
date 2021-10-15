@@ -79,7 +79,7 @@ class CreateTasksTable extends Migration
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
             $table->timestamp('expires_at')->index()->nullable();
-            $table->timestamp('closed_at')->index()->nullable();
+            $table->timestamp('completed_at')->index()->nullable();
             $table->timestamps();
         });
 
