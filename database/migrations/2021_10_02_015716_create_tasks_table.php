@@ -73,6 +73,9 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(TaskType::class, 'task_type_id');
             $table->foreignIdFor(TaskStatus::class, 'task_status_id');
             $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')->nullable();
+            $table->boolean('is_first_contact')->index();
+            $table->boolean('is_followup')->index();
+            $table->boolean('is_client_requested')->index();
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
             $table->timestamp('expires_at')->index()->nullable();
@@ -85,6 +88,7 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(Task::class, 'task_id');
             $table->string('customer_number');
             $table->string('customer_email');
+            $table->text('instructions');
             $table->json('unstructured_data');
             $table->timestamps();
         });
