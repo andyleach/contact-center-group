@@ -179,6 +179,7 @@ return [
 
         // Application Providers
         App\Providers\TaskServiceProvider::class,
+        App\Providers\RosterServiceProvider::class,
     ],
 
     /*
