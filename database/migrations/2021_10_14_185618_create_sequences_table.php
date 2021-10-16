@@ -27,8 +27,8 @@ class CreateSequencesTable extends Migration
         });
 
         Schema::table('leads', function(Blueprint $table) {
-            $table->foreignIdFor(Sequence::class, 'sequence_id');
-            $table->string('last_sequence_action_identifier', 50);
+            $table->foreignIdFor(Sequence::class, 'sequence_id')->nullable()->after('lead_provider_id');
+            $table->string('last_sequence_action_identifier', 50)->after('sequence_id')->nullable();
         });
 
         Schema::table('tasks', function(Blueprint $table) {

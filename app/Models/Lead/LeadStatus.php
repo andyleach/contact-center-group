@@ -47,10 +47,13 @@ class LeadStatus extends Model
      * TODO: Should we behave like a CRM or rebuild contact center?
      */
 
-    const PENDING = 1;
-    const WORKING = 2;
-    const COMPLETED = 3;
-    const CLOSED_SUBSCRIPTION_TERMINATED = 4;
-    const CLOSED_AGED = 5;
-    const DISMISSED = 6;
+    const RECEIVED = 1;
+    const IMPORT_STARTED = 2;
+    const IMPORT_FAILED = 3;
+    const IMPORT_COMPLETED = 4;
+    const WORKING = 5;
+    const COMPLETED = 6;
+    const CLOSED_SUBSCRIPTION_TERMINATED = 7;
+    const CLOSED_AGED = 8;
+    const DISMISSED = 9;
 }

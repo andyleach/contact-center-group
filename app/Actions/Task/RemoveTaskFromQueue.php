@@ -24,7 +24,7 @@ class RemoveTaskFromQueue implements RemovesTaskFromQueueContract {
             ->where('task_status_id', TaskStatus::PENDING)
             ->update([
                 'task_status_id' => TaskStatus::REMOVED,
-                'closed_at' => now()
+                'completed_at' => now()
             ]);
 
         if (0 == $rowsUpdated) {

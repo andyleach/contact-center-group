@@ -2,6 +2,7 @@
 
 namespace App\Models\Lead;
 
+use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,10 +40,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereLastSequenceActionIdentifier($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereLeadTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereSequenceId($value)
+ * @property-read Client $client
+ * @property-read \App\Models\Lead\LeadDisposition $leadDisposition
+ * @property-read \App\Models\Lead\LeadStatus $leadStatus
+ * @property-read \App\Models\Lead\LeadType $leadType
+ * @property int $lead_provider_id The originator of the lead.  This will most likely be just BetterCarPeople
+ * @method static \Illuminate\Database\Eloquent\Builder|Lead whereLeadProviderId($value)
  */
 class Lead extends Model
 {
     use HasFactory;
+
+    /**
+     * @var string[] $dispatchesEvents
+     */
+    protected $dispatchesEvents = [
+        'created' => LeadCreated::class
+    ];
+
+    protected $fillable = [
+        'client_id', 'lead_type_id', 'sequence_id', 'last_sequence_action_identifier',
+        'first_name', 'last_name', 'full_name', 'lead_status_id', 'lead_disposition_id', 'lead_provider_id'
+    ];
 
     public function client(): BelongsTo {
         return $this->belongsTo(Client::class, 'client_id');

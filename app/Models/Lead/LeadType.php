@@ -24,8 +24,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadType whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\Lead\LeadTypeFactory factory(...$parameters)
  */
 class LeadType extends Model
 {
     use HasFactory;
+
+    const SALES = 1;
+    const SERVICE = 2;
 }

@@ -16,6 +16,9 @@ class CreateClient {
             'label' => $clientName
         ]);
 
+        // Generates a unique API token that allows for outside parties to access our API to send in new leads
+        $client->createToken($clientName .' (ID: '. $client->id.')');
+
         return $client;
     }
 }

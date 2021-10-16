@@ -28,11 +28,13 @@ class TaskFactory extends Factory
             'task_status_id' => TaskStatus::PENDING,
             'task_disposition_id' => null,
             'agent_id' => null,
-            'unstructured_data' => [],
+            'is_followup' => $this->faker->boolean,
+            'is_first_contact' => $this->faker->boolean,
+            'is_client_requested' => $this->faker->boolean,
             'available_at' => now(),
             'assigned_at' => null,
             'expires_at' => null,
-            'closed_at' => null,
+            'completed_at' => null,
         ];
     }
 }

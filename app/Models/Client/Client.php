@@ -6,6 +6,7 @@ use App\Models\Lead\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * App\Models\Client\Client
@@ -20,6 +21,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $leads
+ * @property-read int|null $leads_count
+ * @property string $label
+ * @method static \Database\Factories\Client\ClientFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereLabel($value)
  */
 class Client extends Model
 {

@@ -181,6 +181,7 @@ return [
         App\Providers\TaskServiceProvider::class,
         App\Providers\AgentServiceProvider::class,
         App\Providers\RosterServiceProvider::class,
+        App\Providers\LeadServiceProvider::class,
     ],
 
     /*

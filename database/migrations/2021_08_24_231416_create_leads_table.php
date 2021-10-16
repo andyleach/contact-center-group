@@ -7,7 +7,7 @@ use App\Models\Lead\LeadDisposition;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\Lead\LeadProvider;
 class CreateLeadsTable extends Migration
 {
     /**
@@ -17,6 +17,12 @@ class CreateLeadsTable extends Migration
      */
     public function up()
     {
+        Schema::create('lead_providers', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
+            $table->timestamps();
+        });
+
         Schema::create('lead_dispositions', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
@@ -44,17 +50,20 @@ class CreateLeadsTable extends Migration
 
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Client::class, 'client_id');
-            $table->foreignIdFor(LeadType::class, 'lead_type_id');
-            $table->foreignIdFor(LeadStatus::class, 'lead_status_id');
-            $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('full_name');
+            $table->foreignIdFor(Client::class, 'client_id');
+            $table->foreignIdFor(LeadType::class, 'lead_type_id');
+            $table->foreignIdFor(LeadStatus::class, 'lead_status_id');
+            $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id')->nullable();
+            $table->foreignIdFor(\App\Models\Lead\LeadProvider::class, 'lead_provider_id')
+                ->comment('The originator of the lead.  This will most likely be just BetterCarPeople');
             $table->timestamps();
         });
 
         $this->initializeLeadStatuses();
+        $this->initializeLeadProviders();
     }
 
     /**
@@ -67,15 +76,72 @@ class CreateLeadsTable extends Migration
         Schema::dropIfExists('lead_statuses');
         Schema::dropIfExists('lead_dispositions');
         Schema::dropIfExists('lead_types');
+        Schema::dropIfExists('lead_providers');
         Schema::dropIfExists('leads');
+    }
+
+    public function initializeLeadTypes() {
+        LeadType::query()->insert([
+            [
+                'id' => LeadType::SALES,
+                'label' => 'Sales',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadType::SERVICE,
+                'label' => 'Service',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+    }
+
+    public function initializeLeadDispositions() {
+
+    }
+
+    public function initializeLeadProviders() {
+        LeadProvider::query()->insert([
+            [
+                'id' => LeadProvider::BETTER_CAR_PEOPLE,
+                'label' => 'Better Car People',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     public function initializeLeadStatuses() {
         LeadStatus::query()->insert([
             [
-                'id' => LeadStatus::PENDING,
-                'label' => 'Pending',
-                'description' => 'The lead has been created, but work has not begun.',
+                'id' => LeadStatus::RECEIVED,
+                'label' => 'Received',
+                'description' => 'The lead has been received, and we are awaiting processing.',
+                'is_billable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::IMPORT_STARTED,
+                'label' => 'Lead Import Started',
+                'description' => 'The leads has been received and we have started the import process.',
+                'is_billable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::IMPORT_COMPLETED,
+                'label' => 'Lead Import Completed',
+                'description' => 'The lead has been created, and all processing is done, but work has not begun.',
+                'is_billable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::IMPORT_FAILED,
+                'label' => 'Lead Import Failed',
+                'description' => 'We attempted to import the lead, but there was a failure along the way that needs to be fixed',
                 'is_billable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
