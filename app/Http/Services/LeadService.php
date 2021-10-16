@@ -11,8 +11,7 @@ use App\Models\Lead\Lead;
 class LeadService {
 
     /**
-     * @var CreatesNewLeadContract|\Illuminate\Contracts\Foundation\Application|mixed $c
-     *
+     * @var CreatesNewLeadContract|\Illuminate\Contracts\Foundation\Application|mixed
      */
     protected CreatesNewLeadContract $createLeadAction;
 
