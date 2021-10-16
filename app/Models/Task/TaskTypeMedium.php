@@ -30,6 +30,8 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|TaskTypeMedium whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TaskTypeMedium whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskTypeMedium whereDeletedAt($value)
  */
 class TaskTypeMedium extends Model
 {

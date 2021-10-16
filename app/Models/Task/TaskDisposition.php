@@ -29,6 +29,8 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|TaskDisposition whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TaskDisposition whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskDisposition whereDeletedAt($value)
  */
 class TaskDisposition extends Model
 {

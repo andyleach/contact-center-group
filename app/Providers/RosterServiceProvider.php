@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Actions\Agent\AgentDisabling\GraceFullyDisableAgent;
+use App\Actions\Agent\AgentDisabling\GracefullyDisableAgent;
 use App\Actions\Roster\ManuallyAssignAgentHoursOnRoster;
 use App\Actions\Roster\RemoveAllHoursFromAgentOnRoster;
 use App\Contracts\Agent\DisablesAgentContract;

@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadDisposition whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadDisposition whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadDisposition whereDeletedAt($value)
  */
 class LeadDisposition extends Model
 {

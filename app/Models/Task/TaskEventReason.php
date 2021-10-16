@@ -30,6 +30,8 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskEventReason whereDeletedAt($value)
  */
 class TaskEventReason extends Model
 {

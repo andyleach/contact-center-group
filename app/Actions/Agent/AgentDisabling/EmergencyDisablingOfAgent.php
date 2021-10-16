@@ -10,6 +10,7 @@ use App\Models\Agent\Agent;
  * EmergencyDisablingOfAgent
  *
  * Disables an agent, and locks down all forms of access. This includes:
+ *
  * - Terminating all forms of active communication (Calls, Sms, Email, Live Chat)
  * - Disabling the agent to prevent future work
  * - Disabling the login to prevent any further access to the application
@@ -21,7 +22,8 @@ class EmergencyDisablingOfAgent implements DisablesAgentContract {
      * @return Agent
      */
     public function handle(Agent $agent): Agent {
-        // TODO: Implement handle() method.
+        $agent->disabled_at = now();
+        $agent->save();
 
         AgentDisabled::dispatch($agent);
 

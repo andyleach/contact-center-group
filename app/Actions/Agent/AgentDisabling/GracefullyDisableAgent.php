@@ -7,17 +7,18 @@ use App\Events\Agent\AgentDisabled;
 use App\Models\Agent\Agent;
 
 /**
- * GraceFullyDisableAgent
+ * GracefullyDisableAgent
  *
  * Disables the agent and allows them to finish all open work, but will prevent them from being assigned anything new
  */
-class GraceFullyDisableAgent implements DisablesAgentContract {
+class GracefullyDisableAgent implements DisablesAgentContract {
     /**
      * @param Agent $agent
      * @return Agent
      */
     public function handle(Agent $agent): Agent {
-        // TODO: Implement handle() method.
+        $agent->disabled_at = now();
+        $agent->save();
 
         AgentDisabled::dispatch($agent);
 

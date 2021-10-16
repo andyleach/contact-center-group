@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereDeletedAt($value)
  */
 class LeadStatus extends Model
 {

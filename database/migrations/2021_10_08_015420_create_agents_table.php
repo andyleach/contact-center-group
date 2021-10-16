@@ -28,6 +28,7 @@ class CreateAgentsTable extends Migration
             $table->foreignIdFor(AgentAvailabilityType::class, 'availability_type_id');
             $table->string('name');
             $table->timestamp('last_task_assigned_at')->index()->nullable();
+            $table->timestamp('disabled_at')->index()->nullable();
             $table->timestamps();
         });
 

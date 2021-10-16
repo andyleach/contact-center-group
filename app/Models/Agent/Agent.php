@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Agent whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Agent whereUserId($value)
  * @mixin \Eloquent
+ * @property string|null $disabled_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereDisabledAt($value)
  */
 class Agent extends Model
 {

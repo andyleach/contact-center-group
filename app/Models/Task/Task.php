@@ -57,6 +57,19 @@ use Illuminate\Support\Collection;
  * @property-read Agent|null $agent
  * @method static \Database\Factories\Task\TaskFactory factory(...$parameters)
  * @method static Builder|Task whereAgentId($value)
+ * @property int|null $sequence_id
+ * @property string|null $sequence_action_identifier
+ * @property-read \App\Models\Task\TaskDetail|null $taskDetails
+ * @method static Builder|Task whereSequenceActionIdentifier($value)
+ * @method static Builder|Task whereSequenceId($value)
+ * @property int $is_first_contact
+ * @property int $is_followup
+ * @property int $is_client_requested
+ * @property string|null $completed_at
+ * @method static Builder|Task whereCompletedAt($value)
+ * @method static Builder|Task whereIsClientRequested($value)
+ * @method static Builder|Task whereIsFirstContact($value)
+ * @method static Builder|Task whereIsFollowup($value)
  */
 class Task extends Model
 {

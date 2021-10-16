@@ -36,6 +36,8 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereDeletedAt($value)
  */
 class TaskStatus extends Model
 {

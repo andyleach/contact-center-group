@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|AgentAvailabilityType whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AgentAvailabilityType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $is_task_assignment_allowed
+ * @method static \Illuminate\Database\Eloquent\Builder|AgentAvailabilityType whereIsTaskAssignmentAllowed($value)
  */
 class AgentAvailabilityType extends Model
 {

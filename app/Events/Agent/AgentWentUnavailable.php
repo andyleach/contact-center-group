@@ -9,8 +9,8 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Indicates that the user is no longer available to perform work. No new tasks will be assigned and any tasks
- * still assigned to them will be returned to the pool
+ * Indicates that the user is no longer available to perform work. No new tasks will be assigned, and all existing
+ * tasks that were assigned have been closed out.
  */
 class AgentWentUnavailable {
     use Dispatchable, InteractsWithSockets, SerializesModels;
