@@ -4,8 +4,10 @@ namespace App\Jobs\Lead;
 
 use App\Actions\Customer\AssociateLeadWithExistingCustomer;
 use App\Actions\Customer\CreateCustomerFromLead;
+use App\Actions\Customer\MatchOrCreateCustomerForLead;
 use App\Actions\Lead\DismissLead;
 use App\Actions\Lead\LeadMatching\MatchLeadUsingCustomerContactInformation;
+use App\Actions\Lead\RouteLead;
 use App\Actions\Lead\Routing\RouteLeadByType;
 use App\Actions\Sequence\AssignSequence;
 use App\Contracts\Lead\PerformsLeadMatchingContract;
@@ -13,6 +15,9 @@ use App\Contracts\Lead\RoutesNewLeadsForClientContract;
 use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
+use App\Http\Services\CustomerService;
+use App\Http\Services\LeadImportingService;
+use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use Illuminate\Bus\Queueable;
@@ -22,7 +27,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ImportLeadReceivedFromLeadProvider implements ShouldQueue
+class ImportNewLead implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,6 +35,10 @@ class ImportLeadReceivedFromLeadProvider implements ShouldQueue
      * @var Lead $lead
      */
     protected Lead $lead;
+
+    protected LeadImportingService $leadImportingService;
+
+    protected CustomerService $customerService;
 
     /**
      * Create a new job instance.
@@ -39,12 +48,12 @@ class ImportLeadReceivedFromLeadProvider implements ShouldQueue
     public function __construct(Lead $lead)
     {
         $this->lead = $lead;
+
+        $this->leadImportingService = new LeadImportingService();
     }
 
     protected function failed() {
-        $this->lead->lead_status_id = LeadStatus::IMPORT_FAILED;
-        $this->lead->save();
-        LeadImportFailed::dispatch($this->lead);
+        $this->leadImportingService->failedImporting($this->lead);
     }
 
     /**
@@ -54,18 +63,14 @@ class ImportLeadReceivedFromLeadProvider implements ShouldQueue
      */
     public function handle()
     {
-        $this->lead->lead_status_id = LeadStatus::IMPORT_STARTED;
-        $this->lead->save();
-        LeadImportStarted::dispatch($this->lead);
+        $this->leadImportingService->startedImporting($this->lead);
 
-        // Match lead to customer
-            // If matched to customer
-            app(AssociateLeadWithExistingCustomer::class);
-                // Add new phone numbers to customer profile
-                // Add new emails to customer profile
-            // If we didn't match the lead to a customer
-            app(CreateCustomerFromLead::class);
-                // Create a new customer from the lead data
+        $lead = $this->handleCustomerAssociation($this->lead);
+
+        $lead = $this->handleLeadDuplicationChecking($lead);
+
+        $lead = $this->handleSequenceAssignment($lead);
+
 
         // Perform duplicate checking.  We should support multiple duplication handling strategies. Strategy should be dictated by lead type
             // Strategies:
@@ -73,13 +78,35 @@ class ImportLeadReceivedFromLeadProvider implements ShouldQueue
                 // Assign new sequence to original lead and dismiss
             // Exit out of job on identifying existence of duplicate
 
-        // Route lead according to lead type
-            app(RoutesNewLeadsForClientContract::class);
-            // Assigns sequence
-            // Creates first task
+        app(RouteLead::class)->route($this->lead);
 
-        $this->lead->lead_status_id = LeadStatus::IMPORT_COMPLETED;
-        $this->lead->save();
-        LeadImportCompleted::dispatch($this->lead);
+
+        $this->leadImportingService->completedImporting($this->lead);
+    }
+
+    /**
+     * @param Lead $lead
+     * @return Lead
+     */
+    protected function handleCustomerAssociation(Lead $lead): Lead {
+        $customer = $this->customerService->matchLeadToCustomer($this->lead);
+        if (false == is_a($customer, Customer::class)) {
+            $customer = $this->customerService->createCustomerFromLead($this->lead);
+        }
+
+
+        // attach the phone numbers
+        // attach the emails
+
+        return $lead;
+    }
+
+    protected function handleLeadDuplicationChecking(Lead $lead): Lead {
+        return $lead;
+    }
+
+    public function handleSequenceAssignment(Lead $lead): Lead {
+        // Perform sequence assignment via client configuration
+        return $lead;
     }
 }

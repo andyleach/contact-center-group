@@ -62,8 +62,10 @@ class CreateLeadsTable extends Migration
             $table->timestamps();
         });
 
+        $this->initializeLeadTypes();
         $this->initializeLeadStatuses();
         $this->initializeLeadProviders();
+        $this->initializeLeadTypes();
     }
 
     /**
@@ -172,7 +174,7 @@ class CreateLeadsTable extends Migration
             ],
             [
                 'id' => LeadStatus::CLOSED_SUBSCRIPTION_TERMINATED,
-                'label' => 'Closed (Subscription Terminated',
+                'label' => 'Closed (Subscription Terminated)',
                 'description' => 'We have closed out the lead because we are no longer working with the client.',
                 'is_billable' => true,
                 'created_at' => now(),

@@ -4,6 +4,7 @@ namespace App\Models\Lead;
 
 use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
+use App\Models\Customer\Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,9 +60,16 @@ class Lead extends Model
     ];
 
     protected $fillable = [
-        'client_id', 'lead_type_id', 'sequence_id', 'last_sequence_action_identifier',
+        'client_id', 'lead_type_id', 'sequence_id', 'last_sequence_action_identifier', 'customer_id',
         'first_name', 'last_name', 'full_name', 'lead_status_id', 'lead_disposition_id', 'lead_provider_id'
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer(): BelongsTo {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 
     public function client(): BelongsTo {
         return $this->belongsTo(Client::class, 'client_id');
