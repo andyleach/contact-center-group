@@ -76,7 +76,7 @@ class TaskQueueService {
         return $task;
     }
 
-    public function expire(Task $task, int $task_event_reason_id): Task {
+    public function expire(Task $task, int $task_event_reason_id = TaskEventReason::NOT_APPLICABLE): Task {
         $rowsUpdated = Task::query()
             ->where('id', $task->id)
             ->expirable()
@@ -99,7 +99,7 @@ class TaskQueueService {
         return $task;
     }
 
-    public function remove(Task $task): Task {
+    public function remove(Task $task, int $task_event_reason_id = TaskEventReason::NOT_APPLICABLE): Task {
         $rowsUpdated = Task::query()
             ->where('id', $task->id)
             ->where('task_status_id', TaskStatus::PENDING)
