@@ -17,6 +17,7 @@ use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Http\Services\CustomerService;
 use App\Http\Services\LeadImportingService;
+use App\Http\Services\LeadService;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
@@ -36,7 +37,7 @@ class ImportNewLead implements ShouldQueue
      */
     protected Lead $lead;
 
-    protected LeadImportingService $leadImportingService;
+    protected LeadService $leadService;
 
     protected CustomerService $customerService;
 
@@ -49,11 +50,11 @@ class ImportNewLead implements ShouldQueue
     {
         $this->lead = $lead;
 
-        $this->leadImportingService = new LeadImportingService();
+        $this->leadService = new LeadService();
     }
 
     protected function failed() {
-        $this->leadImportingService->failedImporting($this->lead);
+        $this->leadService->failedImporting($this->lead);
     }
 
     /**
@@ -63,7 +64,7 @@ class ImportNewLead implements ShouldQueue
      */
     public function handle()
     {
-        $this->leadImportingService->startedImporting($this->lead);
+        $this->leadService->startedImporting($this->lead);
 
         $lead = $this->handleCustomerAssociation($this->lead);
 
@@ -81,7 +82,7 @@ class ImportNewLead implements ShouldQueue
         app(RouteLead::class)->route($this->lead);
 
 
-        $this->leadImportingService->completedImporting($this->lead);
+        $this->leadService->completedImporting($this->lead);
     }
 
     /**
