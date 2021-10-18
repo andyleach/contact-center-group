@@ -2,27 +2,11 @@
 
 namespace App\Jobs\Lead;
 
-use App\Actions\Customer\AssociateLeadWithExistingCustomer;
-use App\Actions\Customer\CreateCustomerFromLead;
-use App\Actions\Customer\MatchOrCreateCustomerForLead;
-use App\Actions\Lead\DismissLead;
-use App\Actions\Lead\LeadMatching\MatchLeadUsingCustomerContactInformation;
-use App\Actions\Lead\RouteLead;
-use App\Actions\Lead\Routing\RouteLeadByType;
-use App\Actions\Sequence\AssignSequence;
-use App\Contracts\Lead\PerformsLeadMatchingContract;
-use App\Contracts\Lead\RoutesNewLeadsForClientContract;
-use App\Events\Lead\LeadImportCompleted;
-use App\Events\Lead\LeadImportFailed;
-use App\Events\Lead\LeadImportStarted;
 use App\Http\Services\CustomerService;
-use App\Http\Services\LeadImportingService;
 use App\Http\Services\LeadService;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
-use App\Models\Lead\LeadStatus;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -79,7 +63,7 @@ class ImportNewLead implements ShouldQueue
                 // Assign new sequence to original lead and dismiss
             // Exit out of job on identifying existence of duplicate
 
-        app(RouteLead::class)->route($this->lead);
+        //app(RouteLead::class)->route($this->lead);
 
 
         $this->leadService->completedImporting($this->lead);
