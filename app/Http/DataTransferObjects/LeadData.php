@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Lead\DataTransferObjects;
+namespace App\Http\DataTransferObjects;
 
 use App\Http\Requests\Api\StoreLeadRequest;
 use App\Models\Lead\LeadStatus;

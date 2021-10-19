@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Services;
 
-use App\Actions\Lead\DataTransferObjects\LeadData;
 use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Events\Lead\LeadReceived;
+use App\Http\DataTransferObjects\LeadData;
 use App\Http\Services\LeadService;
 use App\Jobs\Lead\ImportLeadJob;
 use App\Models\Lead\Lead;

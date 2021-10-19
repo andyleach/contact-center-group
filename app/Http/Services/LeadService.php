@@ -2,14 +2,13 @@
 
 namespace App\Http\Services;
 
-use App\Actions\Lead\DataTransferObjects\LeadData;
 use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Events\Lead\LeadDismissed;
 use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Events\Lead\LeadReceived;
-use App\Jobs\Lead\ImportLeadJob;
+use App\Http\DataTransferObjects\LeadData;
 use App\Models\Client\Client;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;

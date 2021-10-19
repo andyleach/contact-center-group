@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Task\DataTransferObjects;
+namespace App\Http\DataTransferObjects;
 
 use Carbon\Carbon;
 

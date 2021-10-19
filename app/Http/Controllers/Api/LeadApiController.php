@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\Lead\DataTransferObjects\LeadData;
 use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Http\Controllers\Controller;
+use App\Http\DataTransferObjects\LeadData;
 use App\Http\Requests\Api\StoreLeadRequest;
 use App\Http\Services\LeadService;
 use App\Models\Lead\Lead;

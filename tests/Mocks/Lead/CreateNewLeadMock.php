@@ -2,8 +2,8 @@
 
 namespace Tests\Mocks\Lead;
 
-use App\Actions\Lead\DataTransferObjects\LeadData;
 use App\Contracts\Lead\CreatesNewLeadContract;
+use App\Http\DataTransferObjects\LeadData;
 use App\Models\Lead\Lead;
 
 class CreateNewLeadMock implements CreatesNewLeadContract {
