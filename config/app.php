@@ -178,7 +178,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
 
         // Application Providers
-        App\Providers\ContactCenterServiceProvider::class,
+
     ],
 
     /*
