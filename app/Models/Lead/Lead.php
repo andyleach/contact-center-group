@@ -67,9 +67,14 @@ class Lead extends Model
         'created' => LeadCreated::class
     ];
 
+    protected $casts = [
+        'meta_data' => 'array'
+    ];
+
     protected $fillable = [
         'client_id', 'lead_type_id', 'sequence_id', 'last_sequence_action_identifier', 'customer_id',
-        'first_name', 'last_name', 'full_name', 'lead_status_id', 'lead_disposition_id', 'lead_provider_id'
+        'first_name', 'last_name', 'full_name', 'lead_status_id', 'lead_disposition_id', 'lead_provider_id',
+        'meta_data'
     ];
 
     /**

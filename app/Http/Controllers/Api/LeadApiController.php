@@ -44,7 +44,7 @@ class LeadApiController extends Controller
         $data = LeadData::fromRequest($request);
         $data->setLeadProviderId(LeadProvider::BETTER_CAR_PEOPLE);
 
-        $lead = $this->service->createNewLeadWithDataFromLeadProvider($data);
+        $lead = $this->service->createLead($data);
 
         return response()->json($lead);
     }

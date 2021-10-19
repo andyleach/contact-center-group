@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Rules\NowOrFutureDateRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLeadRequest extends FormRequest
@@ -30,6 +31,19 @@ class StoreLeadRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'full_name' => 'required|string',
+
+            // Perform validation on phone numbers
+            'primary_phone_number' => 'sometimes|string',
+            'secondary_phone_numbers' => 'required|array',
+            'secondary_phone_numbers.*' => 'string',
+
+            // Perform validation on email addresses
+            'primary_email_address' => 'sometimes|email:rfc,dns',
+            'secondary_email_addresses' => 'required|array',
+            'secondary_email_addresses.*' => 'string|email:rfc,dns',
+
+            'meta_data' => 'sometimes|array',
+            'import_at' => ['required', new NowOrFutureDateRule()]
         ];
     }
 }
