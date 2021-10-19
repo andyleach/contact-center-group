@@ -14,6 +14,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Opportunity newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Opportunity query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Opportunity whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Opportunity whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Opportunity whereUpdatedAt($value)
  */
 class Opportunity extends Model
 {
