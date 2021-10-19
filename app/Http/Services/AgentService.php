@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Contracts\AgentServiceContract;
 use App\Events\Agent\AgentBeganWindingDown;
 use App\Events\Agent\AgentDisabled;
 use App\Events\Agent\AgentWentAvailable;
@@ -12,7 +13,7 @@ use App\Models\Agent\Agent;
 use App\Models\Agent\AgentAvailabilityType;
 use App\Models\Roster\Roster;
 
-class AgentService {
+class AgentService implements AgentServiceContract {
 
     /**
      * @param Agent $agent
@@ -33,6 +34,12 @@ class AgentService {
             ->exists();
     }
 
+    /**
+     * @param Agent $agent
+     * @return Agent
+     * @throws AgentNotScheduledForWorkException
+     * @throws RosterDoesNotExistException
+     */
     public function markAgentAsAvailable(Agent $agent): Agent {
         $isAgentScheduledForWork = $this->isAgentCurrentlyScheduledToWork($agent);
         if (false == $isAgentScheduledForWork) {

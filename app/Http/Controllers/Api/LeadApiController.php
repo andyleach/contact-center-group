@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Lead\CreatesNewLeadContract;
+use App\Events\Lead\LeadReceived;
 use App\Http\Controllers\Controller;
 use App\Http\DataTransferObjects\LeadData;
 use App\Http\Requests\Api\StoreLeadRequest;
@@ -44,7 +45,7 @@ class LeadApiController extends Controller
         $data = LeadData::fromRequest($request);
         $data->setLeadProviderId(LeadProvider::BETTER_CAR_PEOPLE);
 
-        $lead = $this->service->createLead($data);
+        $lead = $this->service->receiveLeadFromProvider($data);
 
         return response()->json($lead);
     }

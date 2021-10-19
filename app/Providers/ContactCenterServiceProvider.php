@@ -2,14 +2,17 @@
 
 namespace App\Providers;
 
-use App\Actions\Lead\CreateNewLead;
-use App\Contracts\Lead\CreatesNewLeadContract;
+use App\Contracts\AgentServiceContract;
+use App\Contracts\TaskQueueServiceContract;
+use App\Http\Services\AgentService;
+use App\Http\Services\TaskQueueService;
 use Illuminate\Support\ServiceProvider;
 
-class LeadServiceProvider extends ServiceProvider
+class ContactCenterServiceProvider extends ServiceProvider
 {
     public $bindings = [
-        CreatesNewLeadContract::class => CreateNewLead::class
+        AgentServiceContract::class => AgentService::class,
+        TaskQueueServiceContract::class => TaskQueueService::class,
     ];
 
     /**

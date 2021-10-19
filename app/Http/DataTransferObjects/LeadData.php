@@ -5,8 +5,19 @@ namespace App\Http\DataTransferObjects;
 use App\Http\Requests\Api\StoreLeadRequest;
 use App\Models\Lead\LeadStatus;
 use Carbon\Carbon;
+use Database\Factories\Lead\LeadDataFactory;
 
-class LeadData {
+class LeadData extends AbstractDataTransferObject {
+    /**
+     * Ensures that you can use factories to create lead data.  This means that you can start from the same baseline
+     * by default when creating a new instance
+     *
+     * @return LeadDataFactory
+     */
+    public static function newFactory() {
+        return new LeadDataFactory();
+    }
+
     /**
      * @var int $client_id The client who we have assigned the lead to
      */
@@ -20,7 +31,7 @@ class LeadData {
     /**
      * @var int $lead_status_id
      */
-    public int $lead_status_id = LeadStatus::RECEIVED;
+    public int $lead_status_id = LeadStatus::AWAITING_IMPORT;
 
     /**
      * @var string $first_name
@@ -94,8 +105,6 @@ class LeadData {
 
         // Meta data
         $dto->meta_data = $request->input('meta_data', []);
-
-        $dto->lead_status_id = LeadStatus::RECEIVED;
 
         return $dto;
     }

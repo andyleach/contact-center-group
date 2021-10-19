@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Contracts\TaskQueueServiceContract;
 use App\Events\Task\TaskAssigned;
 use App\Events\Task\TaskAssignmentCancelled;
 use App\Events\Task\TaskExpired;
@@ -15,7 +16,7 @@ use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
 
-class TaskQueueService {
+class TaskQueueService implements TaskQueueServiceContract {
     /**
      * @param Task $task
      * @param Agent $agent

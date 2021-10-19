@@ -2,34 +2,32 @@
 
 namespace App\Http\Services;
 
-use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Events\Lead\LeadDismissed;
 use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Events\Lead\LeadReceived;
 use App\Http\DataTransferObjects\LeadData;
-use App\Models\Client\Client;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
+use App\Models\LeadList\LeadList;
 use App\Models\Sequence\Sequence;
 use App\Models\Task\Task;
 
 class LeadService {
 
     public function createLead(LeadData $data) {
-        $client = Client::findOrFail($data->client_id);
-
         $lead = Lead::make([
+            'client_id' => $data->client_id,
             'first_name' => $data->first_name,
             'last_name' => $data->last_name,
             'full_name' => $data->full_name,
-            'lead_status_id' => LeadStatus::RECEIVED,
+            'lead_status_id' => $data->lead_status_id,
             'lead_disposition_id' => null,
             'lead_type_id' => $data->lead_type_id,
-            'lead_provider_id' => $data->lead_provider_id
+            'lead_provider_id' => $data->lead_provider_id,
+            'meta_data' => $data->meta_data
         ]);
-        $client->leads()->save($lead);
 
         return $lead;
     }
@@ -89,7 +87,6 @@ class LeadService {
     /**
      * @param LeadData $data
      * @return Lead
-     * @throws \Exception
      */
     public function receiveLeadFromProvider(LeadData $data): Lead {
         // Create the new lead
@@ -97,8 +94,24 @@ class LeadService {
 
         LeadReceived::dispatch($lead);
 
-        $lead->lead_status_id = LeadStatus::AWAITING_IMPORT;
-        $lead->save();
+        // Determine the best sequence to assign
+        // Create the first task
+
+        return $lead;
+    }
+
+    /**
+     * @param LeadData $data
+     * @return Lead
+     */
+    public function createLeadForLeadList(LeadList $leadList, LeadData $data): Lead {
+        // Create the new lead
+        $lead = $this->createLead($data);
+
+        LeadReceived::dispatch($lead);
+
+        // Determine the best sequence to assign
+        // Create the first task
 
         return $lead;
     }

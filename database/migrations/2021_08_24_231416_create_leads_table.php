@@ -59,6 +59,7 @@ class CreateLeadsTable extends Migration
             $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id')->nullable();
             $table->foreignIdFor(\App\Models\Lead\LeadProvider::class, 'lead_provider_id')
                 ->comment('The originator of the lead.  This will most likely be just BetterCarPeople');
+            $table->json('meta_data');
             $table->timestamps();
         });
 
@@ -117,9 +118,9 @@ class CreateLeadsTable extends Migration
     public function initializeLeadStatuses() {
         LeadStatus::query()->insert([
             [
-                'id' => LeadStatus::RECEIVED,
-                'label' => 'Received',
-                'description' => 'The lead has been received, and we are awaiting processing.',
+                'id' => LeadStatus::DRAFT,
+                'label' => 'Draft',
+                'description' => 'The lead has uploaded to the system, but it is not yet ready to be imported.',
                 'is_billable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),

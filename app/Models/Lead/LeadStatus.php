@@ -47,7 +47,7 @@ class LeadStatus extends Model
      * TODO: Should we behave like a CRM or rebuild contact center?
      */
 
-    const RECEIVED = 1;
+    const DRAFT = 1;
     const AWAITING_IMPORT = 2;
     const IMPORT_STARTED = 3;
     const IMPORT_FAILED = 4;
