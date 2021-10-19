@@ -65,7 +65,7 @@ class CreateLeadsTable extends Migration
         $this->initializeLeadTypes();
         $this->initializeLeadStatuses();
         $this->initializeLeadProviders();
-        $this->initializeLeadTypes();
+        $this->initializeLeadDispositions();
     }
 
     /**
@@ -120,6 +120,14 @@ class CreateLeadsTable extends Migration
                 'id' => LeadStatus::RECEIVED,
                 'label' => 'Received',
                 'description' => 'The lead has been received, and we are awaiting processing.',
+                'is_billable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => LeadStatus::AWAITING_IMPORT,
+                'label' => 'Awaiting Import',
+                'description' => 'The lead has been scheduled for import, and is awaiting the import_at date.',
                 'is_billable' => false,
                 'created_at' => now(),
                 'updated_at' => now(),

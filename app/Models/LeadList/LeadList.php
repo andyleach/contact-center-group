@@ -2,8 +2,12 @@
 
 namespace App\Models\LeadList;
 
+use App\Models\Client\Client;
+use App\Models\Lead\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\LeadList\LeadList
@@ -30,8 +34,41 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadList whereMaxLeadsToImportInDay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadList whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read Client $client
+ * @property-read \App\Models\LeadList\LeadListStatus $leadListStatus
+ * @property-read \App\Models\LeadList\LeadListType $leadListType
+ * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $leads
+ * @property-read int|null $leads_count
  */
 class LeadList extends Model
 {
     use HasFactory;
+
+    /**
+     * @return BelongsTo
+     */
+    public function client(): BelongsTo {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function leadListStatus(): BelongsTo {
+        return $this->belongsTo(LeadListStatus::class, 'lead_list_status_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function leadListType(): BelongsTo {
+        return $this->belongsTo(LeadListType::class, 'lead_list_type_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function leads(): HasMany {
+        return $this->hasMany(Lead::class, 'list_id');
+    }
 }

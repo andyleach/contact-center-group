@@ -9,7 +9,7 @@ use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Events\Lead\LeadReceived;
-use App\Jobs\Lead\ImportNewLead;
+use App\Jobs\Lead\ImportLeadJob;
 use App\Models\Client\Client;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
@@ -17,18 +17,6 @@ use App\Models\Sequence\Sequence;
 use App\Models\Task\Task;
 
 class LeadService {
-
-    /**
-     * @var CreatesNewLeadContract|\Illuminate\Contracts\Foundation\Application|mixed
-     */
-    protected CreatesNewLeadContract $createLeadAction;
-
-    /**
-     *
-     */
-    public function __construct() {
-        $this->createLeadAction = app(CreatesNewLeadContract::class);
-    }
 
     public function createLead(LeadData $data) {
         $client = Client::findOrFail($data->client_id);
@@ -110,7 +98,8 @@ class LeadService {
 
         LeadReceived::dispatch($lead);
 
-        ImportNewLead::dispatch($lead);
+        $lead->lead_status_id = LeadStatus::AWAITING_IMPORT;
+        $lead->save();
 
         return $lead;
     }

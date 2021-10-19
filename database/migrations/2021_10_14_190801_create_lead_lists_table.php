@@ -52,13 +52,9 @@ class CreateLeadListsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('lead_list_pending_leads', function (Blueprint $table) {
-            $table->id();
-            $table->string('label')->unique();
-            $table->foreignIdFor(LeadList::class, 'lead_list_id');
-            $table->foreignIdFor(Lead::class, 'lead_id');
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::table('leads', function (Blueprint $table) {
+            $table->foreignIdFor(LeadList::class, 'lead_list_id')->nullable();
+            $table->timestamp('import_at')->nullable()->after('lead_provider_id')->index();
         });
 
     }
@@ -74,6 +70,5 @@ class CreateLeadListsTable extends Migration
         Schema::dropIfExists('lead_list_events');
         Schema::dropIfExists('lead_list_statuses');
         Schema::dropIfExists('lead_lists');
-        Schema::dropIfExists('lead_list_pending_leads');
     }
 }

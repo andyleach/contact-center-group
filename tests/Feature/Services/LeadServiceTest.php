@@ -6,7 +6,7 @@ use App\Actions\Lead\DataTransferObjects\LeadData;
 use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Events\Lead\LeadReceived;
 use App\Http\Services\LeadService;
-use App\Jobs\Lead\ImportNewLead;
+use App\Jobs\Lead\ImportLeadJob;
 use App\Models\Lead\Lead;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -33,7 +33,7 @@ class LeadServiceTest extends TestCase
         $data = new LeadData();
 
         $this->expectsEvents(LeadReceived::class);
-        $this->expectsJobs(ImportNewLead::class);
+        $this->expectsJobs(ImportLeadJob::class);
         $lead = $this->service->createNewLeadWithDataFromLeadProvider($data);
         $this->assertInstanceOf(Lead::class, $lead);
     }

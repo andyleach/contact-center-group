@@ -5,6 +5,7 @@ namespace App\Models\Lead;
 use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use App\Models\Customer\Customer;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -47,6 +48,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \App\Models\Lead\LeadType $leadType
  * @property int $lead_provider_id The originator of the lead.  This will most likely be just BetterCarPeople
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereLeadProviderId($value)
+ * @property string|null $import_at
+ * @property int|null $lead_list_id
+ * @property-read Customer $customer
+ * @method static \Database\Factories\Lead\LeadFactory factory(...$parameters)
+ * @method static Builder|Lead readyForImport()
+ * @method static Builder|Lead whereImportAt($value)
+ * @method static Builder|Lead whereLeadListId($value)
  */
 class Lead extends Model
 {
@@ -85,5 +93,15 @@ class Lead extends Model
 
     public function leadDisposition(): BelongsTo {
         return $this->belongsTo(LeadDisposition::class, 'lead_disposition_id');
+    }
+
+    /**
+     * Scope that identifies leads that are ready to be imported by the system
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeReadyForImport(Builder $query): Builder {
+        return $query->where('lead_status_id', LeadStatus::AWAITING_IMPORT)
+            ->where('import_at', '<=', now());
     }
 }
