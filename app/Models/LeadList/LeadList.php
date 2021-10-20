@@ -2,6 +2,7 @@
 
 namespace App\Models\LeadList;
 
+use App\Events\LeadList\LeadListCreated;
 use App\Models\Client\Client;
 use App\Models\Lead\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +44,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class LeadList extends Model
 {
     use HasFactory;
+
+    public $dispatchesEvents = [
+        'created' => LeadListCreated::class,
+    ];
 
     /**
      * @return BelongsTo

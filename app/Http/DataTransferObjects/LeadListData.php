@@ -34,7 +34,7 @@ class LeadListData extends AbstractDataTransferObject {
          $data->label = $request->get('label');
          $data->max_leads_to_import_per_day = $request->get('max_leads_to_import_per_day');
          $data->lead_list_type_id = $request->get('lead_list_type_id');
-         //$data->lead_list_status_id = LeadListStatus::
+         $data->lead_list_status_id = LeadListStatus::CREATED;
 
         $leads = $request->get('leads');
         foreach ($leads as $lead) {
