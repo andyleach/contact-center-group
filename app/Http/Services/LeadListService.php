@@ -6,6 +6,7 @@ use App\Contracts\LeadServiceContract;
 use App\Contracts\LeadListServiceContract;
 use App\Events\LeadList\LeadListClosed;
 use App\Events\LeadList\LeadListCompleted;
+use App\Events\LeadList\LeadListConfirmed;
 use App\Events\LeadList\LeadListImportingPaused;
 use App\Events\LeadList\LeadListImportingResumed;
 use App\Events\LeadList\LeadListUploaded;
@@ -67,7 +68,9 @@ class LeadListService implements LeadListServiceContract {
         $leadList->lead_list_status_id = LeadListStatus::COMPLETED;
         $leadList->save();
 
-        LeadListCompleted::dispatch($leadList);
+        $this->scheduleLeads($leadList);
+
+        LeadListConfirmed::dispatch($leadList);
 
         return $leadList;
     }

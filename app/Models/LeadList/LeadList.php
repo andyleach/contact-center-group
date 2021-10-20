@@ -93,8 +93,12 @@ class LeadList extends Model
     public function leadsNotImported(): HasMany {
         return $this->leads()
             ->where(function($query) {
-                $query->where('lead_status_id', LeadStatus::AWAITING_IMPORT)
-                    ->orWhere('list_status_id', LeadStatus::DRAFT);
+                $query->whereIn('lead_status_id', [
+                    LeadStatus::DRAFT,
+                    LeadStatus::AWAITING_IMPORT,
+                    LeadStatus::IMPORT_STARTED,
+                    LeadStatus::IMPORT_FAILED
+                ]);
             });
     }
 }
