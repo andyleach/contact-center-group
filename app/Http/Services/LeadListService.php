@@ -9,6 +9,8 @@ use App\Events\LeadList\LeadListCompleted;
 use App\Events\LeadList\LeadListConfirmed;
 use App\Events\LeadList\LeadListImportingPaused;
 use App\Events\LeadList\LeadListImportingResumed;
+use App\Events\LeadList\LeadListSchedulingCompleted;
+use App\Events\LeadList\LeadListSchedulingStarted;
 use App\Events\LeadList\LeadListUploaded;
 use App\Http\DataTransferObjects\LeadListData;
 use App\Models\Lead\Lead;
@@ -32,6 +34,12 @@ class LeadListService implements LeadListServiceContract {
     public function scheduleLeads(LeadList $leadList): LeadList {
         $dayLeadsScheduledForImport = $this->getFirstDayAvailableForSchedulingWork($leadList);
 
+        LeadListSchedulingStarted::dispatch($leadList);
+
+        /**
+         * Find leads that haven't been scheduled, chunk them according to leads per day, and then schedule those leads
+         * according to the maximum leads per day
+         */
         $leadList
             ->leadsAwaitingScheduling()
             ->chunk(
@@ -51,6 +59,8 @@ class LeadListService implements LeadListServiceContract {
 
             $dayLeadsScheduledForImport->addDay();
         });
+
+        LeadListSchedulingCompleted::dispatch($leadList);
 
         return $leadList;
     }
