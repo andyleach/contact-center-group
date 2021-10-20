@@ -29,7 +29,7 @@ class LeadServiceTest extends TestCase
      */
     public function test_that_when_a_provider_sends_us_lead_data_we_will_create_a_new_lead() {
         /** @var LeadData $dto */
-        $dto = LeadData::factory()->make([]);
+        $dto = LeadData::factory()->unscheduled()->make([]);
 
         $this->expectsEvents(LeadReceived::class);
         $lead = $this->service->receiveLeadFromProvider($dto);
@@ -38,7 +38,7 @@ class LeadServiceTest extends TestCase
         $this->assertDatabaseHas('leads', [
             'client_id' => $dto->client_id,
             'lead_type_id' => $dto->lead_type_id,
-            'lead_status_id' => LeadStatus::AWAITING_IMPORT,
+            'lead_status_id' => LeadStatus::DRAFT,
             'first_name' => $dto->first_name,
             'last_name' => $dto->last_name,
             'full_name' => $dto->full_name

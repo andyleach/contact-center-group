@@ -28,6 +28,13 @@ class CreateLeadListsTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('lead_list_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('label')->unique();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
         Schema::create('lead_list_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();

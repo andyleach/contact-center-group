@@ -75,6 +75,8 @@ class LeadData extends AbstractDataTransferObject {
 
     public array $meta_data = [];
 
+    public ?int $lead_list_id = null;
+
     /**
      * @var Carbon $import_at With a lead list, we may not want to import all of our leads at once.  Should another
      *                        provider send us the lead though, we may want to begin work immediately.  This field

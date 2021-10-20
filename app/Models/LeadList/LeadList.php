@@ -51,7 +51,7 @@ class LeadList extends Model
     use HasFactory;
 
     protected $fillable = [
-        'label', 'max_leads_to_import_per_day', 'lead_list_type_id', 'client_id', 'start_work_at',
+        'label', 'max_leads_to_import_per_day', 'lead_list_type_id', 'client_id', 'start_work_at', 'lead_list_status_id'
     ];
 
     public $dispatchesEvents = [
@@ -83,7 +83,7 @@ class LeadList extends Model
      * @return HasMany
      */
     public function leads(): HasMany {
-        return $this->hasMany(Lead::class, 'list_id');
+        return $this->hasMany(Lead::class, 'lead_list_id');
     }
 
     public function leadsAwaitingScheduling(): HasMany {

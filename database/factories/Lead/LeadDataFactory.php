@@ -5,6 +5,7 @@ namespace Database\Factories\Lead;
 use App\Http\DataTransferObjects\LeadData;
 use App\Models\Client\Client;
 use App\Models\Lead\LeadProvider;
+use App\Models\Lead\LeadStatus;
 use App\Models\Lead\LeadType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -41,7 +42,34 @@ class LeadDataFactory extends Factory {
                 'model' => 'Camaro',
             ],
             'import_at' => Carbon::parse($this->faker->dateTimeBetween('now', '+30 days')),
-            'lead_provider_id' => LeadProvider::BETTER_CAR_PEOPLE
+            'lead_provider_id' => LeadProvider::BETTER_CAR_PEOPLE,
+            'lead_status_id' => $this->faker->randomElement([
+                LeadStatus::DRAFT,
+                LeadStatus::AWAITING_IMPORT,
+                LeadStatus::IMPORT_STARTED,
+                LeadStatus::IMPORT_FAILED,
+                LeadStatus::IMPORT_COMPLETED,
+                LeadStatus::WORKING,
+                LeadStatus::COMPLETED,
+                LeadStatus::CLOSED_SUBSCRIPTION_TERMINATED,
+                LeadStatus::CLOSED_AGED,
+                LeadStatus::DISMISSED
+            ])
         ];
+    }
+
+    /**
+     * Indicate that the user is suspended.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function unscheduled(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'lead_status_id' => LeadStatus::DRAFT,
+                'import_at' => now()
+            ];
+        });
     }
 }

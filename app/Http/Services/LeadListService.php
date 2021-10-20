@@ -22,13 +22,13 @@ use Carbon\Carbon;
 
 class LeadListService implements LeadListServiceContract {
     /**
-     * @var LeadServiceContract $leadService
+     * @var LeadService $leadService
      */
-    protected LeadServiceContract $leadService;
+    protected LeadService $leadService;
 
     public function __construct()
     {
-        $this->leadService = app(LeadServiceContract::class);
+        $this->leadService = new LeadService();
     }
 
     public function scheduleLeads(LeadList $leadList): LeadList {
@@ -75,7 +75,7 @@ class LeadListService implements LeadListServiceContract {
     }
 
     public function confirm(LeadList $leadList): LeadList {
-        $leadList->lead_list_status_id = LeadListStatus::COMPLETED;
+        $leadList->lead_list_status_id = LeadListStatus::CONFIRMED;
         $leadList->save();
 
         $this->scheduleLeads($leadList);
@@ -100,7 +100,8 @@ class LeadListService implements LeadListServiceContract {
             'max_leads_to_import_per_day' => $data->max_leads_to_import_per_day,
             'lead_list_status_id' => $data->lead_list_status_id,
             'lead_list_type_id' => $data->lead_list_type_id,
-            'client_id' => $data->client_id
+            'client_id' => $data->client_id,
+            'start_work_at' => $data->start_work_at
         ]);
 
         foreach ($data->leads as $lead) {
@@ -114,7 +115,10 @@ class LeadListService implements LeadListServiceContract {
         return $leadList;
     }
 
-    public function pauseLeadListImporting(LeadList $leadList): LeadList {
+    public function pauseImporting(LeadList $leadList): LeadList {
+        $leadList->lead_list_status_id = LeadListStatus::PAUSED;
+        $leadList->save();
+
         $leadList->leadsNotImported()->update([
             'import_at' => null,
             'lead_status_id' => LeadStatus::DRAFT
@@ -129,7 +133,10 @@ class LeadListService implements LeadListServiceContract {
      * @param LeadList $leadList
      * @return LeadList
      */
-    public function resumeLeadListImporting(LeadList $leadList): LeadList {
+    public function resumeImporting(LeadList $leadList): LeadList {
+        $leadList->lead_list_status_id = LeadListStatus::IMPORT_STARTED;
+        $leadList->save();
+
         $leadList = $this->scheduleLeads($leadList);
 
         LeadListImportingResumed::dispatch($leadList);
@@ -141,10 +148,11 @@ class LeadListService implements LeadListServiceContract {
      * @param LeadList $leadList The lead list for which we want to determine whether or not we can begin scheduling work
      * @return Carbon
      */
-    protected function getFirstDayAvailableForSchedulingWork(LeadList $leadList): Carbon {
+    public function getFirstDayAvailableForSchedulingWork(LeadList $leadList): Carbon {
         $today = Carbon::now();
 
         $beginWorkAt = $leadList->start_work_at;
+        // If the start date is in the past, start scheduling work beginning today
         if (false === $today->lessThanOrEqualTo($leadList->start_work_at)) {
             $beginWorkAt = $today;
         }
