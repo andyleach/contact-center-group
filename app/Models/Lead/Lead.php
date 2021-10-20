@@ -55,6 +55,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Lead readyForImport()
  * @method static Builder|Lead whereImportAt($value)
  * @method static Builder|Lead whereLeadListId($value)
+ * @property array $meta_data
+ * @method static Builder|Lead whereMetaData($value)
  */
 class Lead extends Model
 {

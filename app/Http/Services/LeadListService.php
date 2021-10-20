@@ -8,8 +8,11 @@ use App\Events\LeadList\LeadListClosed;
 use App\Events\LeadList\LeadListCompleted;
 use App\Events\LeadList\LeadListUploaded;
 use App\Http\DataTransferObjects\LeadListData;
+use App\Models\Lead\Lead;
+use App\Models\Lead\LeadStatus;
 use App\Models\LeadList\LeadList;
 use App\Models\LeadList\LeadListStatus;
+use App\Models\Task\TaskStatus;
 use Carbon\Carbon;
 
 class LeadListService implements LeadListServiceContract {
@@ -24,7 +27,29 @@ class LeadListService implements LeadListServiceContract {
     }
 
     public function scheduleLeads(LeadList $leadList): LeadList {
+        $dayLeadsScheduledForImport = $this->getFirstDayAvailableForSchedulingWork($leadList);
 
+        $leadList
+            ->leadsAwaitingScheduling()
+            ->chunk(
+                $leadList->max_leads_to_import_per_day,
+                function($leads) use ($leadList, $dayLeadsScheduledForImport) {
+            $leadIds = [];
+            foreach ($leads as $lead) {
+                $leadIds[] = $lead->id;
+            }
+
+            Lead::whereIn('id', $leadIds)
+                ->where('lead_list_id', $leadList->id)
+                ->update([
+                    'import_at' => $dayLeadsScheduledForImport,
+                    'lead_status_id' => LeadStatus::AWAITING_IMPORT
+                ]);
+
+            $dayLeadsScheduledForImport->addDay();
+        });
+
+        return $leadList;
     }
 
     public function close(LeadList $leadList): LeadList {
@@ -65,6 +90,7 @@ class LeadListService implements LeadListServiceContract {
 
         foreach ($data->leads as $lead) {
             $lead->lead_list_id = $leadList->id;
+            $lead->lead_status_id = LeadStatus::DRAFT;
             $this->leadService->createLead($lead);
         }
 
@@ -75,5 +101,20 @@ class LeadListService implements LeadListServiceContract {
 
     public function rescheduleImportDateForLeadsAwaitingImport(LeadList $leadList, Carbon $startDay): LeadList {
 
+    }
+
+    /**
+     * @param LeadList $leadList The lead list for which we want to determine whether or not we can begin scheduling work
+     * @return Carbon
+     */
+    protected function getFirstDayAvailableForSchedulingWork(LeadList $leadList): Carbon {
+        $today = Carbon::now();
+
+        $beginWorkAt = $leadList->start_work_at;
+        if (false === $today->lessThanOrEqualTo($leadList->start_work_at)) {
+            $beginWorkAt = $today;
+        }
+
+        return $beginWorkAt->startOfDay();
     }
 }

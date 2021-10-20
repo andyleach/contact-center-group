@@ -6,4 +6,3 @@ class LeadListUploaded extends AbstractLeadListEvent
 {
 
 }
-

@@ -2,11 +2,10 @@
 
 namespace App\Actions\Task;
 
-use App\Contracts\Task\CreatesTaskForQueueContract;
 use App\Http\DataTransferObjects\TaskData;
 use App\Models\Task\Task;
 
-class CreateTaskForQueue implements CreatesTaskForQueueContract {
+class CreateTaskForQueue {
 
     /**
      * @param TaskData $taskData

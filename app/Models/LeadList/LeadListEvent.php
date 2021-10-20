@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadListEvent whereLeadListEventTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadListEvent whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $lead_list_status_id
+ * @property int $user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListEvent whereLeadListStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListEvent whereUserId($value)
  */
 class LeadListEvent extends Model
 {

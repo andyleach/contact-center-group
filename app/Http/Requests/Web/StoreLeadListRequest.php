@@ -31,6 +31,7 @@ class StoreLeadListRequest extends FormRequest
             'lead_list_type_id' => 'required|exists:lead_list_types,id',
             'client_id' => 'required|exists:clients,id',
             'leads' => 'required|array',
+            'start_work_at' => ['required', new NowOrFutureDateRule()],
             'leads.*' => [
                 'lead_type_id' => 'required|exists:lead_types,id',
                 'first_name' => 'required|string',
@@ -48,7 +49,6 @@ class StoreLeadListRequest extends FormRequest
                 'secondary_email_addresses.*' => 'string|email:rfc,dns',
 
                 'meta_data' => 'sometimes|array',
-                'import_at' => ['required', new NowOrFutureDateRule()]
             ]
         ];
     }

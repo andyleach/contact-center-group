@@ -42,6 +42,7 @@ class CreateLeadListsTable extends Migration
             $table->foreignIdFor(LeadListStatus::class, 'lead_list_status_id');
             $table->foreignIdFor(LeadListType::class, 'lead_list_type_id');
             $table->foreignIdFor(Client::class, 'client_id');
+            $table->timestamp('start_work_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

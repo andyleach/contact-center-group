@@ -4,6 +4,7 @@ namespace App\Http\DataTransferObjects;
 
 use App\Http\Requests\Api\StoreLeadRequest;
 use App\Http\Requests\Web\StoreLeadListRequest;
+use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Models\LeadList\LeadListStatus;
 use Carbon\Carbon;
@@ -17,6 +18,9 @@ class LeadListData extends AbstractDataTransferObject {
     public int $lead_list_status_id;
     public int $lead_list_type_id;
     public int $client_id;
+    /**
+     * @var array<Lead> $leads
+     */
     public array $leads = [];
 
     /**

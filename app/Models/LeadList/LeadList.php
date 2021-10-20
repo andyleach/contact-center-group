@@ -5,6 +5,7 @@ namespace App\Models\LeadList;
 use App\Events\LeadList\LeadListCreated;
 use App\Models\Client\Client;
 use App\Models\Lead\Lead;
+use App\Models\Lead\LeadStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,10 +41,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\LeadList\LeadListType $leadListType
  * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $leads
  * @property-read int|null $leads_count
+ * @property int $max_leads_to_import_per_day
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadList whereMaxLeadsToImportPerDay($value)
+ * @property string $start_work_at
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadList whereStartWorkAt($value)
  */
 class LeadList extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'label', 'max_leads_to_import_per_day', 'lead_list_type_id', 'client_id', 'start_work_at',
+    ];
 
     public $dispatchesEvents = [
         'created' => LeadListCreated::class,
@@ -75,5 +84,13 @@ class LeadList extends Model
      */
     public function leads(): HasMany {
         return $this->hasMany(Lead::class, 'list_id');
+    }
+
+    public function leadsAwaitingScheduling(): HasMany {
+        return $this->leads()->where('lead_status_id', LeadStatus::DRAFT);
+    }
+
+    public function leadThatCanBeUnscheduled(): HasMany {
+        return $this->leads()->where('lead_status_id', LeadStatus::AWAITING_IMPORT);
     }
 }
