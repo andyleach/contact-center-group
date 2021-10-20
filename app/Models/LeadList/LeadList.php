@@ -90,7 +90,11 @@ class LeadList extends Model
         return $this->leads()->where('lead_status_id', LeadStatus::DRAFT);
     }
 
-    public function leadThatCanBeUnscheduled(): HasMany {
-        return $this->leads()->where('lead_status_id', LeadStatus::AWAITING_IMPORT);
+    public function leadsNotImported(): HasMany {
+        return $this->leads()
+            ->where(function($query) {
+                $query->where('lead_status_id', LeadStatus::AWAITING_IMPORT)
+                    ->orWhere('list_status_id', LeadStatus::DRAFT);
+            });
     }
 }

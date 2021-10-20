@@ -82,6 +82,10 @@ class CreateLeadListsTable extends Migration
                     'id' => LeadListStatus::TERMINATED,
                     'label' => 'Terminated'
                 ],
+                [
+                    'id' => LeadListStatus::PAUSED,
+                    'label' => 'Paused'
+                ],
             ]);
     }
 

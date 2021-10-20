@@ -33,4 +33,5 @@ class LeadListStatus extends Model
     const IMPORT_COMPLETED = 4;
     const COMPLETED        = 5;
     const TERMINATED       = 6;
+    const PAUSED           = 7;
 }

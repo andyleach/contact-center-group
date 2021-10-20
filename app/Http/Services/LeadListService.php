@@ -6,6 +6,8 @@ use App\Contracts\LeadServiceContract;
 use App\Contracts\LeadListServiceContract;
 use App\Events\LeadList\LeadListClosed;
 use App\Events\LeadList\LeadListCompleted;
+use App\Events\LeadList\LeadListImportingPaused;
+use App\Events\LeadList\LeadListImportingResumed;
 use App\Events\LeadList\LeadListUploaded;
 use App\Http\DataTransferObjects\LeadListData;
 use App\Models\Lead\Lead;
@@ -99,8 +101,27 @@ class LeadListService implements LeadListServiceContract {
         return $leadList;
     }
 
-    public function rescheduleImportDateForLeadsAwaitingImport(LeadList $leadList, Carbon $startDay): LeadList {
+    public function pauseLeadListImporting(LeadList $leadList): LeadList {
+        $leadList->leadsNotImported()->update([
+            'import_at' => null,
+            'lead_status_id' => LeadStatus::DRAFT
+        ]);
 
+        LeadListImportingPaused::dispatch($leadList);
+
+        return $leadList;
+    }
+
+    /**
+     * @param LeadList $leadList
+     * @return LeadList
+     */
+    public function resumeLeadListImporting(LeadList $leadList): LeadList {
+        $leadList = $this->scheduleLeads($leadList);
+
+        LeadListImportingResumed::dispatch($leadList);
+
+        return $leadList;
     }
 
     /**
