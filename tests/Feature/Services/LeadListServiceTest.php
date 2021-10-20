@@ -154,9 +154,11 @@ class LeadListServiceTest extends TestCase
      */
     public function test_that_lead_list_leads_will_be_scheduled_according_to_lead_list_parameters()
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        // Create the lead list with 10 leads, and that the start work date is today
+        // schedule the lead list with 5 leads per day.
+        // Confirm that all the leads have a lead status of AWAITING_IMPORT
+        // Confirm that the leads are are scheduled 5 for today, and 5 for tomorrow
+        // Confirm that the leads are scheduled for the start of the day
     }
 
     /**
