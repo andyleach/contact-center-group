@@ -26,4 +26,11 @@ use Illuminate\Database\Eloquent\Model;
 class LeadListStatus extends Model
 {
     use HasFactory;
+
+    const CREATED          = 1;
+    const CONFIRMED        = 2;
+    const IMPORT_STARTED   = 3;
+    const IMPORT_COMPLETED = 4;
+    const COMPLETED        = 5;
+    const TERMINATED       = 6;
 }

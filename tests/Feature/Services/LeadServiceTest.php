@@ -2,21 +2,13 @@
 
 namespace Tests\Feature\Services;
 
-use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Events\Lead\LeadReceived;
 use App\Http\DataTransferObjects\LeadData;
 use App\Http\Services\LeadService;
-use App\Jobs\Lead\ImportLeadJob;
-use App\Models\Client\Client;
 use App\Models\Lead\Lead;
-use App\Models\Lead\LeadProvider;
 use App\Models\Lead\LeadStatus;
-use App\Models\Lead\LeadType;
-use Carbon\Carbon;
-use Database\Factories\Lead\LeadDataFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Mocks\Lead\CreateNewLeadMock;
 use Tests\TestCase;
 
 class LeadServiceTest extends TestCase

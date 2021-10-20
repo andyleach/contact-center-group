@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\DataTransferObjects\LeadListData;
 use App\Models\Lead\Lead;
 use App\Models\LeadList\LeadList;
 use Carbon\Carbon;
@@ -23,11 +24,12 @@ class LeadListService {
 
     }
 
-    public function create(): LeadList {
+    public function create(LeadListData $data): LeadList {
 
+        return new LeadList();
     }
 
-    public function rescheduleStartDate(LeadList $leadList, Carbon $startDay): LeadList {
+    public function rescheduleImportDateForLeadsAwaitingImport(LeadList $leadList, Carbon $startDay): LeadList {
 
     }
 

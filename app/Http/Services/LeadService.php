@@ -16,8 +16,12 @@ use App\Models\Task\Task;
 
 class LeadService {
 
-    public function createLead(LeadData $data) {
-        $lead = Lead::make([
+    /**
+     * @param LeadData $data
+     * @return Lead
+     */
+    public function createLead(LeadData $data): Lead {
+        $lead = Lead::create([
             'client_id' => $data->client_id,
             'first_name' => $data->first_name,
             'last_name' => $data->last_name,
