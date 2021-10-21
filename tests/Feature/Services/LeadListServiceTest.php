@@ -8,8 +8,10 @@ use App\Events\LeadList\LeadListImportingPaused;
 use App\Events\LeadList\LeadListSchedulingCompleted;
 use App\Events\LeadList\LeadListSchedulingStarted;
 use App\Events\LeadList\LeadListUploaded;
+use App\Http\DataTransferObjects\LeadData;
 use App\Http\DataTransferObjects\LeadListData;
 use App\Http\Services\LeadListService;
+use App\Models\Lead\Lead;
 use App\Models\LeadList\LeadList;
 use App\Models\LeadList\LeadListStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,8 +19,6 @@ use Tests\TestCase;
 
 class LeadListServiceTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected LeadListService $service;
 
     public function setUp(): void {
@@ -152,20 +152,6 @@ class LeadListServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_that_lead_list_leads_will_be_scheduled_according_to_lead_list_parameters()
-    {
-        // Create the lead list with 10 leads, and that the start work date is today
-        // schedule the lead list with 5 leads per day.
-        // Confirm that all the leads have a lead status of AWAITING_IMPORT
-        // Confirm that the leads are are scheduled 5 for today, and 5 for tomorrow
-        // Confirm that the leads are scheduled for the start of the day
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function test_that_a_lead_list_scheduled_in_the_past_will_be_scheduled_for_import_starting_today()
     {
         /** @var LeadListData $data */
@@ -199,5 +185,43 @@ class LeadListServiceTest extends TestCase
         $this->assertTrue($date->isTomorrow());
         $this->assertTrue($date->isStartOfDay());
 
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_that_lead_list_leads_will_be_scheduled_according_to_lead_list_parameters()
+    {
+
+        /** @var LeadListData $data */
+        $data = LeadListData::factory()->make([
+            'label' => 'Test of scheduling',
+            // Create the lead list with 10 leads, and that the start work date is today
+            'leads' => LeadData::factory()->count(10)->make(),
+            'start_work_at' => now(),
+            // schedule the lead list with 5 leads per day.
+            'max_leads_to_import_per_day' => 5,
+        ]);
+
+        $leadList = $this->service->create($data);
+
+        $totalLeadsOnLeadList = $leadList->leads()->count();
+        $this->assertEquals($totalLeadsOnLeadList, 10);
+        $leadsAwaitingSchedulingOnList = $leadList->leadsAwaitingScheduling()->count();
+        $this->assertTrue($leadsAwaitingSchedulingOnList === 10);
+
+        $this->service->scheduleLeads($leadList);
+
+        $countOfLeadsReadyForImport = Lead::query()->readyForImport()->count();
+        $this->assertEquals($countOfLeadsReadyForImport, 5, 'Lead list leads to be scheduled for today is incorrect');
+
+        $toBeImportedTomorrow = Lead::query()->readyForImportOnDay(now()->addDay()->startOfDay())->count();
+        $this->assertEquals($toBeImportedTomorrow, 5, 'Lead list leads to be scheduled for tomorrow is incorrect');
+
+        // Confirm that all the leads have a lead status of AWAITING_IMPORT
+        // Confirm that the leads are are scheduled 5 for today, and 5 for tomorrow
+        // Confirm that the leads are scheduled for the start of the day
     }
 }

@@ -45,6 +45,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadList whereMaxLeadsToImportPerDay($value)
  * @property string $start_work_at
  * @method static \Illuminate\Database\Eloquent\Builder|LeadList whereStartWorkAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $leadsAwaitingScheduling
+ * @property-read int|null $leads_awaiting_scheduling_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $leadsNotImported
+ * @property-read int|null $leads_not_imported_count
+ * @method static \Database\Factories\LeadList\LeadListFactory factory(...$parameters)
  */
 class LeadList extends Model
 {
@@ -87,7 +92,8 @@ class LeadList extends Model
     }
 
     public function leadsAwaitingScheduling(): HasMany {
-        return $this->leads()->where('lead_status_id', LeadStatus::DRAFT);
+        return $this->leads()
+            ->where('lead_status_id', LeadStatus::DRAFT);
     }
 
     public function leadsNotImported(): HasMany {

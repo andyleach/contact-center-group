@@ -12,6 +12,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadListType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LeadListType query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property string $label
+ * @property string|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\LeadList\LeadListTypeFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListType whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListType whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadListType whereUpdatedAt($value)
  */
 class LeadListType extends Model
 {

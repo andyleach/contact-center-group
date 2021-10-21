@@ -5,6 +5,7 @@ namespace App\Models\Lead;
 use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use App\Models\Customer\Customer;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -57,6 +58,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Lead whereLeadListId($value)
  * @property array $meta_data
  * @method static Builder|Lead whereMetaData($value)
+ * @method static Builder|Lead awaitingImport()
  */
 class Lead extends Model
 {
@@ -102,13 +104,31 @@ class Lead extends Model
         return $this->belongsTo(LeadDisposition::class, 'lead_disposition_id');
     }
 
+    public function scopeAwaitingImport(Builder $query): Builder {
+        return $query->where('lead_status_id', LeadStatus::AWAITING_IMPORT);
+    }
+
     /**
      * Scope that identifies leads that are ready to be imported by the system
      * @param Builder $query
      * @return Builder
      */
     public function scopeReadyForImport(Builder $query): Builder {
-        return $query->where('lead_status_id', LeadStatus::AWAITING_IMPORT)
+        return $this->awaitingImport()
             ->where('import_at', '<=', now());
+    }
+
+    /**
+     * Get leads that will be ready to import on day
+     * @param Builder $query
+     * @param Carbon $dayToBeChecked
+     * @return Builder
+     */
+    public function scopeReadyForImportOnDay(Builder $query, Carbon $dayToBeChecked): Builder {
+        $startOfDay = $dayToBeChecked->startOfDay();
+        $endOfDay = $dayToBeChecked->copy()->endOfDay();
+
+        return $this->awaitingImport()
+            ->whereBetween('import_at', [$startOfDay, $endOfDay]);
     }
 }

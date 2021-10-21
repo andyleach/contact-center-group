@@ -42,7 +42,7 @@ class LeadListService implements LeadListServiceContract {
          */
         $leadList
             ->leadsAwaitingScheduling()
-            ->chunk(
+            ->chunkById(
                 $leadList->max_leads_to_import_per_day,
                 function($leads) use ($leadList, $dayLeadsScheduledForImport) {
             $leadIds = [];
@@ -58,7 +58,7 @@ class LeadListService implements LeadListServiceContract {
                 ]);
 
             $dayLeadsScheduledForImport->addDay();
-        });
+        }, 'id');
 
         LeadListSchedulingCompleted::dispatch($leadList);
 
