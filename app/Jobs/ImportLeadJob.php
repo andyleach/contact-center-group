@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Lead;
+namespace App\Jobs;
 
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;

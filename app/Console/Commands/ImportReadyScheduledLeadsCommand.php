@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\Lead\ImportLeadJob;
+use App\Jobs\ImportLeadJob;
 use App\Models\Lead\Lead;
 use Illuminate\Console\Command;
 
