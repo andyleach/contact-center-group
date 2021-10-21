@@ -35,18 +35,10 @@ class CreateTasksTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('task_type_mediums', function (Blueprint $table) {
-            $table->id();
-            $table->string('label')->unique();
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
         Schema::create('task_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
-            $table->foreignIdFor(TaskTypeMedium::class, 'task_type_medium_id');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -70,9 +62,18 @@ class CreateTasksTable extends Migration
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(TaskType::class, 'task_type_id');
-            $table->foreignIdFor(TaskStatus::class, 'task_status_id');
-            $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')->nullable();
+            $table->foreignIdFor(TaskType::class, 'task_type_id')->constrained();
+            $table->foreignIdFor(TaskStatus::class, 'task_status_id')->constrained();
+            $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')->nullable()->constrained();
+            $table->foreignIdFor(\App\Models\Agent\Agent::class, 'agent_id')
+                ->nullable()
+                ->constrained();
+            $table->foreignIdFor(\App\Models\Sequence\Sequence::class, 'sequence_id')
+                ->nullable()
+                ->constrained();
+            $table->string('sequence_action_identifier', 50)
+                ->nullable()
+                ->index();
             $table->boolean('is_first_contact')->index();
             $table->boolean('is_followup')->index();
             $table->boolean('is_client_requested')->index();
@@ -81,6 +82,10 @@ class CreateTasksTable extends Migration
             $table->timestamp('expires_at')->index()->nullable();
             $table->timestamp('completed_at')->index()->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('tasks', function (Blueprint $table) {
+
         });
 
         Schema::create('task_details', function (Blueprint $table) {
@@ -95,10 +100,10 @@ class CreateTasksTable extends Migration
 
         Schema::create('task_events', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Task::class, 'task_id');
-            $table->foreignIdFor(TaskEventType::class, 'task_event_type_id');
-            $table->foreignIdFor(TaskEventReason::class, 'task_event_reason_id');
-            $table->foreignIdFor(Agent::class, 'agent_id')->nullable();
+            $table->foreignIdFor(Task::class, 'task_id')->constrained();
+            $table->foreignIdFor(TaskEventType::class, 'task_event_type_id')->constrained();
+            $table->foreignIdFor(TaskEventReason::class, 'task_event_reason_id')->constrained();
+            $table->foreignIdFor(Agent::class, 'agent_id')->nullable()->constrained();
             $table->timestamps();
         });
 
@@ -107,7 +112,7 @@ class CreateTasksTable extends Migration
          */
         $this->initializeTaskTypes();
         $this->initializeTaskStatuses();
-        $this->initializeTaskTypeMedium();
+        //$this->initializeTaskTypeMedium();
         $this->initializeTaskEventTypes();
         $this->initializeTaskEventReason();
     }
@@ -119,9 +124,9 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('task_events');
         Schema::dropIfExists('task_event_types');
         Schema::dropIfExists('task_event_reasons');
-        Schema::dropIfExists('task_events');
         Schema::dropIfExists('task_details');
         Schema::dropIfExists('tasks');
         Schema::dropIfExists('task_statuses');
@@ -209,28 +214,24 @@ class CreateTasksTable extends Migration
             [
                 'id' => TaskType::INBOUND_CALL,
                 'label' => 'Inbound Call',
-                'task_type_medium_id' => TaskTypeMedium::CALL,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => TaskType::OUTBOUND_CALL,
                 'label' => 'Outbound Call',
-                'task_type_medium_id' => TaskTypeMedium::CALL,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => TaskType::MISSED_CALL_CALLBACK,
                 'label' => 'Missed Call Callback',
-                'task_type_medium_id' => TaskTypeMedium::CALL,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => TaskType::NON_WORKING_HOURS_CALLBACK,
                 'label' => 'Non-Working Hours Callback',
-                'task_type_medium_id' => TaskTypeMedium::CALL,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

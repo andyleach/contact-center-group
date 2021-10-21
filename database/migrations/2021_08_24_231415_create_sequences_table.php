@@ -21,22 +21,9 @@ class CreateSequencesTable extends Migration
             $table->text('description');
             $table->json('actions');
             $table->unsignedFloat('cost_per_lead_in_usd');
-            $table->foreignIdFor(Client::class, 'client_id');
+            $table->foreignIdFor(Client::class, 'client_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
-        });
-
-        Schema::table('leads', function(Blueprint $table) {
-            $table->foreignIdFor(Sequence::class, 'sequence_id')->nullable()->after('lead_provider_id');
-            $table->string('last_sequence_action_identifier', 50)->after('sequence_id')->nullable();
-        });
-
-        Schema::table('tasks', function(Blueprint $table) {
-            $table->foreignIdFor(Sequence::class, 'sequence_id')->nullable()->after('agent_id');
-            $table->string('sequence_action_identifier', 50)
-                ->nullable()
-                ->after('sequence_id')
-                ->index();
         });
     }
 

@@ -46,17 +46,12 @@ class CreateLeadListsTable extends Migration
             $table->id();
             $table->string('label');
             $table->unsignedBigInteger('max_leads_to_import_per_day');
-            $table->foreignIdFor(LeadListStatus::class, 'lead_list_status_id');
-            $table->foreignIdFor(LeadListType::class, 'lead_list_type_id');
-            $table->foreignIdFor(Client::class, 'client_id');
+            $table->foreignIdFor(LeadListStatus::class, 'lead_list_status_id')->constrained();
+            $table->foreignIdFor(LeadListType::class, 'lead_list_type_id')->constrained();
+            $table->foreignIdFor(Client::class, 'client_id')->constrained();
             $table->timestamp('start_work_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
-        });
-
-        Schema::table('leads', function (Blueprint $table) {
-            $table->foreignIdFor(LeadList::class, 'lead_list_id')->nullable();
-            $table->timestamp('import_at')->nullable()->after('lead_provider_id')->index();
         });
 
         $this->initializeLeadListStatuses();
@@ -103,9 +98,10 @@ class CreateLeadListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lead_list_event_types');
+        Schema::dropIfExists('lead_lists');
+        Schema::dropIfExists('lead_list_types');
         Schema::dropIfExists('lead_list_events');
         Schema::dropIfExists('lead_list_statuses');
-        Schema::dropIfExists('lead_lists');
+        Schema::dropIfExists('lead_list_event_types');
     }
 }

@@ -24,18 +24,12 @@ class CreateAgentsTable extends Migration
 
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'user_id')->unique();
-            $table->foreignIdFor(AgentAvailabilityType::class, 'availability_type_id');
+            $table->foreignIdFor(User::class, 'user_id')->unique()->constrained();
+            $table->foreignIdFor(AgentAvailabilityType::class, 'availability_type_id')->constrained('agent_availability_types');
             $table->string('name');
             $table->timestamp('last_task_assigned_at')->index()->nullable();
             $table->timestamp('disabled_at')->index()->nullable();
             $table->timestamps();
-        });
-
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Agent\Agent::class, 'agent_id')
-                ->nullable()
-                ->after('task_disposition_id');
         });
 
         AgentAvailabilityType::query()->insert([

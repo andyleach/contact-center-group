@@ -23,8 +23,8 @@ class CreateRostersTable extends Migration
 
         Schema::create('agent_rosters', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Agent::class, 'agent_id');
-            $table->foreignIdFor(Roster::class, 'roster_id');
+            $table->foreignIdFor(Agent::class, 'agent_id')->constrained();
+            $table->foreignIdFor(Roster::class, 'roster_id')->constrained();
             $table->unsignedTinyInteger('hour');
 
             $table->unique(['agent_id', 'roster_id', 'hour']);

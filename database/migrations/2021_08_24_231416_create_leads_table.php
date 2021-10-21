@@ -53,13 +53,22 @@ class CreateLeadsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('full_name');
-            $table->foreignIdFor(Client::class, 'client_id');
-            $table->foreignIdFor(LeadType::class, 'lead_type_id');
-            $table->foreignIdFor(LeadStatus::class, 'lead_status_id');
-            $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id')->nullable();
+            $table->foreignIdFor(Client::class, 'client_id')->constrained();
+            $table->foreignIdFor(\App\Models\LeadList\LeadList::class, 'lead_list_id')
+                ->nullable()->constrained();
+            $table->foreignIdFor(LeadType::class, 'lead_type_id')->constrained();
+            $table->foreignIdFor(LeadStatus::class, 'lead_status_id')->constrained();
+            $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id')
+                ->nullable()
+                ->constrained();;
+            $table->foreignIdFor(\App\Models\Sequence\Sequence::class, 'sequence_id')->nullable()->constrained();
+            $table->string('last_sequence_action_identifier', 50)->nullable();
+
             $table->foreignIdFor(\App\Models\Lead\LeadProvider::class, 'lead_provider_id')
-                ->comment('The originator of the lead.  This will most likely be just BetterCarPeople');
+                ->comment('The originator of the lead.  This will most likely be just BetterCarPeople')
+                ->constrained();
             $table->json('meta_data');
+            $table->timestamp('import_at')->nullable()->index();
             $table->timestamps();
         });
 
@@ -76,11 +85,11 @@ class CreateLeadsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('leads');
         Schema::dropIfExists('lead_statuses');
         Schema::dropIfExists('lead_dispositions');
         Schema::dropIfExists('lead_types');
         Schema::dropIfExists('lead_providers');
-        Schema::dropIfExists('leads');
     }
 
     public function initializeLeadTypes() {
