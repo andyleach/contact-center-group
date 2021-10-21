@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
-use App\Contracts\AgentServiceContract;
 use App\Events\Agent\AgentBeganWindingDown;
 use App\Events\Agent\AgentDisabled;
 use App\Events\Agent\AgentWentAvailable;
@@ -13,7 +12,7 @@ use App\Models\Agent\Agent;
 use App\Models\Agent\AgentAvailabilityType;
 use App\Models\Roster\Roster;
 
-class AgentService implements AgentServiceContract {
+class AgentService {
 
     /**
      * @param Agent $agent

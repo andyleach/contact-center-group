@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Contracts\Roster\AssignsAgentHoursOnRosterContract;
 use App\Contracts\Roster\RemovesHoursFromAgentOnRosterContract;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\DataTransferObjects;
+namespace App\Services\DataTransferObjects;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;

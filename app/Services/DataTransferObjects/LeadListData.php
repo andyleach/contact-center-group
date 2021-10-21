@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Http\DataTransferObjects;
+namespace App\Services\DataTransferObjects;
 
-use App\Http\Requests\Api\StoreLeadRequest;
 use App\Http\Requests\Web\StoreLeadListRequest;
-use App\Models\Lead\Lead;
-use App\Models\Lead\LeadStatus;
 use App\Models\LeadList\LeadListStatus;
 use Carbon\Carbon;
-use Database\Factories\Lead\LeadDataFactory;
 use Database\Factories\LeadList\LeadListDataFactory;
 use Illuminate\Support\Collection;
 

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
-use App\Contracts\TaskQueueServiceContract;
 use App\Events\Task\TaskAssigned;
 use App\Events\Task\TaskAssignmentCancelled;
 use App\Events\Task\TaskExpired;
@@ -16,7 +15,7 @@ use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
 
-class TaskQueueService implements TaskQueueServiceContract {
+class TaskQueueService {
     /**
      * @param Task $task
      * @param Agent $agent

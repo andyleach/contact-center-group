@@ -8,13 +8,12 @@ use App\Events\LeadList\LeadListImportingPaused;
 use App\Events\LeadList\LeadListSchedulingCompleted;
 use App\Events\LeadList\LeadListSchedulingStarted;
 use App\Events\LeadList\LeadListUploaded;
-use App\Http\DataTransferObjects\LeadData;
-use App\Http\DataTransferObjects\LeadListData;
-use App\Http\Services\LeadListService;
 use App\Models\Lead\Lead;
 use App\Models\LeadList\LeadList;
 use App\Models\LeadList\LeadListStatus;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Services\DataTransferObjects\LeadData;
+use App\Services\DataTransferObjects\LeadListData;
+use App\Services\LeadListService;
 use Tests\TestCase;
 
 class LeadListServiceTest extends TestCase

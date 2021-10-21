@@ -2,13 +2,11 @@
 
 namespace Database\Factories\LeadList;
 
-use App\Http\DataTransferObjects\LeadData;
-use App\Http\DataTransferObjects\LeadListData;
 use App\Models\Client\Client;
-use App\Models\Lead\LeadProvider;
-use App\Models\Lead\LeadType;
 use App\Models\LeadList\LeadListStatus;
 use App\Models\LeadList\LeadListType;
+use App\Services\DataTransferObjects\LeadData;
+use App\Services\DataTransferObjects\LeadListData;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

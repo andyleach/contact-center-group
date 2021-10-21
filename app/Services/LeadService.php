@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Events\Lead\LeadDismissed;
 use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Events\Lead\LeadReceived;
-use App\Http\DataTransferObjects\LeadData;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Models\LeadList\LeadList;
 use App\Models\Sequence\Sequence;
 use App\Models\Task\Task;
+use App\Services\DataTransferObjects\LeadData;
 
 class LeadService {
 

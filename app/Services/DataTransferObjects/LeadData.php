@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\DataTransferObjects;
+namespace App\Services\DataTransferObjects;
 
-use App\Http\Requests\Api\StoreLeadRequest;
-use App\Models\Lead\LeadStatus;
 use Carbon\Carbon;
+use App\Models\Lead\LeadStatus;
+use App\Http\Requests\Api\StoreLeadRequest;
 use Database\Factories\Lead\LeadDataFactory;
 
 class LeadData extends AbstractDataTransferObject {

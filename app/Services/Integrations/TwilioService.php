@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations;
+namespace App\Services\Integrations;
 
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
@@ -11,7 +11,7 @@ use Twilio\Rest\Client;
 use Twilio\Rest\Lookups\V1\PhoneNumberInstance;
 use Twilio\TwiML\VoiceResponse;
 
-class TwilioIntegration {
+class TwilioService {
     /**
      * @var Client $twilio
      */

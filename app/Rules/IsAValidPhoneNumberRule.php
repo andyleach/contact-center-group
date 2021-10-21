@@ -2,13 +2,13 @@
 
 namespace App\Rules;
 
-use App\Integrations\TwilioIntegration;
+use App\Services\TwilioService;
 use Illuminate\Contracts\Validation\Rule;
 use Twilio\Exceptions\TwilioException;
 
 class IsAValidPhoneNumberRule implements Rule
 {
-    protected TwilioIntegration $integration;
+    protected TwilioService $integration;
 
     /**
      * Create a new rule instance.
@@ -17,7 +17,7 @@ class IsAValidPhoneNumberRule implements Rule
      */
     public function __construct()
     {
-        $this->integration = new TwilioIntegration();
+        $this->integration = new TwilioService();
     }
 
     /**

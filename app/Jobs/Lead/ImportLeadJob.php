@@ -2,10 +2,10 @@
 
 namespace App\Jobs\Lead;
 
-use App\Http\Services\CustomerService;
-use App\Http\Services\LeadService;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
+use App\Services\CustomerService;
+use App\Services\LeadService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

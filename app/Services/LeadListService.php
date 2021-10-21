@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
-use App\Contracts\LeadServiceContract;
-use App\Contracts\LeadListServiceContract;
 use App\Events\LeadList\LeadListClosed;
 use App\Events\LeadList\LeadListCompleted;
 use App\Events\LeadList\LeadListConfirmed;
@@ -12,15 +10,14 @@ use App\Events\LeadList\LeadListImportingResumed;
 use App\Events\LeadList\LeadListSchedulingCompleted;
 use App\Events\LeadList\LeadListSchedulingStarted;
 use App\Events\LeadList\LeadListUploaded;
-use App\Http\DataTransferObjects\LeadListData;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Models\LeadList\LeadList;
 use App\Models\LeadList\LeadListStatus;
-use App\Models\Task\TaskStatus;
+use App\Services\DataTransferObjects\LeadListData;
 use Carbon\Carbon;
 
-class LeadListService implements LeadListServiceContract {
+class LeadListService {
     /**
      * @var LeadService $leadService
      */

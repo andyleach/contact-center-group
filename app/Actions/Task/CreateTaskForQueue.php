@@ -2,8 +2,8 @@
 
 namespace App\Actions\Task;
 
-use App\Http\DataTransferObjects\TaskData;
 use App\Models\Task\Task;
+use App\Services\DataTransferObjects\TaskData;
 
 class CreateTaskForQueue {
 

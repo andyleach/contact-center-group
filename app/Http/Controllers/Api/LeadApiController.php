@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Lead\CreatesNewLeadContract;
-use App\Events\Lead\LeadReceived;
 use App\Http\Controllers\Controller;
-use App\Http\DataTransferObjects\LeadData;
 use App\Http\Requests\Api\StoreLeadRequest;
-use App\Http\Services\LeadService;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadProvider;
+use App\Services\DataTransferObjects\LeadData;
+use App\Services\LeadService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
