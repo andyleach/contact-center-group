@@ -2,24 +2,30 @@
 
 namespace App\Jobs;
 
+use App\Models\Agent\Agent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Responsible for taking a task off the top of the queue, and then assigning it to an agent for work
+ */
 class AgentTaskAssignment implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public Agent $agent;
+
     /**
-     * Create a new job instance.
+     * Creates a new instance of the job for the agent who needs to be assigned the task
      *
-     * @return void
+     * @param Agent $agent
      */
-    public function __construct()
+    public function __construct(Agent $agent)
     {
-        //
+        $this->agent = $agent;
     }
 
     /**
