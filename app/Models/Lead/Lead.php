@@ -5,6 +5,8 @@ namespace App\Models\Lead;
 use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use App\Models\Customer\Customer;
+use App\Models\LeadList\LeadList;
+use App\Models\Sequence\Sequence;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -59,6 +61,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property array $meta_data
  * @method static Builder|Lead whereMetaData($value)
  * @method static Builder|Lead awaitingImport()
+ * @property-read LeadList|null $leadList
+ * @method static Builder|Lead readyForImportOnDay(\Carbon\Carbon $dayToBeChecked)
+ * @property-read \App\Models\Lead\LeadProvider $leadProvider
+ * @property-read Sequence|null $sequence
  */
 class Lead extends Model
 {
@@ -102,6 +108,18 @@ class Lead extends Model
 
     public function leadDisposition(): BelongsTo {
         return $this->belongsTo(LeadDisposition::class, 'lead_disposition_id');
+    }
+
+    public function leadList(): BelongsTo {
+        return $this->belongsTo(LeadList::class, 'lead_list_id');
+    }
+
+    public function sequence(): BelongsTo {
+        return $this->belongsTo(Sequence::class, 'sequence_id');
+    }
+
+    public function leadProvider(): BelongsTo {
+        return $this->belongsTo(LeadProvider::class, 'lead_provider_id');
     }
 
     public function scopeAwaitingImport(Builder $query): Builder {
