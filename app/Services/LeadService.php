@@ -50,33 +50,6 @@ class LeadService {
         return $lead;
     }
 
-    public function startedImporting(Lead $lead): Lead {
-        $lead->lead_status_id = LeadStatus::IMPORT_STARTED;
-        $lead->save();
-
-        LeadImportStarted::dispatch($lead);
-
-        return $lead;
-    }
-
-    public function failedImporting(Lead $lead): Lead {
-        $lead->lead_status_id = LeadStatus::IMPORT_FAILED;
-        $lead->save();
-
-        LeadImportFailed::dispatch($lead);
-
-        return $lead;
-    }
-
-    public function completedImporting(Lead $lead): Lead {
-        $lead->lead_status_id = LeadStatus::IMPORT_COMPLETED;
-        $lead->save();
-
-        LeadImportCompleted::dispatch($lead);
-
-        return $lead;
-    }
-
     public function assignSequenceToLead(Lead $lead, Sequence $sequence): Lead {
 
     }

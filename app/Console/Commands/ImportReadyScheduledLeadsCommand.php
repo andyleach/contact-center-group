@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\ImportLeadJob;
+use App\Jobs\ImportLead;
 use App\Models\Lead\Lead;
 use Illuminate\Console\Command;
 
@@ -44,7 +44,7 @@ class ImportReadyScheduledLeadsCommand extends Command
             ->readyForImport()
             ->chunk(100, function($leads) {
                 foreach ($leads as $lead) {
-                    ImportLeadJob::dispatch($lead);
+                    ImportLead::dispatch($lead);
                 }
             });
         return 0;

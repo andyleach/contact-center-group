@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
 use App\Services\CustomerService;
+use App\Services\DataTransferObjects\LeadData;
 use App\Services\LeadService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,14 +13,14 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ImportLeadJob implements ShouldQueue
+class ImportLead implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Lead $lead
+     * @var LeadData $leadData
      */
-    protected Lead $lead;
+    protected LeadData $leadData;
 
     protected LeadService $leadService;
 
@@ -30,11 +31,12 @@ class ImportLeadJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Lead $lead)
+    public function __construct(LeadData $leadData)
     {
-        $this->lead = $lead;
+        $this->leadData = $leadData;
 
         $this->leadService = new LeadService();
+        $this->customerService = new CustomerService();
     }
 
     protected function failed() {
@@ -48,9 +50,11 @@ class ImportLeadJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->leadService->startedImporting($this->lead);
+        $lead = $this->leadService->createLead($this->leadData);
 
-        $lead = $this->handleCustomerAssociation($this->lead);
+        $this->leadService->startedImporting($lead);
+
+        $lead = $this->handleCustomerMatching($lead);
 
         $lead = $this->handleLeadDuplicationChecking($lead);
 
@@ -66,15 +70,15 @@ class ImportLeadJob implements ShouldQueue
         //app(RouteLead::class)->route($this->lead);
 
 
-        $this->leadService->completedImporting($this->lead);
+        $this->leadService->completedImporting($lead);
     }
 
     /**
      * @param Lead $lead
      * @return Lead
      */
-    protected function handleCustomerAssociation(Lead $lead): Lead {
-        $customer = $this->customerService->matchLeadToCustomer($this->lead);
+    protected function handleCustomerMatching(Lead $lead): Lead {
+        $customer = $this->customerService->matchLeadToCustomer();
         if (false == is_a($customer, Customer::class)) {
             $customer = $this->customerService->createCustomerFromLead($this->lead);
         }

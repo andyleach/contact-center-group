@@ -10,6 +10,8 @@ use App\Models\LeadList\LeadListEventType;
 use App\Models\LeadList\LeadList;
 use App\Models\Lead\Lead;
 use App\Models\User;
+use App\Models\Customer\CustomerEmailAddress;
+use App\Models\Customer\CustomerPhoneNumber;
 
 class CreateLeadListsTable extends Migration
 {

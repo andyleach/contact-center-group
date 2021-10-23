@@ -115,4 +115,26 @@ class LeadData extends AbstractDataTransferObject {
         $this->lead_provider_id = $leadProviderId;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getAllEmailAddresses(): array {
+        $emailAddressList = $this->secondary_email_addresses;
+
+        array_unshift($emailAddressList, $this->primary_email_address);
+
+        return $emailAddressList;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllPhoneNumbers(): array {
+        $phoneNumberList = $this->secondary_phone_numbers;
+
+        array_unshift($phoneNumberList, $this->primary_phone_number);
+
+        return $phoneNumberList;
+    }
 }

@@ -8,6 +8,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Lead\LeadProvider;
+use App\Models\Customer\CustomerEmailAddress;
+use App\Models\Customer\CustomerPhoneNumber;
+use App\Models\Customer\Customer;
+use App\Models\Lead\Lead;
+
 class CreateLeadsTable extends Migration
 {
     /**
@@ -72,6 +77,21 @@ class CreateLeadsTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('customer_phone_number_lead', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(CustomerPhoneNumber::class, 'customer_phone_number_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('customer_email_address_lead', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(CustomerEmailAddress::class, 'customer_email_address_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained()->onDelete('cascade');
+
+            $table->timestamps();
+        });
+
         $this->initializeLeadTypes();
         $this->initializeLeadStatuses();
         $this->initializeLeadProviders();
@@ -85,6 +105,8 @@ class CreateLeadsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('customer_phone_number_lead');
+        Schema::dropIfExists('customer_email_address_lead');
         Schema::dropIfExists('leads');
         Schema::dropIfExists('lead_statuses');
         Schema::dropIfExists('lead_dispositions');
