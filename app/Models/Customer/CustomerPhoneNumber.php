@@ -2,6 +2,7 @@
 
 namespace App\Models\Customer;
 
+use App\Models\Lead\LeadPhoneNumber;
 use App\Services\DataTransferObjects\LeadData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,11 +46,21 @@ class CustomerPhoneNumber extends Model
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    /**
+     * Identifies the lead that we first saw this phone number on
+     *
+     * @return BelongsTo
+     */
+    public function leadPhoneNumber(): BelongsTo {
+        return $this->belongsTo(LeadPhoneNumber::class, 'lead_phone_number_id');
+    }
+
     public function scopeMatchClientCustomerPhoneNumber(Builder $query, int $client_id, $phoneNumbers): Builder {
+
         if (is_array($phoneNumbers)) {
             $query->whereIn('phone_number', $phoneNumbers);
         } else {
-            $query->where('phone_number', $phoneNumbers);
+            $query->whereIn('phone_number', [$phoneNumbers]);
         }
 
         return $query->whereHas('customer', function($query) use ($client_id) {

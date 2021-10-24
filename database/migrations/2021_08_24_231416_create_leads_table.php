@@ -77,18 +77,30 @@ class CreateLeadsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('customer_phone_number_lead', function (Blueprint $table) {
+        Schema::create('lead_phone_numbers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(CustomerPhoneNumber::class, 'customer_phone_number_id')->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Lead::class, 'lead_id')->constrained()->onDelete('cascade');
+            $table->string('phone_number');
+            $table->boolean('is_valid')->nullable();
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained();
             $table->timestamps();
         });
 
-        Schema::create('customer_email_address_lead', function (Blueprint $table) {
+        Schema::create('lead_email_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(CustomerEmailAddress::class, 'customer_email_address_id')->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Lead::class, 'lead_id')->constrained()->onDelete('cascade');
+            $table->string('email_address');
+            $table->boolean('is_valid')->nullable();
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained();
+            $table->timestamps();
+        });
 
+        Schema::create('customer_lead', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Customer::class, 'customer_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('matching_phone_numbers');
+            $table->unsignedBigInteger('matching_email_addresses');
+            $table->unsignedBigInteger('total_points_of_commonality');
+            $table->unique(['customer_id', 'lead_id']);
             $table->timestamps();
         });
 
@@ -105,8 +117,8 @@ class CreateLeadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_phone_number_lead');
-        Schema::dropIfExists('customer_email_address_lead');
+        Schema::dropIfExists('lead_email_addresses');
+        Schema::dropIfExists('lead_phone_numbers');
         Schema::dropIfExists('leads');
         Schema::dropIfExists('lead_statuses');
         Schema::dropIfExists('lead_dispositions');

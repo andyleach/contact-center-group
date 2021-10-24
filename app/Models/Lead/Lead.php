@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Lead\Lead
@@ -65,6 +66,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Lead readyForImportOnDay(\Carbon\Carbon $dayToBeChecked)
  * @property-read \App\Models\Lead\LeadProvider $leadProvider
  * @property-read Sequence|null $sequence
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lead\LeadEmailAddress[] $leadEmailAddresses
+ * @property-read int|null $lead_email_addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lead\LeadPhoneNumber[] $leadPhoneNumbers
+ * @property-read int|null $lead_phone_numbers_count
  */
 class Lead extends Model
 {
@@ -120,6 +125,14 @@ class Lead extends Model
 
     public function leadProvider(): BelongsTo {
         return $this->belongsTo(LeadProvider::class, 'lead_provider_id');
+    }
+
+    public function leadPhoneNumbers(): HasMany {
+        return $this->hasMany(LeadPhoneNumber::class, 'lead_id');
+    }
+
+    public function leadEmailAddresses(): HasMany {
+        return $this->hasMany(LeadEmailAddress::class, 'lead_id');
     }
 
     public function scopeAwaitingImport(Builder $query): Builder {

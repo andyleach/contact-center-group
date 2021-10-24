@@ -2,6 +2,8 @@
 
 namespace App\Models\Customer;
 
+use App\Models\Lead\LeadEmailAddress;
+use App\Models\Lead\LeadPhoneNumber;
 use App\Services\DataTransferObjects\LeadData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +45,15 @@ class CustomerEmailAddress extends Model
 
     public function customer(): BelongsTo {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    /**
+     * Identifies the lead that we first saw this email_address on
+     *
+     * @return BelongsTo
+     */
+    public function leadEmailAddress(): BelongsTo {
+        return $this->belongsTo(LeadEmailAddress::class, 'lead_id');
     }
 
     public function scopeMatchClientCustomerEmailAddress(Builder $query, int $client_id, $emailAddresses): Builder {

@@ -22,23 +22,7 @@ class CreateCustomersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('customer_phone_numbers', function (Blueprint $table) {
-            $table->id();
-            $table->string('phone_number');
-            $table->foreignIdFor(\App\Models\Customer\Customer::class, 'customer_id')->constrained();
-            $table->timestamp('last_seen_at');
-            $table->unique(['phone_number', 'customer_id']);
-            $table->timestamps();
-        });
 
-        Schema::create('customer_email_addresses', function (Blueprint $table) {
-            $table->id();
-            $table->string('email_address');
-            $table->foreignIdFor(\App\Models\Customer\Customer::class, 'customer_id')->constrained();
-            $table->timestamp('last_seen_at');
-            $table->unique(['email_address', 'customer_id']);
-            $table->timestamps();
-        });
     }
 
     /**
@@ -48,8 +32,6 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_phone_numbers');
-        Schema::dropIfExists('customer_email_addresses');
         Schema::dropIfExists('customers');
     }
 }

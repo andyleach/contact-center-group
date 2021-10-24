@@ -9,11 +9,6 @@ use App\Models\Lead\Lead;
 use App\Services\DataTransferObjects\LeadData;
 
 class CustomerService {
-    public function createCustomerFromLead(Lead $lead): Customer {
-        $customer = new Customer();
-        $customer->leads()->save($lead);
-    }
-
     public function addPhoneNumberToCustomer(Customer $customer, string $phoneNumber): CustomerPhoneNumber {
         /** @var CustomerPhoneNumber $phoneNumber */
         $phoneNumber = $customer->customerPhoneNumbers()->updateOrCreate([
@@ -24,6 +19,11 @@ class CustomerService {
         ]);
 
         return $phoneNumber;
+    }
+
+    public function createCustomerFromLead(Lead $lead): Customer {
+        $customer = new Customer();
+        $customer->leads()->save($lead);
     }
 
     public function addEmailAddressToCustomer(Customer $customer, string $emailAddress): CustomerEmailAddress {

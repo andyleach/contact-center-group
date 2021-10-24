@@ -47,7 +47,7 @@ class TwilioService {
      */
     public function lookup(string $phoneNumber): PhoneNumberInstance {
         return $this->twilio->lookups->v1->phoneNumbers($phoneNumber)
-            ->fetch(["countryCode" => "US"]);
+            ->fetch([]);
     }
 
     /**

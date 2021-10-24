@@ -58,13 +58,6 @@ class LeadImportingService {
         return $queryTwo->unionAll($query)->orderByDesc('last_seen_at')->first();
     }
 
-    public function matchLeadDataToCustomerPhoneNumber(LeadData $leadData) {
-        // Match based upon customer phone numbers
-        $customerPhoneNumberQuery = CustomerPhoneNumber::query()
-            ->first();
-    }
-
-
     public function startedImporting(Lead $lead): Lead {
         $lead->lead_status_id = LeadStatus::IMPORT_STARTED;
         $lead->save();

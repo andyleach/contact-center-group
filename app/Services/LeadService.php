@@ -7,12 +7,15 @@ use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Events\Lead\LeadReceived;
+use App\Jobs\ImportLead;
+use App\Jobs\ValidateLeadContactInformation;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Models\LeadList\LeadList;
 use App\Models\Sequence\Sequence;
 use App\Models\Task\Task;
 use App\Services\DataTransferObjects\LeadData;
+use Illuminate\Support\Facades\Bus;
 
 class LeadService {
 
@@ -33,6 +36,20 @@ class LeadService {
             'lead_list_id' => $data->lead_list_id,
             'meta_data' => $data->meta_data
         ]);
+
+        $phoneNumbers = $data->getAllPhoneNumbers();
+        foreach ($phoneNumbers as $phoneNumber) {
+            $lead->leadPhoneNumbers()->create([
+                'phone_number' => $phoneNumber,
+            ]);
+        }
+
+        $emailAddresses = $data->getAllEmailAddresses();
+        foreach ($emailAddresses as $emailAddress) {
+            $lead->leadEmailAddresses()->create([
+                'email_address' => $emailAddress,
+            ]);
+        }
 
         return $lead;
     }

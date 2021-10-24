@@ -2,45 +2,51 @@
 
 namespace App\Jobs;
 
+use App\Jobs\LeadImportStages\DetermineIfLeadIsDuplicate;
+use App\Jobs\LeadImportStages\IdentifyPossibleRelatedCustomersForLead;
+use App\Jobs\LeadImportStages\IdentifySequenceToBeAssignedToLead;
+use App\Jobs\LeadImportStages\ValidateLeadContactInformation;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
 use App\Services\CustomerService;
 use App\Services\DataTransferObjects\LeadData;
+use App\Services\LeadImportingService;
 use App\Services\LeadService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 
 class ImportLead implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var LeadData $leadData
+     * @var Lead $lead
      */
-    protected LeadData $leadData;
+    protected Lead $lead;
 
-    protected LeadService $leadService;
-
-    protected CustomerService $customerService;
+    protected LeadImportingService $service;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(LeadData $leadData)
+    public function __construct(Lead $lead)
     {
-        $this->leadData = $leadData;
+        $this->lead = $lead;
 
-        $this->leadService = new LeadService();
-        $this->customerService = new CustomerService();
+        $this->service = new LeadImportingService();
     }
 
+    /**
+     * We failed the job, what should we do
+     */
     protected function failed() {
-        $this->leadService->failedImporting($this->lead);
+        $this->service->failedImporting($this->lead);
     }
 
     /**
@@ -50,52 +56,16 @@ class ImportLead implements ShouldQueue
      */
     public function handle()
     {
-        $lead = $this->leadService->createLead($this->leadData);
+        $this->service->startedImporting($this->lead);
 
-        $this->leadService->startedImporting($lead);
-
-        $lead = $this->handleCustomerMatching($lead);
-
-        $lead = $this->handleLeadDuplicationChecking($lead);
-
-        $lead = $this->handleSequenceAssignment($lead);
-
-
-        // Perform duplicate checking.  We should support multiple duplication handling strategies. Strategy should be dictated by lead type
-            // Strategies:
-                // Dismiss lead if duplicate
-                // Assign new sequence to original lead and dismiss
-            // Exit out of job on identifying existence of duplicate
-
-        //app(RouteLead::class)->route($this->lead);
-
-
-        $this->leadService->completedImporting($lead);
-    }
-
-    /**
-     * @param Lead $lead
-     * @return Lead
-     */
-    protected function handleCustomerMatching(Lead $lead): Lead {
-        $customer = $this->customerService->matchLeadToCustomer();
-        if (false == is_a($customer, Customer::class)) {
-            $customer = $this->customerService->createCustomerFromLead($this->lead);
-        }
-
-
-        // attach the phone numbers
-        // attach the emails
-
-        return $lead;
-    }
-
-    protected function handleLeadDuplicationChecking(Lead $lead): Lead {
-        return $lead;
-    }
-
-    public function handleSequenceAssignment(Lead $lead): Lead {
-        // Perform sequence assignment via client configuration
-        return $lead;
+        Bus::chain([
+            //new ValidateLeadContactInformation($this->lead),
+            new IdentifyPossibleRelatedCustomersForLead($this->lead),
+            new DetermineIfLeadIsDuplicate($this->lead),
+            new IdentifySequenceToBeAssignedToLead($this->lead),
+            function () {
+                $this->service->completedImporting($this->lead);
+            },
+        ])->dispatch();
     }
 }

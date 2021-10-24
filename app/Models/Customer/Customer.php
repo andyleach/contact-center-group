@@ -2,9 +2,12 @@
 
 namespace App\Models\Customer;
 
+use App\Models\Client\Client;
 use App\Models\Lead\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -41,10 +44,26 @@ class Customer extends Model
     use HasFactory;
 
     /**
+     * @return BelongsTo
+     */
+    public function client(): BelongsTo {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    /**
      * @return HasMany
      */
     public function leads(): HasMany {
         return $this->hasMany(Lead::class, 'lead_id');
+    }
+
+    /**
+     * This table exists to identify points of commonality between a customer and a lead at the time of import
+     *
+     * @return BelongsToMany
+     */
+    public function possibleRelatedLeads(): BelongsToMany {
+        return $this->belongsToMany(Lead::class, 'customer_lead','customer_id', 'lead_id');
     }
 
     /**
