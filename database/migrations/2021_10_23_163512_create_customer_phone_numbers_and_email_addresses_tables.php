@@ -16,7 +16,8 @@ class CreateCustomerPhoneNumbersAndEmailAddressesTables extends Migration
         Schema::create('customer_phone_numbers', function (Blueprint $table) {
             $table->id();
             $table->string('phone_number');
-            $table->foreignIdFor(\App\Models\Customer\Customer::class, 'customer_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Customer\Customer::class, 'customer_id')
+                ->constrained()->onDelete('cascade');
             $table->timestamp('last_seen_at');
             $table->unique(['phone_number', 'customer_id']);
             $table->timestamps();
@@ -25,7 +26,8 @@ class CreateCustomerPhoneNumbersAndEmailAddressesTables extends Migration
         Schema::create('customer_email_addresses', function (Blueprint $table) {
             $table->id();
             $table->string('email_address');
-            $table->foreignIdFor(\App\Models\Customer\Customer::class, 'customer_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Customer\Customer::class, 'customer_id')
+                ->constrained()->onDelete('cascade');
             $table->timestamp('last_seen_at');
             $table->unique(['email_address', 'customer_id']);
             $table->timestamps();
