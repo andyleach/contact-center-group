@@ -117,6 +117,7 @@ class CreateLeadsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('customer_lead');
         Schema::dropIfExists('lead_email_addresses');
         Schema::dropIfExists('lead_phone_numbers');
         Schema::dropIfExists('leads');
