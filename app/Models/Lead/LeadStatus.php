@@ -48,13 +48,14 @@ class LeadStatus extends Model
      */
 
     const DRAFT = 1;
-    const AWAITING_IMPORT = 2;
-    const IMPORT_STARTED = 3;
-    const IMPORT_FAILED = 4;
-    const IMPORT_COMPLETED = 5;
-    const WORKING = 6;
-    const COMPLETED = 7;
-    const CLOSED_SUBSCRIPTION_TERMINATED = 8;
-    const CLOSED_AGED = 9;
-    const DISMISSED = 10;
+    const CLEANSING = 2;
+    const AWAITING_IMPORT = 3;
+    const IMPORT_STARTED = 4;
+    const IMPORT_FAILED = 5;
+    const IMPORT_COMPLETED = 6;
+    const WORKING = 7;
+    const COMPLETED = 8;
+    const CLOSED_SUBSCRIPTION_TERMINATED = 9;
+    const CLOSED_AGED = 10;
+    const DISMISSED = 11;
 }

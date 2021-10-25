@@ -11,51 +11,79 @@ use App\Models\Customer\CustomerPhoneNumber;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Services\DataTransferObjects\LeadData;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class LeadImportingService {
 
     /**
-     * @param LeadData $leadData
-     * @return Customer|null
+     * @param Lead $lead
+     * @return Collection
      */
-    public function matchLeadDataToCustomer(LeadData $leadData): ?Customer {
-        $result = $this->matchMostRecentlySeenCustomerContactInformation($leadData);
+    public function matchLeadToCustomerUsingContactInformation(Lead $lead): Collection {
+        $phoneNumbers = $lead->leadPhoneNumbers->pluck('phone_number')->toArray();
+        $emailAddresses = $lead->leadEmailAddresses->pluck('email_address')->toArray();
 
         return Customer::query()
-            ->where('id', $result->customer_id)
-            ->where('client_id', $leadData->client_id)
-            ->first();
+            // Ensurer that we only match against customers belonging to the same client as the lead
+            ->where('client_id', $lead->client_id)
+            /**
+             * Ensure that we only match against customers that have either a phone number of a email address in
+             * common with our lead
+             */
+            ->where(function($query) use ($phoneNumbers, $emailAddresses) {
+                $query->whereHas('customerPhoneNumbers', function($query) use ($phoneNumbers) {
+                    $query->whereIn('phone_number', $phoneNumbers);
+                })->orWhereHas('customerEmailAddresses', function($query) use ($emailAddresses) {
+                    $query->whereIn('email_address', $emailAddresses);
+                });
+            })
+            // Ensure that when we fetch the related records, we ONLY fetch the ones that had a match
+            ->with([
+                'customerPhoneNumbers' => function ($query) use ($phoneNumbers) {
+                    $query->whereIn('phone_number', $phoneNumbers);
+                },
+                'customerEmailAddresses' => function ($query) use ($emailAddresses) {
+                    $query->whereIn('email_address', $emailAddresses);
+                }
+            ])->get();
     }
 
     /**
-     * @param LeadData $leadData
-     * @return Customer|null
+     * Persists a record to the database
+     * @param Lead     $lead
+     * @param Customer $customer
      */
-    public function matchMostRecentlySeenCustomerContactInformation(LeadData $leadData): ?object {
-        // Create query for lead matching based upon client customer phone numbers
-        $query = CustomerPhoneNumber::query()
-            ->matchClientCustomerPhoneNumber($leadData->client_id, $leadData->getAllPhoneNumbers())
-            ->select([
-                'id',
-                'customer_id',
-                'phone_number as value',
-                'last_seen_at',
-                \DB::raw("'phone' as type"),
-            ]);
+    public function storePointsOfCommonalityBetweenLeadAndCustomer(Lead $lead, Customer $customer) {
+        // The total number of matched phone numbers
+        $phoneNumberCount = $customer->customerPhoneNumbers->count();
+        $emailAddressCount = $customer->customerEmailAddresses->count();
 
-        // Create query for lead matching based upon client customer email addresses
-        $queryTwo = CustomerEmailAddress::query()
-            ->matchClientCustomerEmailAddress($leadData->client_id, $leadData->getAllEmailAddresses())
-            ->select([
-                'id',
-                'customer_id',
-                'email_address as value',
-                'last_seen_at',
-                \DB::raw("'email' as type")
-            ]);
+        // This is to be used to sort from most probable to least probable in terms of matches
+        $totalPointsOfCommonality = $phoneNumberCount + $emailAddressCount;
 
-        return $queryTwo->unionAll($query)->orderByDesc('last_seen_at')->first();
+        // Create an array of our columns to be updated on the pivot table for reuse down below
+        $pivotData = [
+            'matching_phone_numbers' => $phoneNumberCount,
+            'matching_email_addresses' => $emailAddressCount,
+            'total_points_of_commonality' => $totalPointsOfCommonality,
+        ];
+
+        /**
+         * Checks to see if we already created the pivot. There is a unique key constraint to protect from
+         * duplication, but we should still keep safeguards in the code.
+         */
+        $pivotExists = $customer->possibleRelatedLeads()
+            ->wherePivot('lead_id', $lead->id)
+            ->exists();
+
+        // If the pivot exists, update the pivot with our newly queried data
+        if (true == $pivotExists) {
+            $customer->possibleRelatedLeads()->updateExistingPivot($lead->id, $pivotData);
+        } else {
+            // No pivot exists so we should save it for the first time
+            $customer->possibleRelatedLeads()->save($lead, $pivotData);
+        }
     }
 
     public function startedImporting(Lead $lead): Lead {

@@ -169,6 +169,16 @@ class CreateLeadsTable extends Migration
                 'updated_at' => now(),
             ],
             [
+                'id' => LeadStatus::CLEANSING,
+                'label' => 'Cleansing Lead',
+                'description' => 'The lead has now entered the queue for import, but before import can take place, '
+                    .' we need to ensure that data like contact information is valid before we risk allowing it into'
+                    .' our system',
+                'is_billable' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'id' => LeadStatus::AWAITING_IMPORT,
                 'label' => 'Awaiting Import',
                 'description' => 'The lead has been scheduled for import, and is awaiting the import_at date.',
