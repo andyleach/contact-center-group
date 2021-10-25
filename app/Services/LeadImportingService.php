@@ -6,13 +6,9 @@ use App\Events\Lead\LeadImportCompleted;
 use App\Events\Lead\LeadImportFailed;
 use App\Events\Lead\LeadImportStarted;
 use App\Models\Customer\Customer;
-use App\Models\Customer\CustomerEmailAddress;
-use App\Models\Customer\CustomerPhoneNumber;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
-use App\Services\DataTransferObjects\LeadData;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class LeadImportingService {
 
