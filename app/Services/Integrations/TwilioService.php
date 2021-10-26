@@ -2,6 +2,7 @@
 
 namespace App\Services\Integrations;
 
+use App\Contacts\TwilioServiceContract;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Api\V2010\Account\CallInstance;
@@ -11,7 +12,7 @@ use Twilio\Rest\Client;
 use Twilio\Rest\Lookups\V1\PhoneNumberInstance;
 use Twilio\TwiML\VoiceResponse;
 
-class TwilioService {
+class TwilioService implements TwilioServiceContract {
     /**
      * @var Client $twilio
      */

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Contacts\TwilioServiceContract;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Services\Integrations\TwilioService;
@@ -39,14 +40,14 @@ class LeadDataCleansing implements ShouldQueue {
         $this->lead->lead_status_id = LeadStatus::CLEANSING;
         $this->lead->save();
 
-        $this->scrubLeadPhoneNumbers();
+        $this->handleClensingOfLeadPhoneNumbers();
     }
 
     /**
      *
      */
-    public function scrubLeadPhoneNumbers() {
-        $twilioService = new TwilioService();
+    public function handleClensingOfLeadPhoneNumbers() {
+        $twilioService = app(TwilioServiceContract::class);
         $leadPhoneNumbers = $this->lead->leadPhoneNumbers;
         foreach ($leadPhoneNumbers as $leadPhoneNumber) {
             try {
