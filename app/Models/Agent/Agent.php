@@ -40,6 +40,11 @@ class Agent extends Model
     use HasFactory;
 
     /**
+     * Indicates the agents overall availability in the system.  This includes things like whether they are:
+     *
+     * - Available for work
+     * - Winding down
+     * - Unavailable
      * @return BelongsTo
      */
     public function agentAvailabilityType(): BelongsTo {
@@ -47,6 +52,14 @@ class Agent extends Model
     }
 
     /**
+     * Indicates the agent's current task assignment status.  This includes things like:
+     *
+     * - Having no task
+     * - Looking for a task
+     * - If they were just assigned a task
+     * - If they are working on that task
+     * - If they are wrapping up a task
+     *
      * @return BelongsTo
      */
     public function agentAssignmentStatus(): BelongsTo {
