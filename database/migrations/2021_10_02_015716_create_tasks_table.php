@@ -39,6 +39,10 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
+            $table->time('begin_assignment_at')
+                ->comment('The beginning of the window in which we will allow a task of this type to be assigned');
+            $table->time('end_assignment_at')
+                ->comment('The end of the window in which we will allow a task of the type to be assigned');
             $table->softDeletes();
             $table->timestamps();
         });
