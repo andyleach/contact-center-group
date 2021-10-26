@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadPhoneNumber wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadPhoneNumber whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Lead\Lead $lead
+ * @method static \Database\Factories\Lead\LeadPhoneNumberFactory factory(...$parameters)
  */
 class LeadPhoneNumber extends Model
 {

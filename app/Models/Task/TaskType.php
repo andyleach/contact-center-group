@@ -36,6 +36,10 @@ use Illuminate\Support\Collection;
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|TaskType whereDeletedAt($value)
+ * @property string|null $begin_assignment_at The beginning of the window in which we will allow a task of this type to be assigned
+ * @property string|null $end_assignment_at The end of the window in which we will allow a task of the type to be assigned.
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskType whereBeginAssignmentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskType whereEndAssignmentAt($value)
  */
 class TaskType extends Model
 {

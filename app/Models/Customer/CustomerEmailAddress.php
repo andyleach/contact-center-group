@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|CustomerEmailAddress whereUpdatedAt($value)
  * @method static Builder|CustomerEmailAddress matchClientCustomerEmailAddresses(int $client_id, array $emailAddresses = [])
  * @method static Builder|CustomerEmailAddress matchClientCustomerEmailAddress(int $client_id, $emailAddresses)
+ * @property-read LeadEmailAddress $leadEmailAddress
  */
 class CustomerEmailAddress extends Model
 {

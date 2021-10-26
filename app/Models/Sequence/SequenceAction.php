@@ -15,6 +15,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property int $sequence_id
+ * @property int $task_type_id
+ * @property string|null $scheduled_start_time The time we will create the task to be worked
+ * @property int $delay_in_seconds The delay added to the scheduled start time.  If start time is null, it will be assumed to be the current time
+ * @property string $instructions
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereDelayInSeconds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereInstructions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereScheduledStartTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereSequenceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereTaskTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereUpdatedAt($value)
  */
 class SequenceAction extends Model
 {

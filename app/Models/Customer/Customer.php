@@ -38,6 +38,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Customer whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Customer whereFullName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Customer whereLastName($value)
+ * @property-read Client $client
+ * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $possibleRelatedLeads
+ * @property-read int|null $possible_related_leads_count
  */
 class Customer extends Model
 {

@@ -12,6 +12,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property string $label
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereUpdatedAt($value)
  */
 class SequenceActionRestriction extends Model
 {

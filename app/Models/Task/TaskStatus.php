@@ -38,6 +38,10 @@ use Illuminate\Support\Collection;
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereDeletedAt($value)
+ * @property int $is_removable
+ * @property int $is_agent_dismissible
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereIsAgentDismissible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TaskStatus whereIsRemovable($value)
  */
 class TaskStatus extends Model
 {

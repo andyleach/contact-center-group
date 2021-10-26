@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|LeadEmailAddress whereLeadId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeadEmailAddress whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Lead\Lead $lead
+ * @method static \Database\Factories\Lead\LeadEmailAddressFactory factory(...$parameters)
  */
 class LeadEmailAddress extends Model
 {

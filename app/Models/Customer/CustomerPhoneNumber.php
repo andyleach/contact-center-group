@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|CustomerPhoneNumber whereUpdatedAt($value)
  * @method static Builder|CustomerPhoneNumber matchClientCustomerPhoneNumbers(int $client_id, array $phoneNumbers = [])
  * @method static Builder|CustomerPhoneNumber matchClientCustomerPhoneNumber(int $client_id, $phoneNumbers)
+ * @property-read LeadPhoneNumber $leadPhoneNumber
  */
 class CustomerPhoneNumber extends Model
 {
