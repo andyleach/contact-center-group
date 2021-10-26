@@ -26,22 +26,22 @@ class CreateLeadListsTable extends Migration
             $table->id();
             $table->foreignIdFor(LeadListStatus::class, 'lead_list_status_id');
             $table->foreignIdFor(User::class, 'user_id');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('lead_list_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('lead_list_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('lead_lists', function (Blueprint $table) {
@@ -52,8 +52,8 @@ class CreateLeadListsTable extends Migration
             $table->foreignIdFor(LeadListType::class, 'lead_list_type_id')->constrained();
             $table->foreignIdFor(Client::class, 'client_id')->constrained();
             $table->timestamp('start_work_at')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         $this->initializeLeadListStatuses();
