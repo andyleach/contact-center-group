@@ -12,6 +12,8 @@ use App\Models\Customer\CustomerEmailAddress;
 use App\Models\Customer\CustomerPhoneNumber;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
+use App\Models\Sequence\Sequence;
+use App\Models\LeadList\LeadList;
 
 class CreateLeadsTable extends Migration
 {
@@ -32,16 +34,16 @@ class CreateLeadsTable extends Migration
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('lead_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('lead_statuses', function (Blueprint $table) {
@@ -49,8 +51,8 @@ class CreateLeadsTable extends Migration
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
             $table->boolean('is_billable')->default(false);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('leads', function (Blueprint $table) {
@@ -59,17 +61,15 @@ class CreateLeadsTable extends Migration
             $table->string('last_name');
             $table->string('full_name');
             $table->foreignIdFor(Client::class, 'client_id')->constrained();
-            $table->foreignIdFor(\App\Models\LeadList\LeadList::class, 'lead_list_id')
+            $table->foreignIdFor(LeadList::class, 'lead_list_id')
                 ->nullable()->constrained();
             $table->foreignIdFor(LeadType::class, 'lead_type_id')->constrained();
             $table->foreignIdFor(LeadStatus::class, 'lead_status_id')->constrained();
             $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id')
                 ->nullable()
                 ->constrained();;
-            $table->foreignIdFor(\App\Models\Sequence\Sequence::class, 'sequence_id')->nullable()->constrained();
-            $table->string('last_sequence_action_identifier', 50)->nullable();
 
-            $table->foreignIdFor(\App\Models\Lead\LeadProvider::class, 'lead_provider_id')
+            $table->foreignIdFor(LeadProvider::class, 'lead_provider_id')
                 ->comment('The originator of the lead.  This will most likely be just BetterCarPeople')
                 ->constrained();
             $table->json('meta_data');

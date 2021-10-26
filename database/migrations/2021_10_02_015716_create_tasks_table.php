@@ -24,35 +24,38 @@ class CreateTasksTable extends Migration
         Schema::create('task_event_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('task_event_reasons', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('task_types', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
+            // Null indicates that we never stop assigning this task type
             $table->time('begin_assignment_at')
+                ->nullable()
                 ->comment('The beginning of the window in which we will allow a task of this type to be assigned');
             $table->time('end_assignment_at')
-                ->comment('The end of the window in which we will allow a task of the type to be assigned');
-            $table->softDeletes();
+                ->nullable()
+                ->comment('The end of the window in which we will allow a task of the type to be assigned.');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('task_dispositions', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('task_statuses', function (Blueprint $table) {
@@ -62,8 +65,8 @@ class CreateTasksTable extends Migration
             $table->boolean('is_removable')->index();
             $table->boolean('is_expirable')->index();
             $table->boolean('is_agent_dismissible')->index();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('tasks', function (Blueprint $table) {
@@ -74,12 +77,6 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(\App\Models\Agent\Agent::class, 'agent_id')
                 ->nullable()
                 ->constrained();
-            $table->foreignIdFor(\App\Models\Sequence\Sequence::class, 'sequence_id')
-                ->nullable()
-                ->constrained();
-            $table->string('sequence_action_identifier', 50)
-                ->nullable()
-                ->index();
             $table->boolean('is_first_contact')->index();
             $table->boolean('is_followup')->index();
             $table->boolean('is_client_requested')->index();
@@ -220,24 +217,32 @@ class CreateTasksTable extends Migration
             [
                 'id' => TaskType::INBOUND_CALL,
                 'label' => 'Inbound Call',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => TaskType::OUTBOUND_CALL,
                 'label' => 'Outbound Call',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => TaskType::MISSED_CALL_CALLBACK,
                 'label' => 'Missed Call Callback',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => TaskType::NON_WORKING_HOURS_CALLBACK,
                 'label' => 'Non-Working Hours Callback',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
