@@ -57,6 +57,12 @@ class CustomerEmailAddress extends Model
         return $this->belongsTo(LeadEmailAddress::class, 'lead_id');
     }
 
+    /**
+     * @param Builder $query
+     * @param int $client_id
+     * @param $emailAddresses
+     * @return Builder
+     */
     public function scopeMatchClientCustomerEmailAddress(Builder $query, int $client_id, $emailAddresses): Builder {
         if (is_array($emailAddresses)) {
             $query->whereIn('email_address', $emailAddresses);

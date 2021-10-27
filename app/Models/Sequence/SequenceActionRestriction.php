@@ -26,4 +26,8 @@ use Illuminate\Database\Eloquent\Model;
 class SequenceActionRestriction extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'label', 'description'
+    ];
 }

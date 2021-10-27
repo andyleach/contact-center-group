@@ -37,6 +37,11 @@ class SequenceAction extends Model
     use HasFactory;
 
     /**
+     * @var string[] $fillable
+     */
+    protected $fillable = ['sequence_id', 'task_type_id', 'scheduled_start_time', 'delay_in_seconds'];
+
+    /**
      * @return BelongsToMany
      */
     public function sequenceActionRestrictions(): BelongsToMany {

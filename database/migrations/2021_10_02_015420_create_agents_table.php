@@ -23,17 +23,9 @@ class CreateAgentsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('agent_assignment_statuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('label')->unique();
-            $table->timestamps();
-        });
-
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class, 'user_id')->unique()->constrained();
-            $table->foreignIdFor(AgentAssignmentStatus::class, 'agent_assignment_status_id')
-                ->constrained('agent_assignment_statuses');
             $table->foreignIdFor(AgentAvailabilityType::class, 'availability_type_id')
                 ->constrained('agent_availability_types');
             $table->string('name');
@@ -41,29 +33,6 @@ class CreateAgentsTable extends Migration
             $table->timestamp('disabled_at')->index()->nullable();
             $table->timestamps();
         });
-
-        AgentAssignmentStatus::query()->insert([
-            [
-                'id' => AgentAssignmentStatus::NO_TASK,
-                'label' => 'No Task',
-            ],
-            [
-                'id' => AgentAssignmentStatus::LOOKING_FOR_TASK,
-                'label' => 'Looking For Task'
-            ],
-            [
-                'id' => AgentAssignmentStatus::ASSIGNED_TASK,
-                'label' => 'Assigned Task'
-            ],
-            [
-                'id' => AgentAssignmentStatus::WORKING_TASK,
-                'label' => 'Working Task',
-            ],
-            [
-                'id' => AgentAssignmentStatus::WRAPPING_UP_TASK,
-                'label' => 'Wrapping Up Task',
-            ],
-        ]);
 
         AgentAvailabilityType::query()->insert([
             [
@@ -98,7 +67,6 @@ class CreateAgentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('agents');
-        Schema::dropIfExists('agent_assignment_statuses');
         Schema::dropIfExists('agent_availability_types');
     }
 }

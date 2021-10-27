@@ -4,11 +4,12 @@ namespace App\Services;
 
 use App\Models\Lead\Lead;
 use App\Models\Task\Task;
+use App\Services\DataTransferObjects\SequenceData;
 use Carbon\Carbon;
 
 class SequenceService {
-    public function createSequence() {}
-    public function updateSequence() {}
+    public function createSequence(SequenceData $data) {}
+    public function updateSequence(SequenceData $data) {}
 
     /**
      * Each sequence action should require a unique identifier that should be specific to the sequence action.
@@ -21,6 +22,8 @@ class SequenceService {
     public function createNextTask(Lead $lead): Task {
         return new Task();
     }
+
+
 
     /**
      * Used for calculating a next task time based on the time of day and delay required

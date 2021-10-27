@@ -35,7 +35,6 @@ class LeadFactory extends Factory
             'lead_disposition_id' => null,
             'lead_provider_id' => LeadProvider::BETTER_CAR_PEOPLE,
             'sequence_id' => null,
-            'last_sequence_action_identifier' => null,
             'meta_data' => []
         ];
     }

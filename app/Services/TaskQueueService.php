@@ -17,6 +17,18 @@ use App\Models\Task\TaskStatus;
 
 class TaskQueueService {
     /**
+     * @var AgentService $agentService
+     */
+    protected AgentService $agentService;
+
+    /**
+     *
+     */
+    public function __construct() {
+        $this->agentService = app(AgentService::class);
+    }
+
+    /**
      * @param Task $task
      * @param Agent $agent
      * @return Task
