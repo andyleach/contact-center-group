@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereSequenceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereTaskTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereUpdatedAt($value)
+ * @property int $ordinal_number Used to represent the positional order of an action in a sequence
+ * @method static \Illuminate\Database\Eloquent\Builder|SequenceAction whereOrdinalNumber($value)
  */
 class SequenceAction extends Model
 {
@@ -39,7 +41,7 @@ class SequenceAction extends Model
     /**
      * @var string[] $fillable
      */
-    protected $fillable = ['sequence_id', 'task_type_id', 'scheduled_start_time', 'delay_in_seconds'];
+    protected $fillable = ['sequence_id', 'task_type_id', 'scheduled_start_time', 'delay_in_seconds', 'instructions'];
 
     /**
      * @return BelongsToMany

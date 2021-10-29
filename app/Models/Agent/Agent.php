@@ -30,9 +30,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @mixin \Eloquent
  * @property string|null $disabled_at
  * @method static \Illuminate\Database\Eloquent\Builder|Agent whereDisabledAt($value)
- * @property int $agent_assignment_status_id
- * @method static \Illuminate\Database\Eloquent\Builder|Agent whereAgentAssignmentStatusId($value)
- * @property-read \App\Models\Agent\AgentAssignmentStatus $agentAssignmentStatus
  * @property-read \App\Models\Agent\AgentAvailabilityType $agentAvailabilityType
  */
 class Agent extends Model
@@ -49,20 +46,5 @@ class Agent extends Model
      */
     public function agentAvailabilityType(): BelongsTo {
         return $this->belongsTo(AgentAvailabilityType::class, 'agent_availability_type_id');
-    }
-
-    /**
-     * Indicates the agent's current task assignment status.  This includes things like:
-     *
-     * - Having no task
-     * - Looking for a task
-     * - If they were just assigned a task
-     * - If they are working on that task
-     * - If they are wrapping up a task
-     *
-     * @return BelongsTo
-     */
-    public function agentAssignmentStatus(): BelongsTo {
-        return $this->belongsTo(AgentAssignmentStatus::class, 'agent_assignment_status_id');
     }
 }

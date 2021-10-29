@@ -70,6 +70,10 @@ use Illuminate\Support\Collection;
  * @method static Builder|Task whereIsClientRequested($value)
  * @method static Builder|Task whereIsFirstContact($value)
  * @method static Builder|Task whereIsFollowup($value)
+ * @property int $lead_id
+ * @property int|null $sequence_action_id Used to identify the sequence action that prompted the creation of the task
+ * @method static Builder|Task whereLeadId($value)
+ * @method static Builder|Task whereSequenceActionId($value)
  */
 class Task extends Model
 {

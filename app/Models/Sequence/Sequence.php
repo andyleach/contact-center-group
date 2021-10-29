@@ -2,8 +2,12 @@
 
 namespace App\Models\Sequence;
 
+use App\Models\Lead\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Sequence\Sequence
@@ -30,8 +34,25 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Sequence whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Sequence whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $sequence_type_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Sequence whereSequenceTypeId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|Lead[] $leads
+ * @property-read int|null $leads_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Sequence\SequenceAction[] $sequenceActions
+ * @property-read int|null $sequence_actions_count
  */
 class Sequence extends Model
 {
     use HasFactory;
+
+    public function leads(): BelongsToMany {
+        return $this->belongsToMany(Lead::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function sequenceActions(): HasMany {
+        return $this->hasMany(SequenceAction::class, 'sequence_id');
+    }
 }

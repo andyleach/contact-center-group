@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Contacts\TwilioServiceContract;
+use App\Contracts\TwilioServiceContract;
 use App\Services\Integrations\TwilioService;
 use Illuminate\Support\ServiceProvider;
 

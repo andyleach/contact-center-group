@@ -23,8 +23,13 @@ abstract class AbstractDataTransferObject {
 
     /**
      * @param $array
+     * @return Collection
      */
-    public static function newCollection($array) {
+    public static function newCollection($array): Collection {
         return new Collection($array);
+    }
+
+    public static function fromArray(array $attributes = []): static {
+        return new static($attributes);
     }
 }

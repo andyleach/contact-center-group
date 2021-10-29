@@ -70,6 +70,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $lead_email_addresses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lead\LeadPhoneNumber[] $leadPhoneNumbers
  * @property-read int|null $lead_phone_numbers_count
+ * @property-read int $required_sequence_type
+ * @property-read \Illuminate\Database\Eloquent\Collection|Sequence[] $sequences
+ * @property-read int|null $sequences_count
+ * @method static Builder|Lead openSequence()
+ * @property-read \App\Models\Sequence\Sequence|null $open_sequence
  */
 class Lead extends Model
 {
@@ -87,9 +92,8 @@ class Lead extends Model
     ];
 
     protected $fillable = [
-        'client_id', 'lead_type_id', 'sequence_id', 'last_sequence_action_identifier', 'customer_id',
-        'first_name', 'last_name', 'full_name', 'lead_status_id', 'lead_disposition_id', 'lead_provider_id',
-        'meta_data', 'lead_list_id'
+        'client_id', 'lead_type_id', 'customer_id', 'first_name', 'last_name', 'full_name', 'lead_status_id',
+        'lead_disposition_id', 'lead_provider_id', 'meta_data', 'lead_list_id'
     ];
 
     /**
@@ -119,10 +123,6 @@ class Lead extends Model
         return $this->belongsTo(LeadList::class, 'lead_list_id');
     }
 
-    public function sequence(): BelongsTo {
-        return $this->belongsTo(Sequence::class, 'sequence_id');
-    }
-
     public function leadProvider(): BelongsTo {
         return $this->belongsTo(LeadProvider::class, 'lead_provider_id');
     }
@@ -133,6 +133,14 @@ class Lead extends Model
 
     public function leadEmailAddresses(): HasMany {
         return $this->hasMany(LeadEmailAddress::class, 'lead_id');
+    }
+
+    public function sequences(): BelongsToMany {
+        return $this->belongsToMany(Sequence::class)->withPivot([
+            'sequence_action_id',
+            'assigned_at',
+            'closed_at'
+        ]);
     }
 
     public function scopeAwaitingImport(Builder $query): Builder {
@@ -147,6 +155,11 @@ class Lead extends Model
     public function scopeReadyForImport(Builder $query): Builder {
         return $this->awaitingImport()
             ->where('import_at', '<=', now());
+    }
+
+    public function scopeOpenSequence(Builder $query): Builder {
+        return $query->sequences()
+            ->wherePivotNull('closed_at');
     }
 
     /**

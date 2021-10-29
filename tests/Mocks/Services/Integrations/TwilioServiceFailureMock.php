@@ -3,7 +3,7 @@
 namespace Tests\Mocks\Services\Integrations;
 
 
-use App\Contacts\TwilioServiceContract;
+use App\Contracts\TwilioServiceContract;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Lookups\V1\PhoneNumberInstance;
 

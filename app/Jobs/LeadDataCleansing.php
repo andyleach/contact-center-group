@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Contacts\TwilioServiceContract;
+use App\Contracts\TwilioServiceContract;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
 use App\Services\Integrations\TwilioService;

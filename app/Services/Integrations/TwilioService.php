@@ -2,7 +2,7 @@
 
 namespace App\Services\Integrations;
 
-use App\Contacts\TwilioServiceContract;
+use App\Contracts\TwilioServiceContract;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Api\V2010\Account\CallInstance;

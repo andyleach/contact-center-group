@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Sequence\Sequence;
 use App\Models\Client\Client;
 use App\Models\Task\TaskType;
+use App\Models\Lead\Lead;
 use App\Models\Sequence\SequenceAction;
-use App\Models\Sequence\SequenceActionRestriction;
 
 class CreateSequencesTable extends Migration
 {
@@ -28,20 +28,6 @@ class CreateSequencesTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('tasks', function(Blueprint $table) {
-            $table->foreignIdFor(Sequence::class, 'sequence_id')
-                ->nullable()
-                ->after('agent_id')
-                ->constrained();
-        });
-
-        Schema::table('leads', function(Blueprint $table) {
-            $table->foreignIdFor(Sequence::class, 'sequence_id')
-                ->nullable()
-                ->after('lead_disposition_id')
-                ->constrained();
-        });
-
         Schema::create('sequence_actions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Sequence::class, 'sequence_id')->constrained();
@@ -52,7 +38,38 @@ class CreateSequencesTable extends Migration
             $table->unsignedBigInteger('delay_in_seconds')
                 ->comment('The delay added to the scheduled start time.  If start time is null, it will be assumed to be the current time');
             $table->text('instructions');
+            $table->unsignedBigInteger('ordinal_number')
+                ->comment('Used to represent the positional order of an action in a sequence');
             $table->timestamps();
+        });
+
+        Schema::table('tasks', function(Blueprint $table) {
+            $table->foreignIdFor(SequenceAction::class, 'sequence_action_id')
+                ->nullable()
+                ->after('lead_id')
+                ->comment('Used to identify the sequence action that prompted the creation of the task')
+                ->constrained();
+        });
+
+        Schema::create('lead_sequence', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained();
+            $table->foreignIdFor(Sequence::class, 'sequence_id')->constrained();
+            $table->foreignIdFor(SequenceAction::class, 'sequence_action_id')
+                ->nullable()
+                ->comment('Used to identify the last sequence action that was created for a lead')
+                ->constrained();
+            $table->timestamp('assigned_at')->index()
+                ->comment('Indicates when we first assigned the sequence to the lead');
+            $table->timestamp('closed_at')->index()
+                ->comment('Indicates that we have done all work we intend to do for this sequence');
+            $table->timestamps();
+
+            // Ensures that a sequence can only be assigned one time
+            $table->unique(['lead_id', 'sequence_id']);
+
+            // Ensures that no more than one sequence can be open at one time
+            $table->unique(['lead_id', 'closed_at']);
         });
 
         Schema::create('sequence_action_restrictions', function (Blueprint $table) {
@@ -90,6 +107,7 @@ class CreateSequencesTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('lead_sequence');
         Schema::dropIfExists('sequence_action_sequence_action_restriction');
         Schema::dropIfExists('sequence_action_restrictions');
         Schema::dropIfExists('sequence_actions');

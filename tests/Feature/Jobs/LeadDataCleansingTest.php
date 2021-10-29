@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs;
 
-use App\Contacts\TwilioServiceContract;
+use App\Contracts\TwilioServiceContract;
 use App\Jobs\ImportLead;
 use App\Jobs\LeadDataCleansing;
 use App\Models\Client\Client;

@@ -3,22 +3,11 @@
 namespace App\Services;
 
 use App\Events\Lead\LeadDismissed;
-use App\Events\Lead\LeadImportCompleted;
-use App\Events\Lead\LeadImportFailed;
-use App\Events\Lead\LeadImportStarted;
-use App\Events\Lead\LeadReceived;
-use App\Jobs\ImportLead;
-use App\Jobs\ValidateLeadContactInformation;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadStatus;
-use App\Models\LeadList\LeadList;
-use App\Models\Sequence\Sequence;
-use App\Models\Task\Task;
 use App\Services\DataTransferObjects\LeadData;
-use Illuminate\Support\Facades\Bus;
 
 class LeadService {
-
     /**
      * @param LeadData $data
      * @return Lead
@@ -63,50 +52,6 @@ class LeadService {
         $lead->save();
 
         LeadDismissed::dispatch($lead);
-
-        return $lead;
-    }
-
-    public function assignSequenceToLead(Lead $lead, Sequence $sequence): Lead {
-
-    }
-
-    public function createNextTaskInSequence(Lead $lead): Task {
-
-    }
-
-    public function endSequence(Lead $lead): Lead {
-
-    }
-
-    /**
-     * @param LeadData $data
-     * @return Lead
-     */
-    public function receiveLeadFromProvider(LeadData $data): Lead {
-        // Create the new lead
-        $lead = $this->createLead($data);
-
-        LeadReceived::dispatch($lead);
-
-        // Determine the best sequence to assign
-        // Create the first task
-
-        return $lead;
-    }
-
-    /**
-     * @param LeadData $data
-     * @return Lead
-     */
-    public function createLeadForLeadList(LeadList $leadList, LeadData $data): Lead {
-        // Create the new lead
-        $lead = $this->createLead($data);
-
-        LeadReceived::dispatch($lead);
-
-        // Determine the best sequence to assign
-        // Create the first task
 
         return $lead;
     }

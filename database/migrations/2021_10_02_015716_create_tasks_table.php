@@ -11,6 +11,8 @@ use App\Models\Agent\Agent;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Lead\Lead;
+use App\Models\Sequence\SequenceAction;
 
 class CreateTasksTable extends Migration
 {
@@ -71,15 +73,17 @@ class CreateTasksTable extends Migration
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(TaskType::class, 'task_type_id')->constrained();
-            $table->foreignIdFor(TaskStatus::class, 'task_status_id')->constrained();
-            $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')->nullable()->constrained();
-            $table->foreignIdFor(\App\Models\Agent\Agent::class, 'agent_id')
+            $table->foreignIdFor(Lead::class, 'lead_id')->constrained();
+            $table->foreignIdFor(TaskType::class, 'task_type_id')
+                ->constrained();
+            $table->foreignIdFor(TaskStatus::class, 'task_status_id')
+                ->constrained();
+            $table->foreignIdFor(TaskDisposition::class, 'task_disposition_id')
                 ->nullable()
                 ->constrained();
-            $table->boolean('is_first_contact')->index();
-            $table->boolean('is_followup')->index();
-            $table->boolean('is_client_requested')->index();
+            $table->foreignIdFor(Agent::class, 'agent_id')
+                ->nullable()
+                ->constrained();
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
             $table->timestamp('expires_at')->index()->nullable();
@@ -245,7 +249,39 @@ class CreateTasksTable extends Migration
                 'end_assignment_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
+            [
+                'id' => TaskType::INBOUND_SMS,
+                'label' => 'Inbound SMS',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => TaskType::OUTBOUND_SMS,
+                'label' => 'Outbound SMS',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => TaskType::INBOUND_EMAIL,
+                'label' => 'Inbound Email',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => TaskType::OUTBOUND_EMAIL,
+                'label' => 'Outbound Email',
+                'begin_assignment_at' => null,
+                'end_assignment_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 
