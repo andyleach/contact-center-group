@@ -6,6 +6,7 @@ use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use App\Models\Customer\Customer;
 use App\Models\LeadList\LeadList;
+use App\Models\Pivot\LeadSequence;
 use App\Models\Sequence\Sequence;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -136,11 +137,9 @@ class Lead extends Model
     }
 
     public function sequences(): BelongsToMany {
-        return $this->belongsToMany(Sequence::class)->withPivot([
-            'sequence_action_id',
-            'assigned_at',
-            'closed_at'
-        ]);
+        return $this->belongsToMany(Sequence::class)
+            ->using(LeadSequence::class)
+            ->as('leadSequence');
     }
 
     public function scopeAwaitingImport(Builder $query): Builder {

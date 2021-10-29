@@ -14,6 +14,7 @@ use App\Models\Task\Task;
 use App\Models\Task\TaskEventReason;
 use App\Models\Task\TaskEventType;
 use App\Models\Task\TaskStatus;
+use App\Services\DataTransferObjects\TaskData;
 
 class TaskQueueService {
     /**
@@ -26,6 +27,18 @@ class TaskQueueService {
      */
     public function __construct() {
         $this->agentService = app(AgentService::class);
+    }
+
+    /**
+     * @param TaskData $taskData
+     * @return Task
+     */
+    public function createTask(TaskData $taskData): Task {
+        $task = Task::factory()->create([
+            'task_type_id' => $taskData->task_type_id,
+            'unstructured_data' => $taskData->unstructured_data,
+            'available_at' => $taskData->available_at
+        ]);
     }
 
     /**

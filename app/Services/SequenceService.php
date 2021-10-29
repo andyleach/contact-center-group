@@ -4,11 +4,15 @@ namespace App\Services;
 
 use App\Events\Lead\LeadAssignedSequence;
 use App\Events\Lead\LeadClosedSequence;
+use App\Exceptions\Sequence\MissingAssignedSequenceException;
+use App\Exceptions\Sequence\MissingNextSequenceActionException;
 use App\Models\Lead\Lead;
+use App\Models\Pivot\LeadSequence;
 use App\Models\Sequence\Sequence;
 use App\Models\Sequence\SequenceAction;
 use App\Models\Task\Task;
 use App\Services\DataTransferObjects\SequenceData;
+use App\Services\DataTransferObjects\TaskData;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -143,47 +147,26 @@ class SequenceService {
      * @throws \Throwable
      */
     public function createNextTask(Lead $lead): Task {
-        $sequenceService = $this;
+        return DB::transaction(function() use ($lead) {
+            $leadSequence = LeadSequence::query()
+                ->where('lead_id', $lead->id)
+                ->isClosed()
+                ->first();
 
-        return DB::transaction(function() use ($sequenceService, $lead) {
-            $sequence = $lead->openSequence()->first();
-            if (null == $sequence) {
-                throw new \Exception('There is no open sequence for the lead #'. $lead->id);
+            if (null == $leadSequence) {
+                throw MissingAssignedSequenceException::create($lead);
             }
 
-            $lead->sequence->pivot->
-            return new Task();
+            $upcomingSequenceAction = SequenceAction::query()
+                ->afterSequencePosition($leadSequence->sequence_id, $leadSequence->sequenceAction->ordinal_position)
+                ->orderBy('ordinal_position', 'asc')
+                ->first();
+
+            if (null == $upcomingSequenceAction) {
+                throw MissingNextSequenceActionException::create($leadSequence);
+            }
+
+            $taskData = TaskData::fromSequenceAction($upcomingSequenceAction);
         });
-    }
-
-    /**
-     * @param string|null $time     Time of day required
-     * @param string|null $delay    Minimum delay required
-     * @param string      $timezone Timezone of interest
-     * @return Carbon
-     */
-    public function getTimeAfterDelay(?string $time, ?string $delay, string $timezone): Carbon {
-        // The default $waitUntil will be NOW -- no wait
-        $waitUntil = now($timezone);
-
-        // If we have a $delay, add it to the $waitUntil
-        if (!empty($delay)) {
-            $delay = explode(':', $delay);
-            $delay = (3600 * $delay[0] ?? 0) + (60 * $delay[1] ?? 0) + ($delay[2] ?? 0);
-            $waitUntil->addSeconds($delay);
-        }
-
-
-        // If we have a $time, move $waitUntil forward until it is reached
-        if (!empty($time)) {
-            $time = explode(':', $time);
-            $waitUntil->setTime($time[0], $time[1] ?? 0, $time[2] ?? 0);
-            // If the time already passed today, try tomorrow
-            if ($waitUntil->timestamp < microtime(true)) {
-                $waitUntil->addDay(1);
-            }
-        }
-
-        return $waitUntil;
     }
 }

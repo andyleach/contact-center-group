@@ -38,7 +38,7 @@ class CreateSequencesTable extends Migration
             $table->unsignedBigInteger('delay_in_seconds')
                 ->comment('The delay added to the scheduled start time.  If start time is null, it will be assumed to be the current time');
             $table->text('instructions');
-            $table->unsignedBigInteger('ordinal_number')
+            $table->unsignedBigInteger('ordinal_position')
                 ->comment('Used to represent the positional order of an action in a sequence');
             $table->timestamps();
         });
