@@ -21,10 +21,21 @@ class SequenceData  extends AbstractDataTransferObject {
      * @var int $sequence_type_id
      */
     public int $sequence_type_id;
+
     /**
-     * @var Collection|array<SequenceActionData> $sequence_actions
+     * @var int $client_id
      */
-    public array $sequence_actions = [];
+    public int $client_id;
+
+    /**
+     * @var float $cost_per_lead_in_usd
+     */
+    public float $cost_per_lead_in_usd;
+
+    /**
+     * @var Collection $sequence_actions
+     */
+    public Collection $sequence_actions;
 
     /**
      * Ensures that you can use factories to create sequence data.
@@ -46,9 +57,14 @@ class SequenceData  extends AbstractDataTransferObject {
         $sequenceData->description = $request->get('description');
         $sequenceData->sequence_type_id = $request->get('sequence_type_id');
 
+        $actionsCollection = new Collection();
         foreach ($request->get('sequence_actions') as $action) {
-            $sequenceData->sequence_actions[] = SequenceActionData::fromArray($action);
+            $actionsCollection->add(
+                SequenceActionData::fromArray($action)
+            );
         }
+
+        $sequenceData->sequence_actions = $actionsCollection;
 
         return $sequenceData;
     }

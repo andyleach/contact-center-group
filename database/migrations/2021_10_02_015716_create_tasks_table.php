@@ -84,7 +84,7 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(Agent::class, 'agent_id')
                 ->nullable()
                 ->constrained();
-            $table->text('instructions');
+            $table->text('instructions')->nullable();
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
             $table->timestamp('expires_at')->index()->nullable();

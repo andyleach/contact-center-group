@@ -22,8 +22,8 @@ class SequenceActionData extends AbstractDataTransferObject {
     public ?int $sequence_action_id = null;
     public int $task_type_id;
     public int $sequence_id;
-    public Carbon $scheduled_start_time;
+    public string $scheduled_start_time;
     public int $delay_in_seconds;
     public string $instructions;
-    public int $ordinal_position;
+    public ?int $ordinal_position;
 }

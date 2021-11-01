@@ -29,6 +29,8 @@ class SequenceService {
             $sequence = Sequence::create([
                 'label' => $data->label,
                 'description' => $data->description,
+                'cost_per_lead_in_usd' => $data->cost_per_lead_in_usd,
+                'client_id' => $data->client_id,
             ]);
 
             foreach ($data->sequence_actions as $action) {

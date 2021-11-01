@@ -45,6 +45,10 @@ class Sequence extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'label', 'description', 'cost_per_lead_in_usd', 'client_id'
+    ];
+
     public function leads(): BelongsToMany {
         return $this->belongsToMany(Lead::class);
     }

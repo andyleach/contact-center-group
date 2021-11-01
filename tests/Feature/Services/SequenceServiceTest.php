@@ -29,7 +29,14 @@ class SequenceServiceTest extends TestCase
         /** @var SequenceData $sequenceData */
         $sequenceData = SequenceData::factory()->make();
 
-        $sequenceActions = SequenceActionData::factory()->count(10)->make()->toArray();
+        $sequenceActions = SequenceActionData::factory()->count(10)->make();
+        $ordinalPosition = 1;
+
+        foreach ($sequenceActions as $sequenceAction) {
+            $sequenceAction->ordinal_position = $ordinalPosition;
+            $ordinalPosition++;
+        }
+
         $sequenceData->sequence_actions = $sequenceActions;
 
         $this->service->createSequence($sequenceData);

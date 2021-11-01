@@ -46,7 +46,7 @@ class TaskQueueServiceTest extends TestCase
         $taskData = TaskData::factory()->make([]);
 
         $task = $this->service->createTask($taskData);
-        $this->assertNotInstanceOf(Task::class, $task);
+        $this->assertInstanceOf(Task::class, $task);
 
         $this->assertDatabaseHas('tasks', [
             'sequence_action_id' => $taskData->sequence_action_id,

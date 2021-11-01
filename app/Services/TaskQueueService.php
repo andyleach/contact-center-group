@@ -36,6 +36,7 @@ class TaskQueueService {
     public function createTask(TaskData $taskData): Task {
         $task = Task::create([
             'sequence_action_id' => $taskData->sequence_action_id,
+            'task_status_id'     => $taskData->task_status_id,
             'lead_id'            => $taskData->lead_id,
             'task_type_id'       => $taskData->task_type_id,
             'available_at'       => $taskData->available_at,

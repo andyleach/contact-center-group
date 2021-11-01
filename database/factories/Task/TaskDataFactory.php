@@ -26,7 +26,7 @@ class TaskDataFactory extends Factory
         'available_at' => "\Carbon\Carbon",
         'expires_at' => "\Carbon\Carbon"
     ])]
-    public function definition()
+    public function definition(): array
     {
         return [
             'sequence_action_id' => null,

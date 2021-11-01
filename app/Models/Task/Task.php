@@ -88,11 +88,18 @@ class Task extends Model
         'created' => TaskCreated::class,
     ];
 
+    protected $dates = [
+        'available_at', 'expires_at', 'completed_at', 'assigned_at'
+    ];
+
     protected $casts = [
         'unstructured_data' => 'json'
     ];
 
-    protected $fillable = ['sequence_action_id', 'agent_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
+    protected $fillable = [
+        'sequence_action_id', 'agent_id', 'task_status_id', 'task_type_id', 'lead_id',
+        'task_disposition_id', 'instructions', 'available_at', 'expires_at', 'completed_at', 'assigned_at'
+    ];
 
     /**
      * @return BelongsTo

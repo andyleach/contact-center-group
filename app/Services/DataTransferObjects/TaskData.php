@@ -2,6 +2,7 @@
 
 namespace App\Services\DataTransferObjects;
 
+use App\Models\Task\TaskStatus;
 use Carbon\Carbon;
 use App\Models\Lead\Lead;
 use App\Models\Task\TaskType;
@@ -23,15 +24,17 @@ class TaskData extends AbstractDataTransferObject {
      */
     public int $task_type_id;
 
+    public int $task_status_id = TaskStatus::DRAFT;
+
     /**
      * @var int $lead_id The lead the task was for
      */
     public int $lead_id;
 
     /**
-     * @var int $sequence_action_id The sequence action IF any that created the task
+     * @var null|int $sequence_action_id The sequence action IF any that created the task
      */
-    public int $sequence_action_id;
+    public ?int $sequence_action_id = null;
 
     /**
      * @var string $instructions Instructions on what the agent should accomplish
