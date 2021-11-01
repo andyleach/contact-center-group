@@ -74,6 +74,8 @@ use Illuminate\Support\Collection;
  * @property int|null $sequence_action_id Used to identify the sequence action that prompted the creation of the task
  * @method static Builder|Task whereLeadId($value)
  * @method static Builder|Task whereSequenceActionId($value)
+ * @property string $instructions
+ * @method static Builder|Task whereInstructions($value)
  */
 class Task extends Model
 {
@@ -90,7 +92,7 @@ class Task extends Model
         'unstructured_data' => 'json'
     ];
 
-    protected $fillable = ['agent_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
+    protected $fillable = ['sequence_action_id', 'agent_id', 'task_status_id', 'task_type_id', 'task_disposition_id'];
 
     /**
      * @return BelongsTo

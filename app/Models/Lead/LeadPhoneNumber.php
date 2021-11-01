@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @mixin \Eloquent
  * @property-read \App\Models\Lead\Lead $lead
  * @method static \Database\Factories\Lead\LeadPhoneNumberFactory factory(...$parameters)
+ * @property int $should_be_added_to_customer
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadPhoneNumber whereShouldBeAddedToCustomer($value)
  */
 class LeadPhoneNumber extends Model
 {

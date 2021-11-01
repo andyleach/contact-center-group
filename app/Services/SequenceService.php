@@ -11,6 +11,7 @@ use App\Models\Pivot\LeadSequence;
 use App\Models\Sequence\Sequence;
 use App\Models\Sequence\SequenceAction;
 use App\Models\Task\Task;
+use App\Services\DataTransferObjects\SequenceActionData;
 use App\Services\DataTransferObjects\SequenceData;
 use App\Services\DataTransferObjects\TaskData;
 use Carbon\Carbon;
@@ -28,23 +29,62 @@ class SequenceService {
             $sequence = Sequence::create([
                 'label' => $data->label,
                 'description' => $data->description,
-                'sequence_type_id' => $data->sequence_type_id
             ]);
 
             foreach ($data->sequence_actions as $action) {
-                SequenceAction::create([
-                    'sequence_id' => $sequence->id,
-                    'task_type_id' => $action->task_type_id,
-                    'scheduled_start_time' => $action->scheduled_start_time,
-                    'delay_in_seconds' => $action->delay_in_seconds,
-                    'instructions' => $action->instructions
-                ]);
+                $action->sequence_id = $sequence->id;
+                $this->updateOrCreateSequenceAction($action);
             }
 
             return $sequence;
         });
     }
-    public function updateSequence(Sequence $sequence, SequenceData $data) {}
+
+    /**
+     * @param Sequence $sequence
+     * @param SequenceData $data
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function updateSequence(Sequence $sequence, SequenceData $data) {
+        // Execute this in a transaction so as to prevent dirty reads from the DB for sequence actions
+        return $sequence = DB::transaction(function() use ($sequence, $data) {
+            $sequence->label = $data->label;
+            $sequence->description = $data->description;
+            $sequence->save();
+
+            /** Loop through all the new sequence actions $action that have been sent, and verify */
+            foreach ($data->sequence_actions as $action) {
+                $action->sequence_id = $sequence->id;
+                $this->updateOrCreateSequenceAction($action);
+            }
+
+            return $sequence;
+        });
+    }
+
+    /**
+     * Receives a sequence action data transfer object, and then determines whether or not to update it or create
+     * a new sequence action.
+     *
+     * @param SequenceActionData $data
+     * @return SequenceAction
+     */
+    public function updateOrCreateSequenceAction(SequenceActionData $data): SequenceAction {
+        /** @var SequenceAction $sequenceAction */
+        return $sequenceAction = SequenceAction::updateOrCreate([
+            'id' => $data->sequence_action_id
+        ], [
+            'sequence_id' => $data->sequence_id,
+            'task_type_id' => $data->task_type_id,
+            'scheduled_start_time' => $data->scheduled_start_time,
+            'delay_in_seconds' => $data->delay_in_seconds,
+            'instructions' => $data->instructions,
+            'ordinal_position' => $data->ordinal_position,
+        ]);
+
+        // At a future date, we will tie in the creation of task restrictions to this method as well
+    }
 
     /**
      * Each sequence action should require a unique identifier that should be specific to the sequence action.
@@ -148,25 +188,43 @@ class SequenceService {
      */
     public function createNextTask(Lead $lead): Task {
         return DB::transaction(function() use ($lead) {
+            // Look for an open sequence that belongs to the lead
             $leadSequence = LeadSequence::query()
                 ->where('lead_id', $lead->id)
                 ->isClosed()
+                // Locks the row to prevent updating https://laravel.com/docs/5.6/queries#pessimistic-locking
+                ->sharedLock()
                 ->first();
 
+            // We found no sequence for the lead that was opened
             if (null == $leadSequence) {
                 throw MissingAssignedSequenceException::create($lead);
             }
 
+            // Find the next sequence action for the sequence
             $upcomingSequenceAction = SequenceAction::query()
                 ->afterSequencePosition($leadSequence->sequence_id, $leadSequence->sequenceAction->ordinal_position)
                 ->orderBy('ordinal_position', 'asc')
+                // Locks the row to prevent updating https://laravel.com/docs/5.6/queries#pessimistic-locking
+                ->sharedLock()
                 ->first();
 
+            // We found no next sequence action
             if (null == $upcomingSequenceAction) {
                 throw MissingNextSequenceActionException::create($leadSequence);
             }
 
-            $taskData = TaskData::fromSequenceAction($upcomingSequenceAction);
+            // Build the task data from the sequence action
+            $taskData = TaskData::fromLeadForSequenceAction($lead, $upcomingSequenceAction);
+
+            // Create the task from the task data generated from the sequence action
+            $task = app(TaskQueueService::class)->createTask($taskData);
+
+            // Update the last sequence action created
+            $leadSequence->sequence_action_id = $task->sequence_action_id;
+            $leadSequence->save();
+
+            return $task;
         });
     }
 }

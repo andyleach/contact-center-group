@@ -34,11 +34,15 @@ class TaskQueueService {
      * @return Task
      */
     public function createTask(TaskData $taskData): Task {
-        $task = Task::factory()->create([
-            'task_type_id' => $taskData->task_type_id,
-            'unstructured_data' => $taskData->unstructured_data,
-            'available_at' => $taskData->available_at
+        $task = Task::create([
+            'sequence_action_id' => $taskData->sequence_action_id,
+            'lead_id'            => $taskData->lead_id,
+            'task_type_id'       => $taskData->task_type_id,
+            'available_at'       => $taskData->available_at,
+            'expires_at'         => $taskData->expires_at,
         ]);
+
+        return $task;
     }
 
     /**

@@ -84,24 +84,11 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(Agent::class, 'agent_id')
                 ->nullable()
                 ->constrained();
+            $table->text('instructions');
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
             $table->timestamp('expires_at')->index()->nullable();
             $table->timestamp('completed_at')->index()->nullable();
-            $table->timestamps();
-        });
-
-        Schema::table('tasks', function (Blueprint $table) {
-
-        });
-
-        Schema::create('task_details', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(Task::class, 'task_id');
-            $table->string('customer_number');
-            $table->string('customer_email');
-            $table->text('instructions');
-            $table->json('unstructured_data');
             $table->timestamps();
         });
 
@@ -134,7 +121,6 @@ class CreateTasksTable extends Migration
         Schema::dropIfExists('task_events');
         Schema::dropIfExists('task_event_types');
         Schema::dropIfExists('task_event_reasons');
-        Schema::dropIfExists('task_details');
         Schema::dropIfExists('tasks');
         Schema::dropIfExists('task_statuses');
         Schema::dropIfExists('task_types');

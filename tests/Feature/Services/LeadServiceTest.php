@@ -27,12 +27,11 @@ class LeadServiceTest extends TestCase
     /**
      *
      */
-    public function test_that_when_a_provider_sends_us_lead_data_we_will_create_a_new_lead() {
+    public function test_that_we_can_create_a_new_lead() {
         /** @var LeadData $dto */
         $dto = LeadData::factory()->unscheduled()->make([]);
 
-        $this->expectsEvents(LeadReceived::class);
-        $lead = $this->service->receiveLeadFromProvider($dto);
+        $lead = $this->service->createLead($dto);
         $this->assertInstanceOf(Lead::class, $lead);
 
         $this->assertDatabaseHas('leads', [

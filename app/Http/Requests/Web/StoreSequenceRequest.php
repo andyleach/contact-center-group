@@ -30,7 +30,11 @@ class StoreSequenceRequest extends FormRequest
             'cost_per_lead_in_usd' => 'required|decimal|min:0',
             'sequence_actions' => 'required|array',
             'sequence_actions.*' => [
-                'unique_code'
+                'task_type_id' => 'required|exists:task_types,id',
+                'scheduled_start_time' => 'required|date_format:H:i',
+                'delay_in_seconds' => 'required|number',
+                'instructions' => 'required|string',
+                'ordinal_position' => 'required|number'
             ]
         ];
     }

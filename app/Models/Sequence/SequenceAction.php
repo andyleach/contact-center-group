@@ -2,9 +2,11 @@
 
 namespace App\Models\Sequence;
 
+use App\Models\Task\TaskType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -35,6 +37,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|SequenceAction whereTaskTypeId($value)
  * @method static Builder|SequenceAction whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Sequence\Sequence $sequence
+ * @property-read TaskType $taskType
  */
 class SequenceAction extends Model
 {
@@ -46,6 +50,14 @@ class SequenceAction extends Model
     protected $fillable = [
         'sequence_id', 'task_type_id', 'scheduled_start_time', 'delay_in_seconds', 'instructions', 'ordinal_position'
     ];
+
+    public function sequence(): BelongsTo {
+        return $this->belongsTo(Sequence::class, 'sequence_id');
+    }
+
+    public function taskType(): BelongsTo {
+        return $this->belongsTo(TaskType::class, 'task_type_id');
+    }
 
     /**
      * @return BelongsToMany

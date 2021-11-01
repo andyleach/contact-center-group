@@ -54,6 +54,17 @@ class TaskType extends Model
     const INBOUND_EMAIL = 7;
     const OUTBOUND_EMAIL = 8;
 
+    const ALL_TYPES = [
+        self::INBOUND_CALL,
+        self::OUTBOUND_CALL,
+        self::MISSED_CALL_CALLBACK,
+        self::NON_WORKING_HOURS_CALLBACK,
+        self::INBOUND_SMS,
+        self::OUTBOUND_SMS,
+        self::INBOUND_EMAIL,
+        self::OUTBOUND_EMAIL,
+    ];
+
     /**
      * @return HasMany
      */

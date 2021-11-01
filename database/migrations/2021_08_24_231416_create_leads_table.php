@@ -81,6 +81,7 @@ class CreateLeadsTable extends Migration
             $table->id();
             $table->string('phone_number');
             $table->boolean('is_valid')->nullable();
+            $table->boolean('should_be_added_to_customer')->default(true);
             $table->foreignIdFor(Lead::class, 'lead_id')->constrained();
             $table->timestamps();
         });

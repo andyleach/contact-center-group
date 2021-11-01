@@ -3,21 +3,15 @@
 namespace Database\Factories\Task;
 
 use App\Models\Lead\Lead;
-use App\Models\Task\Task;
-use App\Models\Task\TaskStatus;
 use App\Models\Task\TaskType;
+use App\Services\DataTransferObjects\TaskData;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use JetBrains\PhpStorm\ArrayShape;
 
-class TaskFactory extends Factory
+class TaskDataFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Task::class;
+    protected $model = TaskData::class;
 
     /**
      * Define the model's default state.
@@ -27,7 +21,6 @@ class TaskFactory extends Factory
     #[ArrayShape([
         'sequence_action_id' => "null",
         'task_type_id' => "int",
-        'task_status_id' => "int",
         'lead_id' => "int",
         'instructions' => "string",
         'available_at' => "\Carbon\Carbon",
@@ -38,7 +31,6 @@ class TaskFactory extends Factory
         return [
             'sequence_action_id' => null,
             'task_type_id' => $this->faker->randomElement(TaskType::ALL_TYPES),
-            'task_status_id' => TaskStatus::PENDING,
             'lead_id' => Lead::factory()->create()->id,
             'instructions' => $this->faker->text(200),
             'available_at' => $availableAt = Carbon::parse($this->faker->dateTimeBetween(now(), now()->addDays(30))),
