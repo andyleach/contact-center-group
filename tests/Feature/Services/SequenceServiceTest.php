@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Services;
 
+use App\Models\Lead\Lead;
+use App\Models\Sequence\Sequence;
 use App\Services\DataTransferObjects\SequenceActionData;
 use App\Services\DataTransferObjects\SequenceData;
 use App\Services\SequenceService;
@@ -39,6 +41,57 @@ class SequenceServiceTest extends TestCase
 
         $sequenceData->sequence_actions = $sequenceActions;
 
-        $this->service->createSequence($sequenceData);
+        $sequence = $this->service->createSequence($sequenceData);
+        $this->assertInstanceOf(Sequence::class, $sequence);
+        $this->assertDatabaseHas('sequences', [
+            'label' => $sequenceData->label,
+            'description' => $sequenceData->description,
+            'cost_per_lead_in_usd' => $sequenceData->cost_per_lead_in_usd,
+            'client_id' => $sequenceData->client_id,
+        ]);
+
+        $this->assertTrue($sequenceActions->count() == $sequence->sequenceActions->count());
+    }
+
+    public function test_that_a_sequence_can_be_updated()
+    {
+        /** @var Sequence $sequence */
+        $sequence = Sequence::factory()->create();
+        /** @var SequenceData $sequenceData */
+        $sequenceData = SequenceData::factory()->make();
+        $sequenceData->sequence_actions = $sequence->sequenceActions;
+
+        $sequence = $this->service->updateSequence($sequence, $sequenceData);
+        $this->assertInstanceOf(Sequence::class, $sequence);
+        $this->assertDatabaseHas('sequences', [
+            'id' => $sequence->id,
+            'label' => $sequenceData->label,
+            'description' => $sequenceData->description,
+            'cost_per_lead_in_usd' => $sequenceData->cost_per_lead_in_usd,
+            'client_id' => $sequence->client_id,
+        ]);
+
+        // TODO: Write tests that handle cases a sequence action was disabled
+    }
+
+    public function test_that_a_sequence_action_can_be_updated_or_created() {
+        $sequence = Sequence::factory()->create();
+    }
+
+    public function test_assigning_a_sequence() {
+        $sequence = Sequence::factory()->create();
+        $lead = Lead::factory()->create();
+    }
+
+    public function test_creating_a_sequence_task() {
+
+    }
+
+    public function test_assigning_a_sequence_and_creating_first_task() {
+
+    }
+
+    public function test_ending_a_sequence() {
+
     }
 }
