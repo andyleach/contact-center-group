@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Services;
 
-use App\Events\Lead\LeadReceived;
-use App\Models\Lead\Lead;
-use App\Models\Lead\LeadStatus;
-use App\Services\DataTransferObjects\LeadData;
-use App\Services\LeadService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Lead\Lead;
+use App\Services\LeadService;
+use App\Models\Lead\LeadStatus;
+use Illuminate\Foundation\Testing\WithFaker;
+use App\Services\DataTransferObjects\LeadData;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LeadServiceTest extends TestCase
 {

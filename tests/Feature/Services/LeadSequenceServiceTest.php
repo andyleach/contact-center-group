@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Services;
 
+use Tests\TestCase;
 use App\Models\Lead\Lead;
 use App\Models\Sequence\Sequence;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Database\Seeders\SequenceSeeder;
 use App\Services\LeadSequenceService;
-use Tests\TestCase;
+use App\Events\Lead\LeadAssignedSequence;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LeadSequenceServiceTest extends TestCase
 {
@@ -25,20 +27,43 @@ class LeadSequenceServiceTest extends TestCase
      ****************************************************************************/
 
     public function test_assigning_a_sequence() {
-        $sequence = Sequence::factory()->create();
+        $this->seed([
+            SequenceSeeder::class
+        ]);
+
+        /** @var Sequence $sequence */
+        $sequence = Sequence::query()->first();
+
+        /** @var Lead $lead */
         $lead = Lead::factory()->create();
 
+        $this->expectsEvents(LeadAssignedSequence::class);
         $this->service->assignSequence($sequence, $lead);
         $this->assertDatabaseHas('lead_sequence', [
             'lead_id' => $lead->id,
             'sequence_id' => $sequence->id,
+            'sequence_action_id' => null,
             'closed_at' => null,
         ]);
     }
 
+    public function test_that_we_prevent_assigning_multiple_active_sequences_for_a_lead() {
+        $this->assertTrue(true);
+    }
+
+    public function test_that_we_cannot_assign_the_same_sequence_multiple_times() {
+        $this->assertTrue(true);
+    }
+
+    /*****************************************************************************
+     * Lead Sequence Task Creation
+     ****************************************************************************/
     public function test_creating_a_sequence_task() {
-        /** @var Sequence $sequence */
-        $sequence = Sequence::factory()->create();
+        $this->seed([
+            SequenceSeeder::class
+        ]);
+
+        $sequence = Sequence::query()->first();
 
         /** @var Lead $lead */
         $lead = Lead::factory()->create();
@@ -46,15 +71,6 @@ class LeadSequenceServiceTest extends TestCase
         $this->service->assignSequence($sequence, $lead);
 
         $task = $this->service->createNextTask($lead);
-    }
-
-    /*****************************************************************************
-     * Lead Sequence Task Creation
-     ****************************************************************************/
-    public function test_assigning_a_sequence_and_creating_first_task() {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
     }
 
     public function test_missing_sequence_scenario_when_creating_new_task_for_lead()
@@ -66,6 +82,34 @@ class LeadSequenceServiceTest extends TestCase
     {
         $this->assertTrue(true);
     }
+
+    /*****************************************************************************
+     * Lead Sequence Assignment and First Task Creation
+     ****************************************************************************/
+    public function test_assigning_a_sequence_and_creating_first_task() {
+        $this->seed([
+            SequenceSeeder::class
+        ]);
+
+        $sequence = Sequence::query()->first();
+
+        /** @var Lead $lead */
+        $lead = Lead::factory()->create();
+
+        $this->service->assignSequenceToLeadAndCreateFirstTask($sequence, $lead);
+
+        $firstSequenceAction = $sequence->sequenceActions()
+            ->orderBy('ordinal_position', 'asc')
+            ->first();
+
+        $this->assertDatabaseHas('lead_sequence', [
+            'lead_id' => $lead->id,
+            'sequence_id' => $sequence->id,
+            'sequence_action_id' => $firstSequenceAction->id,
+            'closed_at' => null,
+        ]);
+    }
+
 
     /*****************************************************************************
      * Lead Sequence Ending

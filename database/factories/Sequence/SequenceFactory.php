@@ -5,6 +5,7 @@ namespace Database\Factories\Sequence;
 use App\Models\Client\Client;
 use App\Models\Sequence\Sequence;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\ArrayShape;
 
 class SequenceFactory extends Factory

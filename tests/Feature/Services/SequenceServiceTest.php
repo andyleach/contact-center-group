@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Services;
 
-use App\Models\Sequence\Sequence;
-use App\Services\DataTransferObjects\SequenceActionData;
-use App\Services\DataTransferObjects\SequenceData;
-use App\Services\SequenceService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Services\SequenceService;
+use App\Models\Sequence\Sequence;
+use App\Services\DataTransferObjects\SequenceData;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Services\DataTransferObjects\SequenceActionData;
 
 class SequenceServiceTest extends TestCase
 {
@@ -21,12 +20,7 @@ class SequenceServiceTest extends TestCase
 
         $this->service = app(SequenceService::class);
     }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    
     public function test_that_a_sequence_can_be_created()
     {
         /** @var SequenceData $sequenceData */

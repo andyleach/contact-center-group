@@ -6,13 +6,13 @@ use App\Models\Lead\Lead;
 use Exception;
 use JetBrains\PhpStorm\Pure;
 
-class MissingAssignedSequenceException extends Exception
+class ActiveSequenceExistsException extends Exception
 {
     /**
      * @param Lead $lead
      * @return $this
      */
     #[Pure] public static function forLead(Lead $lead): self {
-        return new self('Missing sequence for lead ('. $lead->id.')');
+        return new self('The lead('. $lead->id.') already has an active sequence');
     }
 }

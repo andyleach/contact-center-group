@@ -14,10 +14,13 @@ use App\Models\LeadList\LeadListStatus;
 use App\Services\DataTransferObjects\LeadData;
 use App\Services\DataTransferObjects\LeadListData;
 use App\Services\LeadListService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LeadListServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected LeadListService $service;
 
     public function setUp(): void {

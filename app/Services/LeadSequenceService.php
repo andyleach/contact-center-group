@@ -2,20 +2,41 @@
 
 namespace App\Services;
 
-use App\Events\Lead\LeadAssignedSequence;
-use App\Events\Lead\LeadClosedSequence;
-use App\Exceptions\Sequence\MissingAssignedSequenceException;
-use App\Exceptions\Sequence\MissingNextSequenceActionException;
 use App\Models\Lead\Lead;
-use App\Models\Pivot\LeadSequence;
-use App\Models\Sequence\Sequence;
-use App\Models\Sequence\SequenceAction;
 use App\Models\Task\Task;
-use App\Services\DataTransferObjects\TaskData;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Sequence\Sequence;
+use App\Models\Pivot\LeadSequence;
 use Illuminate\Support\Facades\DB;
+use App\Events\Lead\LeadClosedSequence;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Sequence\SequenceAction;
+use App\Events\Lead\LeadAssignedSequence;
+use App\Services\DataTransferObjects\TaskData;
+use App\Exceptions\Sequence\ActiveSequenceExistsException;
+use App\Exceptions\Sequence\MissingAssignedSequenceException;
+use App\Exceptions\Sequence\DuplicateSequenceAssignmentException;
+use App\Exceptions\Sequence\NextSequenceActionUnavailableException;
+use App\Exceptions\Sequence\SequenceHasNoEligibleSequenceActionsException;
 
 class LeadSequenceService extends SequenceService {
+
+    /**
+     * @param Sequence $sequence
+     * @param Lead $lead
+     * @return Task
+     * @throws \Throwable
+     */
+    public function assignSequenceToLeadAndCreateFirstTask(Sequence $sequence, Lead $lead): Task {
+        return DB::transaction(function() use ($sequence, $lead) {
+            $this->assignSequence($sequence, $lead);
+
+            try {
+                return $this->createNextTask($lead);
+            } catch (NextSequenceActionUnavailableException $exception) {
+                throw SequenceHasNoEligibleSequenceActionsException::forLead($lead, $sequence);
+            }
+        });
+    }
 
     /**
      * @param Sequence $sequence
@@ -26,14 +47,12 @@ class LeadSequenceService extends SequenceService {
     public function assignSequence(Sequence $sequence, Lead $lead): Lead {
         $hasOpenSequence = $this->hasOpenSequence($lead);
         if (true == $hasOpenSequence) {
-            throw new \Exception('An open sequence already exists for the lead '. $lead->id);
+            throw ActiveSequenceExistsException::forLead($lead);
         }
 
         $hasSequenceBeenPreviouslyAssigned = $this->hasSequenceBeenAssignedPreviously($sequence, $lead);
         if (true == $hasSequenceBeenPreviouslyAssigned) {
-            throw new \Exception('The sequence ' . $sequence->label
-                .' has previously been assigned to lead #'. $lead->id
-            );
+            throw DuplicateSequenceAssignmentException::forLead($sequence, $lead);
         }
 
         // Ensure that the sequence to be assigned hasn't been assigned previously
@@ -93,45 +112,41 @@ class LeadSequenceService extends SequenceService {
      * @return Task
      * @throws \Throwable
      */
-    public function createNextTask(Model $lead): Task {
-        return DB::transaction(function() use ($lead) {
-            // Look for an open sequence that belongs to the lead
-            $leadSequence = LeadSequence::query()
-                ->where('lead_id', $lead->id)
-                ->isClosed()
-                // Locks the row to prevent updating https://laravel.com/docs/5.6/queries#pessimistic-locking
-                ->sharedLock()
-                ->first();
+    public function createNextTask(Lead $lead): Task {
+        // Look for an open sequence that belongs to the lead
+        $leadSequence = LeadSequence::query()
+            ->where('lead_id', $lead->id)
+            ->isNotClosed()
+            ->first();
 
-            // We found no sequence for the lead that was opened
-            if (null == $leadSequence) {
-                throw MissingAssignedSequenceException::create($lead);
-            }
+        // We found no sequence for the lead that was opened
+        if (null == $leadSequence) {
+            throw MissingAssignedSequenceException::forLead($lead);
+        }
 
-            // Find the next sequence action for the sequence
-            $upcomingSequenceAction = SequenceAction::query()
-                ->afterSequencePosition($leadSequence->sequence_id, $leadSequence->sequenceAction->ordinal_position)
-                ->orderBy('ordinal_position', 'asc')
-                // Locks the row to prevent updating https://laravel.com/docs/5.6/queries#pessimistic-locking
-                ->sharedLock()
-                ->first();
+        $sequenceActionPosition = $leadSequence->sequenceAction->ordinal_position ?? 0;
 
-            // We found no next sequence action
-            if (null == $upcomingSequenceAction) {
-                throw MissingNextSequenceActionException::create($leadSequence);
-            }
+        // Find the next sequence action for the sequence
+        $upcomingSequenceAction = SequenceAction::query()
+            ->afterSequencePosition($leadSequence->sequence_id, $sequenceActionPosition)
+            ->orderBy('ordinal_position', 'asc')
+            ->first();
 
-            // Build the task data from the sequence action
-            $taskData = TaskData::fromLeadForSequenceAction($lead, $upcomingSequenceAction);
+        // We found no next sequence action
+        if (null == $upcomingSequenceAction) {
+            throw NextSequenceActionUnavailableException::forLeadSequence($leadSequence);
+        }
 
-            // Create the task from the task data generated from the sequence action
-            $task = app(TaskQueueService::class)->createTask($taskData);
+        // Build the task data from the sequence action
+        $taskData = TaskData::fromLeadForSequenceAction($lead, $upcomingSequenceAction);
 
-            // Update the last sequence action created
-            $leadSequence->sequence_action_id = $task->sequence_action_id;
-            $leadSequence->save();
+        // Create the task from the task data generated from the sequence action
+        $task = app(TaskQueueService::class)->createTask($taskData);
 
-            return $task;
-        });
+        // Update the last sequence action created
+        $leadSequence->sequence_action_id = $task->sequence_action_id;
+        $leadSequence->save();
+
+        return $task;
     }
 }
