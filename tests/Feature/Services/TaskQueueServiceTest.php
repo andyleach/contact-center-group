@@ -61,9 +61,6 @@ class TaskQueueServiceTest extends TestCase
      * Task Cancellation
      *******************************************************/
 
-    /**
-     *
-     */
     public function test_that_a_task_assignment_can_be_cancelled() {
         /** @var Agent $agent */
         $agent = Agent::factory()->create([]);
@@ -93,9 +90,6 @@ class TaskQueueServiceTest extends TestCase
         ]);
     }
 
-    /**
-     *
-     */
     public function test_that_a_failure_to_cancel_task_assignment_throws_exception() {
         /** @var Task $task */
         $task = Task::factory()->create([

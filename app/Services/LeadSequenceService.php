@@ -71,11 +71,13 @@ class LeadSequenceService extends SequenceService {
      * @param Lead $lead
      * @return Lead
      */
-    public function endSequence(Model $lead): Lead {
-        // Update the pivot to ensure that the sequence has been closed
-        $lead->sequences()->updateExistingPivot($lead->id, [
-            'closed_at' => now()
-        ]);
+    public function endSequence(Lead $lead): Lead {
+        LeadSequence::query()
+            ->isNotClosed()
+            ->where('lead_id', $lead->id)
+            ->update([
+                'closed_at' => now()
+            ]);
 
         LeadClosedSequence::dispatch($lead);
 

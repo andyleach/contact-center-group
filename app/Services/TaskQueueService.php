@@ -39,6 +39,7 @@ class TaskQueueService {
             'task_status_id'     => $taskData->task_status_id,
             'lead_id'            => $taskData->lead_id,
             'task_type_id'       => $taskData->task_type_id,
+            'instructions'       => $taskData->instructions,
             'available_at'       => $taskData->available_at,
             'expires_at'         => $taskData->expires_at,
         ]);

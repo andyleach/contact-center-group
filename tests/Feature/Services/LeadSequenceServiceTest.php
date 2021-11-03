@@ -2,6 +2,15 @@
 
 namespace Tests\Feature\Services;
 
+use App\Events\Lead\LeadClosedSequence;
+use App\Exceptions\Sequence\ActiveSequenceExistsException;
+use App\Exceptions\Sequence\DuplicateSequenceAssignmentException;
+use App\Exceptions\Sequence\MissingAssignedSequenceException;
+use App\Exceptions\Sequence\NextSequenceActionUnavailableException;
+use App\Exceptions\Sequence\SequenceHasNoEligibleSequenceActionsException;
+use App\Models\Pivot\LeadSequence;
+use App\Models\Sequence\SequenceAction;
+use App\Models\Task\Task;
 use Tests\TestCase;
 use App\Models\Lead\Lead;
 use App\Models\Sequence\Sequence;
@@ -48,11 +57,35 @@ class LeadSequenceServiceTest extends TestCase
     }
 
     public function test_that_we_prevent_assigning_multiple_active_sequences_for_a_lead() {
-        $this->assertTrue(true);
+        $this->seed([
+            SequenceSeeder::class,
+            SequenceSeeder::class
+        ]);
+
+        /** @var Lead $lead */
+        $lead = Lead::factory()->create();
+
+        $sequences = Sequence::take(2)->get();
+
+        $this->service->assignSequence($sequences->first(), $lead);
+        $this->expectException(ActiveSequenceExistsException::class);
+        $this->service->assignSequence($sequences->last(), $lead);
     }
 
     public function test_that_we_cannot_assign_the_same_sequence_multiple_times() {
-        $this->assertTrue(true);
+        $this->seed([
+            SequenceSeeder::class,
+        ]);
+
+        /** @var Lead $lead */
+        $lead = Lead::factory()->create();
+
+        $sequence = Sequence::first();
+
+        $this->service->assignSequence($sequence, $lead);
+        $this->service->endSequence($lead);
+        $this->expectException(DuplicateSequenceAssignmentException::class);
+        $this->service->assignSequence($sequence, $lead);
     }
 
     /*****************************************************************************
@@ -64,6 +97,8 @@ class LeadSequenceServiceTest extends TestCase
         ]);
 
         $sequence = Sequence::query()->first();
+        /** @var SequenceAction $firstSequenceAction */
+        $firstSequenceAction = $sequence->sequenceActions()->orderBy('ordinal_position')->first();
 
         /** @var Lead $lead */
         $lead = Lead::factory()->create();
@@ -71,16 +106,36 @@ class LeadSequenceServiceTest extends TestCase
         $this->service->assignSequence($sequence, $lead);
 
         $task = $this->service->createNextTask($lead);
+        $this->assertInstanceOf(Task::class, $task);
+        $this->assertDatabaseHas('tasks', [
+            'sequence_action_id' => $firstSequenceAction->id,
+            'task_type_id' => $firstSequenceAction->task_type_id,
+            'lead_id' => $lead->id,
+            'instructions' => $firstSequenceAction->instructions
+        ]);
     }
 
     public function test_missing_sequence_scenario_when_creating_new_task_for_lead()
     {
-        $this->assertTrue(true);
+        $lead = Lead::factory()->create();
+        $sequence = Sequence::factory()->create();
+
+        $this->service->assignSequence($sequence, $lead);
+        $this->service->endSequence($lead);
+
+        $this->expectException(MissingAssignedSequenceException::class);
+        $this->service->createNextTask($lead);
     }
 
-    public function test_scenario_where_there_are_no_remaining_sequence_actions_for_sequence_assigned_to_lead()
+    public function test_when_there_are_no_remaining_sequence_actions_for_sequence_assigned_to_lead()
     {
-        $this->assertTrue(true);
+        $lead = Lead::factory()->create();
+        $sequence = Sequence::factory()->create();
+
+        $this->service->assignSequence($sequence, $lead);
+
+        $this->expectException(NextSequenceActionUnavailableException::class);
+        $this->service->createNextTask($lead);
     }
 
     /*****************************************************************************
@@ -110,14 +165,38 @@ class LeadSequenceServiceTest extends TestCase
         ]);
     }
 
+    public function test_when_sequence_is_assigned_and_has_no_workable_sequence_actions() {
+        $sequence = Sequence::factory()->create();
+
+        /** @var Lead $lead */
+        $lead = Lead::factory()->create();
+
+        $this->expectException(SequenceHasNoEligibleSequenceActionsException::class);
+        $this->service->assignSequenceToLeadAndCreateFirstTask($sequence, $lead);
+    }
+
 
     /*****************************************************************************
      * Lead Sequence Ending
      ****************************************************************************/
 
     public function test_ending_a_sequence() {
-        $response = $this->get('/');
+        $sequence = Sequence::factory()->create();
 
-        $response->assertStatus(200);
+        /** @var Lead $lead */
+        $lead = Lead::factory()->create();
+
+        $this->service->assignSequence($sequence, $lead);
+
+        $this->expectsEvents(LeadClosedSequence::class);
+        $this->service->endSequence($lead);
+
+        $hasClosedSequenceRecently = LeadSequence::query()
+            ->where('lead_id', $lead->id)
+            ->where('sequence_id', $sequence->id)
+            ->where('closed_at', '>', now()->subSeconds(3))
+            ->exists();
+
+        $this->assertTrue($hasClosedSequenceRecently);
     }
 }
