@@ -2,6 +2,7 @@
 
 namespace App\Models\Lead;
 
+use App\Contracts\SupportsSequencingContract;
 use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use App\Models\Customer\Customer;
@@ -154,11 +155,6 @@ class Lead extends Model
     public function scopeReadyForImport(Builder $query): Builder {
         return $this->awaitingImport()
             ->where('import_at', '<=', now());
-    }
-
-    public function scopeOpenSequence(Builder $query): Builder {
-        return $query->sequences()
-            ->wherePivotNull('closed_at');
     }
 
     /**

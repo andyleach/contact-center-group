@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Services;
 
-use App\Models\Lead\Lead;
 use App\Models\Sequence\Sequence;
 use App\Services\DataTransferObjects\SequenceActionData;
 use App\Services\DataTransferObjects\SequenceData;
@@ -13,6 +12,8 @@ use Tests\TestCase;
 
 class SequenceServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected SequenceService $service;
 
     public function setUp(): void {
@@ -76,22 +77,5 @@ class SequenceServiceTest extends TestCase
 
     public function test_that_a_sequence_action_can_be_updated_or_created() {
         $sequence = Sequence::factory()->create();
-    }
-
-    public function test_assigning_a_sequence() {
-        $sequence = Sequence::factory()->create();
-        $lead = Lead::factory()->create();
-    }
-
-    public function test_creating_a_sequence_task() {
-
-    }
-
-    public function test_assigning_a_sequence_and_creating_first_task() {
-
-    }
-
-    public function test_ending_a_sequence() {
-
     }
 }

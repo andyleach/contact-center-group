@@ -61,7 +61,7 @@ class CreateSequencesTable extends Migration
                 ->constrained();
             $table->timestamp('assigned_at')->index()
                 ->comment('Indicates when we first assigned the sequence to the lead');
-            $table->timestamp('closed_at')->index()
+            $table->timestamp('closed_at')->nullable()->index()
                 ->comment('Indicates that we have done all work we intend to do for this sequence');
             $table->timestamps();
 

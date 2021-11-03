@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\AssignsSequenceContract;
 use App\Events\Lead\LeadAssignedSequence;
 use App\Events\Lead\LeadClosedSequence;
 use App\Exceptions\Sequence\MissingAssignedSequenceException;
@@ -16,7 +15,7 @@ use App\Services\DataTransferObjects\TaskData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class LeadSequenceService extends SequenceService implements AssignsSequenceContract {
+class LeadSequenceService extends SequenceService {
 
     /**
      * @param Sequence $sequence
@@ -24,7 +23,7 @@ class LeadSequenceService extends SequenceService implements AssignsSequenceCont
      * @return Lead
      * @throws \Exception
      */
-    public function assignSequence(Sequence $sequence, Model $lead): Lead {
+    public function assignSequence(Sequence $sequence, Lead $lead): Lead {
         $hasOpenSequence = $this->hasOpenSequence($lead);
         if (true == $hasOpenSequence) {
             throw new \Exception('An open sequence already exists for the lead '. $lead->id);
@@ -71,7 +70,7 @@ class LeadSequenceService extends SequenceService implements AssignsSequenceCont
      */
     public function hasOpenSequence(Lead $lead): bool {
         // Ensure that there isn't an open sequence
-        return $lead->openSequence()->exists();
+        return $lead->sequences()->wherePivotNull('closed_at')->exists();
     }
 
     /**
