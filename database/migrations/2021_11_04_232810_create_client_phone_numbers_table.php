@@ -18,9 +18,12 @@ class CreateClientPhoneNumbersTable extends Migration
             $table->foreignIdFor(\App\Models\Client\Client::class, 'client_id')->constrained();
             $table->string('phone_number')->index();
             $table->string('forward_number')->index();
-            $table->string('provider_sid')->comment('The unique identifier provider to this resource by a provider');
+            $table->enum('call_handling', ['Forward', 'Route To Agent', 'Multi-Dialer']);
+            $table->string('provider_sid')
+                ->comment('The unique identifier provider to this resource by a provider');
             $table->timestamp('purchased_at')->index();
-            $table->timestamp('expires_at')->index()->comment('Used to indicate a future date in which we will stop servicing a phone number');
+            $table->timestamp('expires_at')->index()
+                ->comment('Used to indicate a future date in which we will stop servicing a phone number');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -49,7 +52,9 @@ class CreateClientPhoneNumbersTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('client_phone_number_transfer_options');
         Schema::dropIfExists('client_phone_numbers');
+        Schema::enableForeignKeyConstraints();
     }
 }

@@ -26,6 +26,15 @@ class CreateProvidersTable extends Migration
         Schema::table('client_phone_numbers', function (Blueprint $table) {
             $table->foreignIdFor(\App\Models\Provider\Provider::class, 'provider_id')->after('provider_sid')->constrained();
         });
+
+        \App\Models\Provider\Provider::query()->insert([
+            [
+                'id' => \App\Models\Provider\Provider::TWILIO,
+                'label' => 'Twilio',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
     }
 
     /**

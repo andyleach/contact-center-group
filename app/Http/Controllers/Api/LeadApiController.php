@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\Lead\CreatesNewLeadContract;
 use App\Events\Lead\LeadReceived;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreLeadRequest;

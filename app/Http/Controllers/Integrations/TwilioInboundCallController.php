@@ -4,11 +4,25 @@ namespace App\Http\Controllers\Integrations;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Integrations\StoreTwilioInboundCallRequest;
+use App\Models\Call\TaskCall;
+use App\Models\Client\ClientPhoneNumber;
+use App\Models\Customer\CustomerPhoneNumber;
+use App\Services\DataTransferObjects\InboundCallData;
+use App\Services\InboundCallService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JetBrains\PhpStorm\Pure;
 
 class TwilioInboundCallController extends Controller
 {
+    protected InboundCallService $service;
+
+    /**
+     *
+     */
+    #[Pure] public function __construct() {
+        $this->service = new InboundCallService();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +41,20 @@ class TwilioInboundCallController extends Controller
      */
     public function store(StoreTwilioInboundCallRequest $request): JsonResponse
     {
-        return response()->json();
+        $data = InboundCallData::fromTwilio($request);
+
+        $clientPhoneNumber = ClientPhoneNumber::query()
+            ->where('phone_number', $data->called)
+            ->firstOrFail();
+
+        $handlingType = $clientPhoneNumber->call_handling;
+        if (ClientPhoneNumber::ROUTE_TO_AGENT == $handlingType) {
+            $call = $this->service->createNewTaskCall($data);
+        } else if (ClientPhoneNumber::MULTI_DIALER == $handlingType) {
+            $call = $this->service->createNewMultiDialerCall($data);
+        } else {
+            throw new \Exception('Invalid Call Handling Type Specified');
+        }
     }
 
     /**

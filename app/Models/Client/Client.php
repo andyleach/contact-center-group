@@ -26,6 +26,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $label
  * @method static \Database\Factories\Client\ClientFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereLabel($value)
+ * @property string|null $twilio_account_sid
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereTwilioAccountSid($value)
  */
 class Client extends Model
 {

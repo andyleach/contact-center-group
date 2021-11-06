@@ -4,6 +4,7 @@ namespace App\Models\Task;
 
 use App\Events\Task\TaskCreated;
 use App\Models\Agent\Agent;
+use App\Models\Call\TaskCall;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -76,6 +77,8 @@ use Illuminate\Support\Collection;
  * @method static Builder|Task whereSequenceActionId($value)
  * @property string $instructions
  * @method static Builder|Task whereInstructions($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|TaskCall[] $taskCall
+ * @property-read int|null $task_call_count
  */
 class Task extends Model
 {
@@ -141,6 +144,10 @@ class Task extends Model
      */
     public function taskDisposition(): BelongsTo {
         return $this->belongsTo(TaskDisposition::class, 'task_disposition_id');
+    }
+
+    public function taskCall(): HasMany {
+        return $this->hasMany(TaskCall::class, 'task_id');
     }
 
     /**

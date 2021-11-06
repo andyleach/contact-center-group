@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @mixin \Eloquent
  * @property-read \App\Models\Sequence\Sequence $sequence
  * @property-read TaskType $taskType
+ * @method static \Database\Factories\Sequence\SequenceActionFactory factory(...$parameters)
  */
 class SequenceAction extends Model
 {

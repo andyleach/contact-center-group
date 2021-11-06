@@ -27,9 +27,9 @@ class TaskData extends AbstractDataTransferObject {
     public int $task_status_id = TaskStatus::DRAFT;
 
     /**
-     * @var int $lead_id The lead the task was for
+     * @var int|null $lead_id The lead the task was for
      */
-    public int $lead_id;
+    public ?int $lead_id;
 
     /**
      * @var null|int $sequence_action_id The sequence action IF any that created the task
@@ -103,5 +103,20 @@ class TaskData extends AbstractDataTransferObject {
         }
 
         return $waitUntil;
+    }
+
+    public static function fromInboundCallData(InboundCallData $data): TaskData {
+        $data = new self;
+        $data->lead_id = null;
+        // Keep it as a draft so that we can do lead and customer matching before routing to an agent
+        $data->task_status_id = TaskStatus::DRAFT;
+        $data->task_type_id = TaskType::INBOUND_CALL;
+        $data->sequence_action_id = null;
+        // TODO: Define a timezone for the client record
+        $data->available_at = now();
+        $data->expires_at   = now()->addMinutes(10);
+        $data->instructions = "Answer the call";
+
+        return $data;
     }
 }

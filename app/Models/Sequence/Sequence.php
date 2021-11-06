@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $leads_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Sequence\SequenceAction[] $sequenceActions
  * @property-read int|null $sequence_actions_count
+ * @method static \Database\Factories\Sequence\SequenceFactory factory(...$parameters)
  */
 class Sequence extends Model
 {

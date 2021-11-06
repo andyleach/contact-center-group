@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SequenceActionRestriction whereUpdatedAt($value)
+ * @method static \Database\Factories\Sequence\SequenceActionRestrictionFactory factory(...$parameters)
  */
 class SequenceActionRestriction extends Model
 {
