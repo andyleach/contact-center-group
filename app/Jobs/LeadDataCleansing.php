@@ -40,13 +40,13 @@ class LeadDataCleansing implements ShouldQueue {
         $this->lead->lead_status_id = LeadStatus::CLEANSING;
         $this->lead->save();
 
-        $this->handleClensingOfLeadPhoneNumbers();
+        $this->handleCleansingOfLeadPhoneNumbers();
     }
 
     /**
      *
      */
-    public function handleClensingOfLeadPhoneNumbers() {
+    public function handleCleansingOfLeadPhoneNumbers() {
         $twilioService = app(TwilioServiceContract::class);
         $leadPhoneNumbers = $this->lead->leadPhoneNumbers;
         foreach ($leadPhoneNumbers as $leadPhoneNumber) {

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\MatchTaskToAnExistingLead;
 use App\Models\Call\MultiDialerCall;
 use App\Models\Call\TaskCall;
 use App\Models\Call\TaskCallParticipantType;
@@ -44,6 +45,8 @@ class InboundCallService {
             'task_call_participant_type_id' => TaskCallParticipantType::CLIENT_CUSTOMER,
             'agent_id' => null,
         ]);
+
+        MatchTaskToAnExistingLead::dispatch($task);
 
         return $taskCall;
     }
