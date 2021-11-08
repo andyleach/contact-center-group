@@ -40,7 +40,7 @@ class LeadDataCleansingTest extends TestCase
 
         $job = new LeadDataCleansing($lead);
 
-        $job->handleClensingOfLeadPhoneNumbers();
+        $job->handleCleansingOfLeadPhoneNumbers();
 
         $this->assertDatabaseHas('lead_phone_numbers', [
             'id' => $leadPhoneNumber->id,

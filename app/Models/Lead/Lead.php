@@ -77,6 +77,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $sequences_count
  * @method static Builder|Lead openSequence()
  * @property-read \App\Models\Sequence\Sequence|null $open_sequence
+ * @method static Builder|Lead leadEmailAddress(string $emailAddress)
+ * @method static Builder|Lead leadPhoneNumber(string $phoneNumber)
+ * @method static Builder|Lead isClosed(string $phoneNumber)
+ * @method static Builder|Lead isNotClosed()
  */
 class Lead extends Model
 {
@@ -169,5 +173,48 @@ class Lead extends Model
 
         return $this->awaitingImport()
             ->whereBetween('import_at', [$startOfDay, $endOfDay]);
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeIsNotClosed(Builder $query): Builder {
+        return $query->whereHas('leadStatus', function($query) {
+            $query->where('is_closed', false);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $phoneNumber
+     * @return Builder
+     */
+    public function scopeIsClosed(Builder $query, string $phoneNumber): Builder {
+        return $query->whereHas('leadStatus', function($query) {
+            $query->where('is_closed', true);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $phoneNumber
+     * @return Builder
+     */
+    public function scopeLeadPhoneNumber(Builder $query, string $phoneNumber): Builder {
+        return $query->whereHas('leadPhoneNumber', function($query) use ($phoneNumber) {
+            $query->where('phone_number', $phoneNumber);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $emailAddress
+     * @return Builder
+     */
+    public function scopeLeadEmailAddress(Builder $query, string $emailAddress): Builder {
+        return $query->whereHas('leadEmailAddress', function($query) use ($emailAddress) {
+            $query->where('email_addrress', $emailAddress);
+        });
     }
 }

@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereDeletedAt($value)
+ * @property int $is_closed
+ * @method static \Illuminate\Database\Eloquent\Builder|LeadStatus whereIsClosed($value)
  */
 class LeadStatus extends Model
 {
@@ -53,9 +55,10 @@ class LeadStatus extends Model
     const IMPORT_STARTED = 4;
     const IMPORT_FAILED = 5;
     const IMPORT_COMPLETED = 6;
-    const WORKING = 7;
-    const COMPLETED = 8;
-    const CLOSED_SUBSCRIPTION_TERMINATED = 9;
-    const CLOSED_AGED = 10;
-    const DISMISSED = 11;
+    const READY = 7;
+    const WORKING = 8;
+    const COMPLETED = 9;
+    const CLOSED_SUBSCRIPTION_TERMINATED = 10;
+    const CLOSED_AGED = 11;
+    const DISMISSED = 12;
 }

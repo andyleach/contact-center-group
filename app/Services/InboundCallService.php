@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
-use App\Jobs\MatchTaskToAnExistingLead;
+use App\Jobs\MatchInboundTaskToAnExistingLead;
 use App\Models\Call\MultiDialerCall;
 use App\Models\Call\TaskCall;
 use App\Models\Call\TaskCallParticipantType;
+use App\Models\Lead\Lead;
 use App\Models\Task\Task;
 use App\Services\DataTransferObjects\InboundCallData;
+use App\Services\DataTransferObjects\LeadData;
 use App\Services\DataTransferObjects\TaskData;
 
 class InboundCallService {
@@ -40,15 +42,33 @@ class InboundCallService {
             'direction' => 'Inbound',
         ]);
 
+        Lead::query()
+            ->leadPhoneNumber($taskCall->phone_number)
+            ->where('client_id', $data->clientPhoneNumber->client_id)
+            ->isNotClosed()
+            ->first();
+
         // Create a participant record for the caller
         $taskCall->taskCallParticipants()->create([
             'task_call_participant_type_id' => TaskCallParticipantType::CLIENT_CUSTOMER,
             'agent_id' => null,
         ]);
 
-        MatchTaskToAnExistingLead::dispatch($task);
-
         return $taskCall;
+    }
+
+    public function matchOrCreateLeadForCall(TaskCall $taskCall): Lead {
+        $lead = Lead::query()
+            ->leadPhoneNumber($taskCall->phone_number)
+            ->where('client_id', $taskCall->clientPhoneNumber->client_id)
+            ->isNotClosed()
+            ->first();
+
+        if (is_a($lead, Lead::class)) {
+            return $lead;
+        }
+
+        LeadData::
     }
 
     public function createNewMultiDialerCall(InboundCallData $data): MultiDialerCall {

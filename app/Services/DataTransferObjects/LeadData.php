@@ -2,12 +2,16 @@
 
 namespace App\Services\DataTransferObjects;
 
+use App\Models\Call\TaskCall;
 use Carbon\Carbon;
 use App\Models\Lead\LeadStatus;
 use App\Http\Requests\Api\StoreLeadRequest;
 use Database\Factories\Lead\LeadDataFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LeadData extends AbstractDataTransferObject {
+    use HasFactory;
+
     /**
      * Ensures that you can use factories to create lead data.  This means that you can start from the same baseline
      * by default when creating a new instance
@@ -109,6 +113,15 @@ class LeadData extends AbstractDataTransferObject {
         $dto->meta_data = $request->input('meta_data', []);
 
         return $dto;
+    }
+
+    public function fromTaskCall(TaskCall $taskCall): self {
+        $data = new LeadData();
+        $data->client_id = $taskCall->clientPhoneNumber->client_id;
+        $data->primary_phone_number = $taskCall->phone_number;
+        $data->first_name = '';
+        $data->last_name = '';
+        $data->full_name = '';
     }
 
     public function setLeadProviderId(int $leadProviderId): self {

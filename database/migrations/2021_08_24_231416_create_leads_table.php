@@ -51,6 +51,7 @@ class CreateLeadsTable extends Migration
             $table->string('label')->unique();
             $table->string('description', 255)->default('');
             $table->boolean('is_billable')->default(false);
+            $table->boolean('is_closed')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -67,12 +68,11 @@ class CreateLeadsTable extends Migration
             $table->foreignIdFor(LeadStatus::class, 'lead_status_id')->constrained();
             $table->foreignIdFor(LeadDisposition::class, 'lead_disposition_id')
                 ->nullable()
-                ->constrained();;
+                ->constrained();
 
             $table->foreignIdFor(LeadProvider::class, 'lead_provider_id')
                 ->comment('The originator of the lead.  This will most likely be just BetterCarPeople')
                 ->constrained();
-            $table->json('meta_data');
             $table->timestamp('import_at')->nullable()->index();
             $table->timestamps();
         });
@@ -167,6 +167,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Draft',
                 'description' => 'The lead has uploaded to the system, but it is not yet ready to be imported.',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -177,6 +178,7 @@ class CreateLeadsTable extends Migration
                     .' we need to ensure that data like contact information is valid before we risk allowing it into'
                     .' our system',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -185,6 +187,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Awaiting Import',
                 'description' => 'The lead has been scheduled for import, and is awaiting the import_at date.',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -193,6 +196,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Lead Import Started',
                 'description' => 'The leads has been received and we have started the import process.',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -201,6 +205,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Lead Import Completed',
                 'description' => 'The lead has been created, and all processing is done, but work has not begun.',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -209,6 +214,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Lead Import Failed',
                 'description' => 'We attempted to import the lead, but there was a failure along the way that needs to be fixed',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -217,6 +223,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Working',
                 'description' => 'We have begun working on the lead in our system.',
                 'is_billable' => false,
+                'is_closed' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -225,6 +232,8 @@ class CreateLeadsTable extends Migration
                 'label' => 'Completed',
                 'description' => 'We have completed working the lead.',
                 'is_billable' => true,
+                'is_closed' => true,
+
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -233,6 +242,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Closed (Aged)',
                 'description' => 'We have closed the lead because it aged out.',
                 'is_billable' => true,
+                'is_closed' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -241,6 +251,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Closed (Subscription Terminated)',
                 'description' => 'We have closed out the lead because we are no longer working with the client.',
                 'is_billable' => true,
+                'is_closed' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -249,6 +260,7 @@ class CreateLeadsTable extends Migration
                 'label' => 'Dismissed',
                 'description' => 'We have decided that we will not work the lead.',
                 'is_billable' => false,
+                'is_closed' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

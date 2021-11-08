@@ -2,6 +2,7 @@
 
 namespace App\Models\Call;
 
+use App\Models\Client\ClientPhoneNumber;
 use App\Models\Task\Task;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,10 +39,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|TaskCall whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TaskCall whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read ClientPhoneNumber $clientPhoneNumber
  */
 class TaskCall extends Model
 {
     use HasFactory;
+
+    /**
+     * @return BelongsTo
+     */
+    public function clientPhoneNumber(): BelongsTo {
+        return $this->belongsTo(ClientPhoneNumber::class, 'client_phone_number_id');
+    }
 
     /**
      * Takes a new call, and allows for it to be associated with a task when necessary.  A call that handled via
