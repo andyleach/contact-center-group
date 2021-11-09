@@ -2,6 +2,7 @@
 
 namespace App\Services\DataTransferObjects;
 
+use App\Models\Task\TaskOriginationType;
 use App\Models\Task\TaskStatus;
 use Carbon\Carbon;
 use App\Models\Lead\Lead;
@@ -50,6 +51,13 @@ class TaskData extends AbstractDataTransferObject {
      * @var Carbon $expires_at The time in which the task will leave the system
      */
     public Carbon $expires_at;
+
+    /**
+     * Indicates how this task came to be
+     *
+     * @var int $task_origination_type_id
+     */
+    public int $task_origination_type_id = TaskOriginationType::SEQUENCE;
 
     public static function fromLeadForSequenceAction(Lead $lead, SequenceAction $action): self {
         $data = new self;
@@ -105,9 +113,9 @@ class TaskData extends AbstractDataTransferObject {
         return $waitUntil;
     }
 
-    public static function fromInboundCallData(InboundCallData $data): TaskData {
+    public static function fromInboundCall(InboundCallData $data, ?Lead $lead): TaskData {
         $data = new self;
-        $data->lead_id = null;
+        $data->lead_id = $lead?->id;
         // Keep it as a draft so that we can do lead and customer matching before routing to an agent
         $data->task_status_id = TaskStatus::DRAFT;
         $data->task_type_id = TaskType::INBOUND_CALL;
@@ -116,6 +124,9 @@ class TaskData extends AbstractDataTransferObject {
         $data->available_at = now();
         $data->expires_at   = now()->addMinutes(10);
         $data->instructions = "Answer the call";
+        $data->task_origination_type_id = null === $lead
+            ? TaskOriginationType::UNMATCHED_INBOUND_ACTIVITY
+            : TaskOriginationType::MATCHED_INBOUND_ACTIVITY;
 
         return $data;
     }

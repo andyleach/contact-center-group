@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Jobs\MatchInboundTaskToAnExistingLead;
 use App\Models\Call\MultiDialerCall;
 use App\Models\Call\TaskCall;
 use App\Models\Call\TaskCallParticipantType;
@@ -28,8 +27,10 @@ class InboundCallService {
     }
 
     public function createNewTaskCall(InboundCallData $data): TaskCall {
+        $matchedLead = $this->matchToLeadForCall($data);
+
         // Map the new inbound call data to our task data dto
-        $taskData = TaskData::fromInboundCallData($data);
+        $taskData = TaskData::fromInboundCall($data, $matchedLead);
 
         /** @var Task $task */
         $task = app(TaskQueueService::class)->createTask($taskData);
@@ -42,12 +43,6 @@ class InboundCallService {
             'direction' => 'Inbound',
         ]);
 
-        Lead::query()
-            ->leadPhoneNumber($taskCall->phone_number)
-            ->where('client_id', $data->clientPhoneNumber->client_id)
-            ->isNotClosed()
-            ->first();
-
         // Create a participant record for the caller
         $taskCall->taskCallParticipants()->create([
             'task_call_participant_type_id' => TaskCallParticipantType::CLIENT_CUSTOMER,
@@ -57,18 +52,16 @@ class InboundCallService {
         return $taskCall;
     }
 
-    public function matchOrCreateLeadForCall(TaskCall $taskCall): Lead {
-        $lead = Lead::query()
-            ->leadPhoneNumber($taskCall->phone_number)
-            ->where('client_id', $taskCall->clientPhoneNumber->client_id)
+    /**
+     * @param InboundCallData $inboundCallData
+     * @return Lead
+     */
+    public function matchToLeadForCall(InboundCallData $inboundCallData): Lead {
+        return Lead::query()
+            ->leadPhoneNumber($inboundCallData->caller)
+            ->where('client_id', $inboundCallData->clientPhoneNumber->client_id)
             ->isNotClosed()
             ->first();
-
-        if (is_a($lead, Lead::class)) {
-            return $lead;
-        }
-
-        LeadData::
     }
 
     public function createNewMultiDialerCall(InboundCallData $data): MultiDialerCall {

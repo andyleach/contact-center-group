@@ -79,6 +79,9 @@ use Illuminate\Support\Collection;
  * @method static Builder|Task whereInstructions($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|TaskCall[] $taskCall
  * @property-read int|null $task_call_count
+ * @property int $task_origination_type_id
+ * @property-read \App\Models\Task\TaskOriginationType $taskOriginationType
+ * @method static Builder|Task whereTaskOriginationTypeId($value)
  */
 class Task extends Model
 {
@@ -97,7 +100,8 @@ class Task extends Model
 
     protected $fillable = [
         'sequence_action_id', 'agent_id', 'task_status_id', 'task_type_id', 'lead_id',
-        'task_disposition_id', 'instructions', 'available_at', 'expires_at', 'completed_at', 'assigned_at'
+        'task_disposition_id', 'instructions', 'available_at', 'expires_at', 'completed_at', 'assigned_at',
+        'task_origination_type_id',
     ];
 
     /**
@@ -142,6 +146,16 @@ class Task extends Model
         return $this->belongsTo(TaskDisposition::class, 'task_disposition_id');
     }
 
+    /**
+     * @return BelongsTo
+     */
+    public function taskOriginationType(): BelongsTo {
+        return $this->belongsTo(TaskOriginationType::class, 'task_origination_type_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function taskCall(): HasMany {
         return $this->hasMany(TaskCall::class, 'task_id');
     }

@@ -42,6 +42,7 @@ class TaskQueueService {
             'instructions'       => $taskData->instructions,
             'available_at'       => $taskData->available_at,
             'expires_at'         => $taskData->expires_at,
+            'task_origination_type_id' => $taskData->task_origination_type_id
         ]);
 
         return $task;

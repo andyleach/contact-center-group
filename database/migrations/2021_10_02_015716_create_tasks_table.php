@@ -13,6 +13,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Lead\Lead;
 use App\Models\Sequence\SequenceAction;
+use App\Models\Task\TaskOriginationType;
 
 class CreateTasksTable extends Migration
 {
@@ -60,6 +61,14 @@ class CreateTasksTable extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('task_origination_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('label')->unique();
+            $table->string('description', 255)->default('');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('task_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('label')->unique();
@@ -84,6 +93,7 @@ class CreateTasksTable extends Migration
             $table->foreignIdFor(Agent::class, 'agent_id')
                 ->nullable()
                 ->constrained();
+            $table->foreignIdFor(TaskOriginationType::class, 'task_origination_type_id')->constrained();
             $table->text('instructions')->nullable();
             $table->timestamp('available_at')->index();
             $table->timestamp('assigned_at')->index()->nullable();
@@ -109,6 +119,7 @@ class CreateTasksTable extends Migration
         //$this->initializeTaskTypeMedium();
         $this->initializeTaskEventTypes();
         $this->initializeTaskEventReason();
+        $this->initializeTaskOriginationTypes();
     }
 
     /**
@@ -122,10 +133,39 @@ class CreateTasksTable extends Migration
         Schema::dropIfExists('task_event_types');
         Schema::dropIfExists('task_event_reasons');
         Schema::dropIfExists('tasks');
+        Schema::dropIfExists('task_origination_types');
         Schema::dropIfExists('task_statuses');
         Schema::dropIfExists('task_types');
         Schema::dropIfExists('task_type_mediums');
         Schema::dropIfExists('task_dispositions');
+    }
+
+    public function initializeTaskOriginationTypes() {
+        TaskOriginationType::query()->insert([
+            [
+                'id' => TaskOriginationType::MATCHED_INBOUND_ACTIVITY,
+                'label' => 'Matched Inbound Lead Activity',
+                'description' => 'We were able to make a tentative match for the lead assigned to the task based upon '
+                    . ' data provided to us.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => TaskOriginationType::UNMATCHED_INBOUND_ACTIVITY,
+                'label' => 'Unmatched Inbound Activity',
+                'description' => 'Based upon data provided to us, we were unable to match this task to an existing '
+                    .'lead in our system',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => TaskOriginationType::SEQUENCE,
+                'label' => 'Sequence',
+                'description' => 'This task was created via a sequence action',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
     }
 
     public function initializeTaskEventTypes() {
