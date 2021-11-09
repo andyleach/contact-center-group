@@ -4,6 +4,7 @@ namespace Database\Factories\Task;
 
 use App\Models\Lead\Lead;
 use App\Models\Task\Task;
+use App\Models\Task\TaskOriginationType;
 use App\Models\Task\TaskStatus;
 use App\Models\Task\TaskType;
 use Carbon\Carbon;
@@ -31,9 +32,10 @@ class TaskFactory extends Factory
         'lead_id' => "int",
         'instructions' => "string",
         'available_at' => "\Carbon\Carbon",
-        'expires_at' => "\Carbon\Carbon"
+        'expires_at' => "\Carbon\Carbon",
+        'task_origination_type_id' => "int",
     ])]
-    public function definition()
+    public function definition(): array
     {
         return [
             'sequence_action_id' => null,
@@ -42,7 +44,12 @@ class TaskFactory extends Factory
             'lead_id' => Lead::factory()->create()->id,
             'instructions' => $this->faker->text(200),
             'available_at' => $availableAt = Carbon::parse($this->faker->dateTimeBetween(now(), now()->addDays(30))),
-            'expires_at'   => $availableAt->addDays(12)
+            'expires_at'   => $availableAt->addDays(12),
+            'task_origination_type_id' => $this->faker->randomElement([
+                TaskOriginationType::MATCHED_INBOUND_ACTIVITY,
+                TaskOriginationType::UNMATCHED_INBOUND_ACTIVITY,
+                TaskOriginationType::SEQUENCE
+            ])
         ];
     }
 }

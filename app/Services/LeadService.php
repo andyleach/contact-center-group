@@ -23,7 +23,6 @@ class LeadService {
             'lead_type_id' => $data->lead_type_id,
             'lead_provider_id' => $data->lead_provider_id,
             'lead_list_id' => $data->lead_list_id,
-            'meta_data' => $data->meta_data
         ]);
 
         $phoneNumbers = $data->getAllPhoneNumbers();

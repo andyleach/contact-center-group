@@ -54,6 +54,7 @@ class TaskQueueServiceTest extends TestCase
             'task_type_id'       => $taskData->task_type_id,
             'available_at'       => $taskData->available_at,
             'expires_at'         => $taskData->expires_at,
+            'task_origination_type_id' => $taskData->task_origination_type_id
         ]);
     }
 

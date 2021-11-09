@@ -36,11 +36,6 @@ class LeadDataFactory extends Factory {
                 $this->faker->email,
                 $this->faker->email,
             ],
-            'meta_data' => [
-                'year' => $this->faker->year,
-                'make' => 'Chevrolet',
-                'model' => 'Camaro',
-            ],
             'import_at' => Carbon::parse($this->faker->dateTimeBetween('now', '+30 days')),
             'lead_provider_id' => LeadProvider::BETTER_CAR_PEOPLE,
             'lead_status_id' => $this->faker->randomElement([

@@ -77,8 +77,6 @@ class LeadData extends AbstractDataTransferObject {
      */
     public array $secondary_email_addresses = [];
 
-    public array $meta_data = [];
-
     public ?int $lead_list_id = null;
 
     /**
@@ -108,9 +106,6 @@ class LeadData extends AbstractDataTransferObject {
         // Email addresses
         $dto->primary_email_address = $request->input('primary_email_address', '');
         $dto->secondary_email_addresses = $request->input('secondary_email_addresses', []);
-
-        // Meta data
-        $dto->meta_data = $request->input('meta_data', []);
 
         return $dto;
     }
