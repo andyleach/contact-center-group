@@ -41,10 +41,12 @@ class ClientController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $client = Client::create([]);
+        $client = Client::create([
+            'label' => $request->get('label')
+        ]);
 
         return \Redirect::route('clients.edit', [
-            'id' => $client->id
+            'client' => $client->id
         ]);
     }
 
@@ -80,11 +82,15 @@ class ClientController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Client\Client  $client
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $client->update($request->toArray());
+
+        return inertia()->render('Client/Edit', [
+            'client' => $client
+        ]);
     }
 
     /**

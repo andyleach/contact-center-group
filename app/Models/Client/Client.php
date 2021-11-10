@@ -2,6 +2,7 @@
 
 namespace App\Models\Client;
 
+use App\Events\Client\ClientCreated;
 use App\Models\Lead\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,8 +36,16 @@ class Client extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'label'
+    ];
+
     protected $hidden = [
         'twilio_sid'
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => ClientCreated::class
     ];
 
     /**

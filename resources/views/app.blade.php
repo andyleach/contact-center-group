@@ -18,9 +18,5 @@
     </head>
     <body class="h-full">
         @inertia
-
-        @env ('local')
-            <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
-        @endenv
     </body>
 </html>

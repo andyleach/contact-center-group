@@ -26,7 +26,7 @@
                                 Now
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <Link class="text-indigo-600 hover:text-indigo-900" :href="route('clients.edit', client.id)">Edit</Link>
+                                <Link :href="route('clients.edit', client.id)">Edit</Link>
                             </td>
                         </tr>
                         </tbody>
@@ -38,9 +38,10 @@
 </template>
 
 <script>
-
+import {Link} from "@inertiajs/inertia-vue3";
 export default {
-    props: ['clients']
+    props: ['clients'],
+    components: {Link}
 }
 </script>
 

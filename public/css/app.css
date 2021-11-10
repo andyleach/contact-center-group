@@ -1211,6 +1211,12 @@ select {
 .-mt-32 {
 	margin-top: -8rem;
 }
+.-ml-4 {
+	margin-left: -1rem;
+}
+.-mt-2 {
+	margin-top: -0.5rem;
+}
 .-ml-1 {
 	margin-left: -0.25rem;
 }
@@ -1219,12 +1225,6 @@ select {
 }
 .mr-0 {
 	margin-right: 0px;
-}
-.-ml-4 {
-	margin-left: -1rem;
-}
-.-mt-2 {
-	margin-top: -0.5rem;
 }
 .block {
 	display: block;
