@@ -8,6 +8,7 @@ use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Api\V2010\Account\CallInstance;
 use Twilio\Rest\Api\V2010\Account\Conference\ParticipantInstance;
 use Twilio\Rest\Api\V2010\Account\ConferenceInstance;
+use Twilio\Rest\Api\V2010\AccountInstance;
 use Twilio\Rest\Client;
 use Twilio\Rest\Lookups\V1\PhoneNumberInstance;
 use Twilio\TwiML\VoiceResponse;
@@ -28,6 +29,18 @@ class TwilioService implements TwilioServiceContract {
         $token = config('services.auth_token');
 
         $this->twilio = new Client($sid, $token);
+    }
+
+    /**
+     * Creates a sub-account in Twilio that allows for us to track the cost of everything we do for a client
+     *
+     * @param string $friendlyName
+     * @return AccountInstance
+     * @throws TwilioException
+     */
+    public function createSubAccount(string $friendlyName): AccountInstance {
+        return $this->twilio->api->v2010->accounts
+            ->create(["friendlyName" => $friendlyName]);
     }
 
     /**

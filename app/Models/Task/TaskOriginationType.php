@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 /**
  * App\Models\Task\TaskOriginationType
- *
+ * 
  * This model is used to define how it was that our task came into existence.
  *
  * @property int $id

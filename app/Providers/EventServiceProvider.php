@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\Client\ClientCreated;
 use App\Events\Task\TaskAssigned;
 use App\Events\Task\TaskAssignmentCancelled;
 use App\Events\Task\TaskClosed;
@@ -11,6 +12,7 @@ use App\Events\Task\TaskCreated;
 use App\Events\Task\TaskExpired;
 use App\Events\Task\TaskInProcess;
 use App\Events\Task\TaskRemoved;
+use App\Listeners\ClientCreated\CreateSubAccountUnderTwilioListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,6 +27,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        ClientCreated::class => [
+            CreateSubAccountUnderTwilioListener::class
         ],
 
         /*********************************************************

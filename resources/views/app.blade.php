@@ -17,7 +17,7 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="h-full">
-        <div id="app" class="h-full"  data-page="{{ json_encode($page) }}"></div>
+        @inertia
 
         @env ('local')
             <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>

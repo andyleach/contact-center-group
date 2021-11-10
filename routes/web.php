@@ -24,6 +24,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
+    Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);
+});
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

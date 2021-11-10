@@ -28,10 +28,16 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereLabel($value)
  * @property string|null $twilio_account_sid
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereTwilioAccountSid($value)
+ * @property string $twilio_sid A unique identifier for the sub-account that was created for this client in Twilio
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereTwilioSid($value)
  */
 class Client extends Model
 {
     use HasFactory;
+
+    protected $hidden = [
+        'twilio_sid'
+    ];
 
     /**
      * @return HasMany
