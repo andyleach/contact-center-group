@@ -25,7 +25,21 @@ class TwilioService implements TwilioServiceContract {
      *
      * @throws ConfigurationException
      */
-    public function __construct(OurClient $client) {
+    public function __construct() {
+        $sid = config('services.account_sid');
+        $token = config('services.auth_token');
+
+        $this->twilio = new Client($sid, $token);
+    }
+
+    /**
+     * Scopes the service to performing actions for a specific client instead of utilizing the global scope
+     *
+     * @param OurClient $client
+     * @return $this
+     * @throws ConfigurationException
+     */
+    public function forClient(OurClient $client): self {
         $sid = config('services.account_sid');
         $token = config('services.auth_token');
 
