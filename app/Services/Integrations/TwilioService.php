@@ -12,6 +12,7 @@ use Twilio\Rest\Api\V2010\AccountInstance;
 use Twilio\Rest\Client;
 use Twilio\Rest\Lookups\V1\PhoneNumberInstance;
 use Twilio\TwiML\VoiceResponse;
+use App\Models\Client\Client as OurClient;
 
 class TwilioService implements TwilioServiceContract {
     /**
@@ -24,11 +25,11 @@ class TwilioService implements TwilioServiceContract {
      *
      * @throws ConfigurationException
      */
-    public function __construct() {
+    public function __construct(OurClient $client) {
         $sid = config('services.account_sid');
         $token = config('services.auth_token');
 
-        $this->twilio = new Client($sid, $token);
+        $this->twilio = new Client($sid, $token, $client->twilio_sid);
     }
 
     /**
@@ -41,6 +42,44 @@ class TwilioService implements TwilioServiceContract {
     public function createSubAccount(string $friendlyName): AccountInstance {
         return $this->twilio->api->v2010->accounts
             ->create(["friendlyName" => $friendlyName]);
+    }
+
+    /**
+     * Delete a phone number from our list of purchased numbers
+     *
+     * @param string $friendlyName The friendly name for the number
+     * @param string $phoneNumber The phone number we want to purchase
+     *
+     * @return \Twilio\Rest\Api\V2010\Account\IncomingPhoneNumberInstance
+     * @throws TwilioException
+     */
+    public function purchasePhoneNumber(string $phoneNumber, string $friendlyName = '') {
+        return  $this->twilio->incomingPhoneNumbers->create([
+            'FriendlyName' => $friendlyName,
+            'PhoneNumber'  => $phoneNumber,
+        ]);
+    }
+
+    /**
+     * Delete a phone number from our list of purchased numbers
+     *
+     * @param string $phoneNumberSid
+     * @return bool
+     * @throws TwilioException
+     */
+    public function releasePhoneNumber(string $phoneNumberSid) {
+        return $this->twilio->incomingPhoneNumbers($phoneNumberSid)->delete();
+    }
+
+    /**
+     * @param int $areaCode The area code of the phone number
+     * @param int $limit    The max results
+     * @return array
+     */
+    public function getAvailableLocalPhoneNumbers(int $areaCode, int $limit = 20): array {
+        return $this->twilio->availablePhoneNumbers('US')
+            ->local
+            ->read(['areaCode' => $areaCode], $limit);
     }
 
     /**
