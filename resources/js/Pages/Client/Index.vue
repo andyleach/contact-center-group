@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="Profile" :page="$page">
+    <app-layout title="Clients" :page="$page">
         <div>
             <div class="max-w-7xl mx-auto py-10">
                 <client-statistics/>
@@ -13,9 +13,7 @@
                                 </h3>
                             </div>
                             <div class="ml-4 mt-2 flex-shrink-0">
-                                <Link :href="route('clients.create')"
-                                      class="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                >Create Client</Link>
+                                <jet-button @click="openClientFormModal">Create Client</jet-button>
                             </div>
                         </div>
                     </div>
@@ -25,6 +23,17 @@
                 </div>
             </div>
         </div>
+
+        <slide-over-dark :open="clientFormOpen" v-on:slideOverClosed="clientFormModalClosed">
+            <template v-slot:title>
+                Create Client
+            </template>
+            <template v-slot:description>
+                Used to create a new client for whom we do billable work.
+            </template>
+
+            <create-client-form></create-client-form>
+        </slide-over-dark>
     </app-layout>
 </template>
 
@@ -34,10 +43,25 @@ import AppLayout from "../../Layouts/AppLayout";
 import ClientStatistics from "./Partials/ClientStatistics"
 import ClientList from "./Partials/ClientList";
 import { Link } from '@inertiajs/inertia-vue3'
-
+import JetButton from "@/Jetstream/Button"
+import CreateClientForm from "./Partials/CreateClientForm";
+import SlideOverDark from "../../Components/SlideOverDark";
 export default {
     name: "ClientIndex",
-    components: {AppLayout, ClientStatistics, ClientList, Link}
+    components: {CreateClientForm, AppLayout, ClientStatistics, ClientList, Link, SlideOverDark, JetButton},
+    data: () => ({
+        clientFormOpen: false
+    }),
+
+    methods: {
+        openClientFormModal() {
+            this.clientFormOpen = true;
+        },
+        clientFormModalClosed() {
+            console.log('emitted');
+            this.clientFormOpen = false;
+        }
+    }
 }
 </script>
 

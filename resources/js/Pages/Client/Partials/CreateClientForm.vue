@@ -7,7 +7,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Log in
+                Create Client
             </jet-button>
         </div>
     </form>

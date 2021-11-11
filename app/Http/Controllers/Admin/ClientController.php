@@ -84,7 +84,7 @@ class ClientController extends Controller
      * @param  \App\Models\Client\Client  $client
      * @return Response
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request, Client $client): Response
     {
         $client->update($request->toArray());
 
@@ -97,10 +97,12 @@ class ClientController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Client\Client  $client
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy(Client $client)
+    public function destroy(Client $client): Response
     {
-        //
+        return inertia()->render('Client/Edit', [
+            'client' => $client
+        ]);
     }
 }

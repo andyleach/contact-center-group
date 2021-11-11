@@ -41,7 +41,7 @@
 import {Link} from "@inertiajs/inertia-vue3";
 export default {
     props: ['clients'],
-    components: {Link}
+    components: {Link},
 }
 </script>
 
