@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ClientPhoneNumberResource;
 use App\Http\Resources\ClientResource;
 use App\Models\Client\Client;
+use App\Models\Client\ClientPhoneNumber;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -62,10 +64,14 @@ class ClientController extends Controller
      */
     public function edit(Client $client): Response
     {
-        $client->load('clientPhoneNumbers.clientPhoneNumberStatus');
+        $clientPhoneNumbers = ClientPhoneNumber::query()
+            ->where('client_id', $client->id)
+            ->with('clientPhoneNumberStatus')
+            ->get();
 
         return inertia()->render('Client/Edit', [
-            'client' => $client
+            'client' => $client,
+            'clientPhoneNumbers' => ClientPhoneNumberResource::collection($clientPhoneNumbers)
         ]);
     }
 

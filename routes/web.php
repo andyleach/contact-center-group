@@ -6,6 +6,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\TwilioPhoneNumberSearchController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ClientPhoneNumberController;
+use App\Http\Controllers\Integrations\TwilioInboundCallController;
+use App\Http\Controllers\Integrations\TwilioInboundSmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +36,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
         Route::get('search-local-phone-numbers', [TwilioPhoneNumberSearchController::class, 'searchLocalPhoneNumbers'])
             ->name('twilio.search-local-numbers');
     });
+});
+
+Route::group(['prefix' => 'integrations'], function() {
+    Route::group(['prefix' => 'twilio'], function() {
+        Route::post('call/inbound', [TwilioInboundCallController::class, 'store'])->name('twilio.call.inbound');
+        Route::post('sms/inbound', [TwilioInboundSmsController::class, 'store'])->name('twilio.sms.inbound');
+    });
+
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

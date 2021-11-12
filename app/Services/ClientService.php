@@ -36,10 +36,17 @@ class ClientService {
         $friendlyName = $client->label .': '. $phoneNumber;
 
         $purchasedNumber = $twilioService->forClient($client)
-            ->purchasePhoneNumber($phoneNumber, $friendlyName);
+            ->purchasePhoneNumber([
+                'FriendlyName' => $friendlyName,
+                'PhoneNumber'  => $phoneNumber,
+                'VoiceUrl' => route('twilio.call.inbound'),
+                'VoiceMethod' => 'POST',
+                'SmsUrl' => route('twilio.sms.inbound'),
+                'SmsMethod' => 'POST'
+            ]);
 
         $clientPhoneNumber = $client->clientPhoneNumbers()->create([
-            'label' => $purchasedNumber->friendlyName,
+            'label' => $purchasedNumber->phoneNumber,
             'phone_number' => $purchasedNumber->phoneNumber,
             'client_phone_number_status_id' => ClientPhoneNumberStatus::PURCHASED,
             'call_handling' => 'Route To Agent',

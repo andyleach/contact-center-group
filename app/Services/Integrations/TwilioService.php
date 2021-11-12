@@ -3,6 +3,7 @@
 namespace App\Services\Integrations;
 
 use App\Contracts\TwilioServiceContract;
+use JetBrains\PhpStorm\ArrayShape;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Api\V2010\Account\CallInstance;
@@ -13,6 +14,7 @@ use Twilio\Rest\Client;
 use Twilio\Rest\Lookups\V1\PhoneNumberInstance;
 use Twilio\TwiML\VoiceResponse;
 use App\Models\Client\Client as OurClient;
+use Twilio\Rest\Api\V2010\Account\IncomingPhoneNumberInstance;
 
 class TwilioService implements TwilioServiceContract {
     /**
@@ -63,16 +65,19 @@ class TwilioService implements TwilioServiceContract {
     /**
      * Delete a phone number from our list of purchased numbers
      *
-     * @param string $friendlyName The friendly name for the number
-     * @param string $phoneNumber The phone number we want to purchase
+     * @param array $params Params
      *
-     * @return \Twilio\Rest\Api\V2010\Account\IncomingPhoneNumberInstance
+     * @return IncomingPhoneNumberInstance
      * @throws TwilioException
      */
-    public function purchasePhoneNumber(string $phoneNumber, string $friendlyName = '') {
-        return  $this->twilio->incomingPhoneNumbers->create([
-            'FriendlyName' => $friendlyName,
-            'PhoneNumber'  => $phoneNumber,
+    public function purchasePhoneNumber(array $params): IncomingPhoneNumberInstance {
+        return $this->twilio->incomingPhoneNumbers->create([
+            'FriendlyName' => $params['FriendlyName'],
+            'PhoneNumber'  => $params['PhoneNumber'],
+            'VoiceUrl' => $params['VoiceUrl'],
+            'VoiceMethod' => 'POST',
+            'SmsUrl' => $params['SmsUrl'],
+            'SmsMethod' => 'POST'
         ]);
     }
 

@@ -78,7 +78,7 @@ export default defineComponent({
     }),
 
     mounted() {
-        this.clientPhoneNumbers = usePage().props.value.client.client_phone_numbers;
+        this.clientPhoneNumbers = usePage().props.value.clientPhoneNumbers.data;
     },
 
     methods: {
