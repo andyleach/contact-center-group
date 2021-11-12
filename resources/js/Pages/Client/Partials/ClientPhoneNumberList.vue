@@ -27,13 +27,13 @@
                                 {{ phoneNumber.phone_number }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ phoneNumber.client_phone_number_status_label }}
+                                {{ phoneNumber.status_label }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ phoneNumber.call_handling }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="#" @click="open">Edit</a>
+                                <a href="#" @click="openPhoneNumberConfigurationModal(phoneNumber)">Edit</a>
                             </td>
                         </tr>
                         </tbody>
@@ -43,43 +43,39 @@
         </div>
     </div>
 
-    <slide-over :open="editPhoneNumberConfigurationModalOpen" v-on:slideOverClosed="closeEditPhoneNumberConfigurationModal">
+    <slide-over :open="editPhoneNumberConfigurationModalOpen" v-on:slideOverClosed="closePhoneNumberConfigurationModal">
         <template v-slot:title>
             Edit Phone Number
         </template>
         <template v-slot:description>
             Handles configuration for how a phone number will be used within our system.
         </template>
+
+        <client-phone-number-form :phoneNumber="currentPhoneNumber" v-if="null !== currentPhoneNumber"/>
     </slide-over>
 </template>
 
 <script>
-/**
- * {
-            id: this.client.id,
-            client_id: this.phoneNumber.client_id,
-            phone_number: this.phoneNumber.phone_number,
-            forward_number: this.phoneNumber.forward_number,
-            call_handling: this.phoneNumber.call_handling
-        }
- */
 import SlideOver from "../../../Components/SlideOver";
+import ClientPhoneNumberForm from "./ClientPhoneNumberForm";
 export default {
     name: "ClientPhoneNumberList.vue",
     props: ['phoneNumbers'],
-    components: { SlideOver },
+    components: { SlideOver, ClientPhoneNumberForm },
 
     data: () => ({
-        purchasePhoneNumberModalOpen: false,
+        currentPhoneNumber: null,
         editPhoneNumberConfigurationModalOpen: false,
     }),
 
     methods: {
-        closePurchasePhoneNumberModel() {
-            this.purchasePhoneNumberModalOpen = false;
+        openPhoneNumberConfigurationModal(phoneNumber) {
+            this.currentPhoneNumber = phoneNumber;
+            this.editPhoneNumberConfigurationModalOpen = true;
         },
 
-        closeEditPhoneNumberConfigurationModal() {
+        closePhoneNumberConfigurationModal() {
+            this.currentPhoneNumber = null;
             this.editPhoneNumberConfigurationModalOpen = false;
         }
     }

@@ -27,8 +27,8 @@ class ClientPhoneNumberResource extends JsonResource
             'label' => $this->resource->label,
             'phone_number' => $this->resource->phone_number,
             'call_handling' => $this->resource->call_handling,
-            'client_phone_number_status_id' => $this->resource->client_phone_number_status_id,
-            'client_phone_number_status_label' => $this->resource->clientPhoneNumberStatus->label,
+            'status_id' => $this->resource->client_phone_number_status_id,
+            'status_label' => $this->resource->clientPhoneNumberStatus->label,
         ];
     }
 }

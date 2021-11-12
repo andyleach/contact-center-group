@@ -6,6 +6,7 @@ use App\Models\Client\Client;
 use App\Models\Client\ClientPhoneNumber;
 use App\Models\Client\ClientPhoneNumberStatus;
 use App\Models\Provider\Provider;
+use App\Services\DataTransferObjects\ClientPhoneNumberData;
 use App\Services\Integrations\TwilioService;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
@@ -57,5 +58,9 @@ class ClientService {
         ]);
 
         return $clientPhoneNumber;
+    }
+
+    public function updateClientPhoneNumber(ClientPhoneNumberData $phoneNumberData) {
+
     }
 }

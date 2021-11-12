@@ -38,8 +38,8 @@
                 </div>
                 <client-phone-number-list :phoneNumbers="this.clientPhoneNumbers"></client-phone-number-list>
             </template>
-        </jet-action-section>
 
+        </jet-action-section>
 
         <slide-over :open="purchasePhoneNumberModalOpen" v-on:slideOverClosed="this.purchasePhoneNumberModalOpen = false">
             <template v-slot:title>
@@ -52,7 +52,6 @@
 
             <purchase-phone-number-form @selectedPhoneNumberForPurchase="purchasePhoneNumber" />
         </slide-over>
-
     </app-layout>
 </template>
 
@@ -62,7 +61,6 @@ import UpdateClientForm from "./Partials/UpdateClientForm";
 import AppLayout from "../../Layouts/AppLayout";
 import JetActionSection from '@/Jetstream/ActionSection';
 import SlideOver from "../../Components/SlideOver";
-import ClientPhoneNumberSection from "./Partials/ClientPhoneNumberSection";
 import JetSectionBorder from '@/Jetstream/SectionBorder'
 import JetButton from '@/Jetstream/Button';
 import ClientPhoneNumberList from "./Partials/ClientPhoneNumberList";
@@ -71,7 +69,8 @@ import { usePage } from '@inertiajs/inertia-vue3'
 
 export default defineComponent({
     name: "ClientEdit",
-    components: {ClientPhoneNumberSection, UpdateClientForm, AppLayout, JetActionSection, SlideOver, JetSectionBorder, JetButton, ClientPhoneNumberList, PurchasePhoneNumberForm },
+    components: {
+        UpdateClientForm, AppLayout, JetActionSection, SlideOver, JetSectionBorder, JetButton, ClientPhoneNumberList, PurchasePhoneNumberForm},
     data: () => ({
         clientPhoneNumbers: [],
         purchasePhoneNumberModalOpen: false,
