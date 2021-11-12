@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <slide-over-dark :open="clientFormOpen" v-on:slideOverClosed="clientFormModalClosed">
+        <slide-over :open="clientFormOpen" v-on:slideOverClosed="clientFormModalClosed">
             <template v-slot:title>
                 Create Client
             </template>
@@ -33,7 +33,7 @@
             </template>
 
             <create-client-form></create-client-form>
-        </slide-over-dark>
+        </slide-over>
     </app-layout>
 </template>
 
@@ -45,10 +45,10 @@ import ClientList from "./Partials/ClientList";
 import { Link } from '@inertiajs/inertia-vue3'
 import JetButton from "@/Jetstream/Button"
 import CreateClientForm from "./Partials/CreateClientForm";
-import SlideOverDark from "../../Components/SlideOverDark";
+import SlideOver from "../../Components/SlideOver";
 export default {
     name: "ClientIndex",
-    components: {CreateClientForm, AppLayout, ClientStatistics, ClientList, Link, SlideOverDark, JetButton},
+    components: {CreateClientForm, AppLayout, ClientStatistics, ClientList, Link, SlideOver, JetButton},
     data: () => ({
         clientFormOpen: false
     }),

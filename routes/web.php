@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\TwilioPhoneNumberSearchController;
+use App\Http\Controllers\Admin\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +27,12 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
-    Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);
+    Route::resource('clients', ClientController::class);
+
+    Route::group(['prefix' => 'twilio'], function() {
+        Route::get('search-local-phone-numbers', [TwilioPhoneNumberSearchController::class, 'searchLocalPhoneNumbers'])
+            ->name('twilio.search-local-numbers');
+    });
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

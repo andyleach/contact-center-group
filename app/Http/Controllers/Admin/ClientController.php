@@ -24,16 +24,6 @@ class ClientController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create(): Response
-    {
-        return inertia()->render('Client/Create', []);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -72,6 +62,8 @@ class ClientController extends Controller
      */
     public function edit(Client $client): Response
     {
+        $client->load('clientPhoneNumbers');
+
         return inertia()->render('Client/Edit', [
             'client' => $client
         ]);

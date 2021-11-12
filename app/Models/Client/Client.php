@@ -54,4 +54,11 @@ class Client extends Model
     public function leads(): HasMany {
         return $this->hasMany(Lead::class, 'client_id');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function clientPhoneNumbers(): HasMany {
+        return $this->hasMany(ClientPhoneNumber::class, 'client_id');
+    }
 }
