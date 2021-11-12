@@ -14,7 +14,7 @@ class StoreClientPhoneNumberRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class StoreClientPhoneNumberRequest extends FormRequest
     {
         return [
             'client_id' => 'required|exists:clients,id',
-            'phone_number' => ['required', new IsAValidPhoneNumberRule()]
+            'phoneNumber' => ['required', new IsAValidPhoneNumberRule()]
         ];
     }
 }

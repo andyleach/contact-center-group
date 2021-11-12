@@ -44,6 +44,8 @@ class TwilioService implements TwilioServiceContract {
         $token = config('services.auth_token');
 
         $this->twilio = new Client($sid, $token, $client->twilio_sid);
+
+        return $this;
     }
 
     /**

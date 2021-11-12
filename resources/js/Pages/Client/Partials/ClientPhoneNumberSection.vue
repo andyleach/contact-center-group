@@ -8,17 +8,7 @@
         </div>
     </div>
 
-    <slide-over :open="purchasePhoneNumberModalOpen" v-on:slideOverClosed="this.purchasePhoneNumberModalOpen = false">
-        <template v-slot:title>
-            Purchase Phone Number
-        </template>
-        <template v-slot:description>
-            Search for and purchase a phone number that will be associated with this client.  Purchased
-            phone numbers will be attached to the client's sub-account.
-        </template>
 
-
-    </slide-over>
 </template>
 
 <script>

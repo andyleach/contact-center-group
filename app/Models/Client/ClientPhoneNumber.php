@@ -4,6 +4,7 @@ namespace App\Models\Client;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Client\ClientPhoneNumber
@@ -36,6 +37,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber wherePurchasedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $client_phone_number_status_id
+ * @property string $account_sid The unique identifier for the account this number has been placed under
+ * @property-read \App\Models\Client\Client $client
+ * @property-read \App\Models\Client\ClientPhoneNumberStatus $clientPhoneNumberStatus
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber whereAccountSid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber whereClientPhoneNumberStatusId($value)
+ * @property string $label
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber whereLabel($value)
  */
 class ClientPhoneNumber extends Model
 {
@@ -48,7 +57,15 @@ class ClientPhoneNumber extends Model
      * @var string[] $fillable
      */
     protected $fillable = [
-        'client_id', 'phone_number', 'forward_number', 'call_handling', 'provider_sid', 'provider_id',
-        'purchased_at', 'expires_at'
+        'client_id', 'phone_number', 'client_phone_number_status_id', 'call_handling', 'provider_sid', 'provider_id',
+        'purchased_at', 'account_sid', 'label',
     ];
+
+    public function client(): BelongsTo {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    public function clientPhoneNumberStatus(): BelongsTo {
+        return $this->belongsTo(ClientPhoneNumberStatus::class, 'client_phone_number_status_id');
+    }
 }

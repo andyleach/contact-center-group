@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Services\TwilioService;
+use App\Services\Integrations\TwilioService;
 use Illuminate\Contracts\Validation\Rule;
 use Twilio\Exceptions\TwilioException;
 
@@ -31,6 +31,7 @@ class IsAValidPhoneNumberRule implements Rule
     {
         try {
             $phone_number = $this->integration->lookup($value);
+            return true;
         } catch (TwilioException $exception) {
             return false;
         }

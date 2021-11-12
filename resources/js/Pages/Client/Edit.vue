@@ -36,12 +36,23 @@
                         <jet-button @click="this.purchasePhoneNumberModalOpen = true">Purchase Number</jet-button>
                     </div>
                 </div>
-                <client-phone-number-list :phoneNumbers="this.client_phone_numbers"></client-phone-number-list>
+                <client-phone-number-list :phoneNumbers="this.clientPhoneNumbers"></client-phone-number-list>
             </template>
         </jet-action-section>
 
 
-        <purchase-phone-number-form @selectedPhoneNumberForPurchase="purchasePhoneNumber" />
+        <slide-over :open="purchasePhoneNumberModalOpen" v-on:slideOverClosed="this.purchasePhoneNumberModalOpen = false">
+            <template v-slot:title>
+                Purchase Phone Number
+            </template>
+            <template v-slot:description>
+                Search for and purchase a phone number that will be associated with this client.  Purchased
+                phone numbers will be attached to the client's sub-account.
+            </template>
+
+            <purchase-phone-number-form @selectedPhoneNumberForPurchase="purchasePhoneNumber" />
+        </slide-over>
+
     </app-layout>
 </template>
 
@@ -56,6 +67,8 @@ import JetSectionBorder from '@/Jetstream/SectionBorder'
 import JetButton from '@/Jetstream/Button';
 import ClientPhoneNumberList from "./Partials/ClientPhoneNumberList";
 import PurchasePhoneNumberForm from "./Partials/PurchasePhoneNumberForm";
+import { usePage } from '@inertiajs/inertia-vue3'
+
 export default defineComponent({
     name: "ClientEdit",
     components: {ClientPhoneNumberSection, UpdateClientForm, AppLayout, JetActionSection, SlideOver, JetSectionBorder, JetButton, ClientPhoneNumberList, PurchasePhoneNumberForm },
@@ -65,9 +78,7 @@ export default defineComponent({
     }),
 
     mounted() {
-        if (typeof $page !== "undefined") {
-            this.clientPhoneNumbers = $page.client.clientPhoneNumbers;
-        }
+        this.clientPhoneNumbers = usePage().props.value.client.client_phone_numbers;
     },
 
     methods: {
@@ -77,10 +88,12 @@ export default defineComponent({
          * @param phoneNumber
          */
         purchasePhoneNumber(phoneNumber) {
-            console.log(phoneNumber);
-            /*axios.post('/clients/'+this.client.id +'/purchase-phone-number', {
+            axios.post('/client-phone-numbers', {
+                client_id: usePage().props.value.client.id,
                 phoneNumber: phoneNumber
-            })*/
+            }).then(response => {
+                console.log(response);
+            })
         }
     }
 })

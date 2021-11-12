@@ -37,6 +37,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber wherePurchasedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumber whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $label
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Client\ClientPhoneNumber[] $clientPhoneNumbers
+ * @property-read int|null $client_phone_numbers_count
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientPhoneNumberStatus whereLabel($value)
  */
 class ClientPhoneNumberStatus extends Model
 {

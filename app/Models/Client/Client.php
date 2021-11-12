@@ -31,6 +31,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereTwilioAccountSid($value)
  * @property string $twilio_sid A unique identifier for the sub-account that was created for this client in Twilio
  * @method static \Illuminate\Database\Eloquent\Builder|Client whereTwilioSid($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Client\ClientPhoneNumber[] $clientPhoneNumbers
+ * @property-read int|null $client_phone_numbers_count
  */
 class Client extends Model
 {

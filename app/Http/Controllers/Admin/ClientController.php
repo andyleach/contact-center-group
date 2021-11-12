@@ -62,7 +62,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client): Response
     {
-        $client->load('clientPhoneNumbers');
+        $client->load('clientPhoneNumbers.clientPhoneNumberStatus');
 
         return inertia()->render('Client/Edit', [
             'client' => $client

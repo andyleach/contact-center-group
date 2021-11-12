@@ -23,6 +23,7 @@ class CreateClientPhoneNumbersTable extends Migration
         Schema::create('client_phone_numbers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\Client\Client::class, 'client_id')->constrained();
+            $table->string('label');
             $table->string('phone_number')->index();
             $table->foreignIdFor(\App\Models\Client\ClientPhoneNumberStatus::class, 'client_phone_number_status_id')->constrained();
             $table->enum('call_handling', ['Route To Agent', 'Multi-Dialer']);

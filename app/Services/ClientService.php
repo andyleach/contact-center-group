@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Client\Client;
 use App\Models\Client\ClientPhoneNumber;
 use App\Models\Client\ClientPhoneNumberStatus;
+use App\Models\Provider\Provider;
 use App\Services\Integrations\TwilioService;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
@@ -44,6 +45,7 @@ class ClientService {
             'call_handling' => 'Route To Agent',
             'provider_sid' => $purchasedNumber->sid,
             'account_sid' => $purchasedNumber->accountSid,
+            'provider_id' => Provider::TWILIO,
             'purchased_at' => now()
         ]);
 

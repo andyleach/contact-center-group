@@ -37,7 +37,8 @@ class ClientPhoneNumberController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $query = ClientPhoneNumber::query();
+        $query = ClientPhoneNumber::query()
+            ->with('clientPhoneNumberStatus');
 
         if (request()->has('client_id')) {
             $query->where('client_id', request()->get('client_id'));
@@ -59,7 +60,7 @@ class ClientPhoneNumberController extends Controller
         $client = Client::findOrFail($request->get('client_id'));
 
         try {
-            $clientPhoneNumber = $this->service->purchasePhoneNumber($client, $request->get('phone_number'));
+            $clientPhoneNumber = $this->service->purchasePhoneNumber($client, $request->get('phoneNumber'));
 
             return ClientPhoneNumberResource::make($clientPhoneNumber);
         } catch (\Exception $exception) {
