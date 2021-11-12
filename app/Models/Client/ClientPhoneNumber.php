@@ -43,4 +43,12 @@ class ClientPhoneNumber extends Model
 
     const ROUTE_TO_AGENT = 'Route To Agent';
     const MULTI_DIALER = 'Multi-Dialer';
+
+    /**
+     * @var string[] $fillable
+     */
+    protected $fillable = [
+        'client_id', 'phone_number', 'forward_number', 'call_handling', 'provider_sid', 'provider_id',
+        'purchased_at', 'expires_at'
+    ];
 }

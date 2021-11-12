@@ -1,19 +1,10 @@
 <template>
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200 mt-8">
         <div class="px-4 py-5 sm:px-6">
-            <div class="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
-                <div class="ml-4 mt-2">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">
-                        Client Phone Numbers
-                    </h3>
-                </div>
-                <div class="ml-4 mt-2 flex-shrink-0">
-                    <jet-button @click="this.purchasePhoneNumberModalOpen = true">Purchase Number</jet-button>
-                </div>
-            </div>
+
         </div>
         <div class="">
-            <client-phone-number-list :phoneNumbers="client.client_phone_numbers"></client-phone-number-list>
+
         </div>
     </div>
 
@@ -26,7 +17,7 @@
             phone numbers will be attached to the client's sub-account.
         </template>
 
-        <purchase-phone-number-form @selectedPhoneNumberForPurchase="purchasePhoneNumber" />
+
     </slide-over>
 </template>
 
@@ -42,28 +33,7 @@ export default {
     props: ['client'],
     components: {PurchasePhoneNumberForm, ClientPhoneNumberList, SlideOver, JetButton, JetInput, JetLabel},
 
-    data: () => ({
-        clientPhoneNumbers: [],
-        purchasePhoneNumberModalOpen: false,
-    }),
 
-    mounted() {
-        this.clientPhoneNumbers = this.client.clientPhoneNumbers;
-    },
-
-    methods: {
-
-        /**
-         *
-         * @param phoneNumber
-         */
-        purchasePhoneNumber(phoneNumber) {
-            console.log(phoneNumber);
-            /*axios.post('/clients/'+this.client.id +'/purchase-phone-number', {
-                phoneNumber: phoneNumber
-            })*/
-        }
-    }
 }
 
 </script>

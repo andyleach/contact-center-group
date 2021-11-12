@@ -14,9 +14,34 @@
             </template>
         </jet-action-section>
 
-        <client-phone-number-section :client="$page.props.client"></client-phone-number-section>
+        <jet-section-border />
+
+        <jet-action-section>
+            <template #title>
+                Client Configuration
+            </template>
+
+            <template #description>
+                Update the client's base configuration within our application
+            </template>
+
+            <template #content>
+                <div class="-ml-4 -mt-2 flex mb-4 items-center justify-between flex-wrap sm:flex-nowrap">
+                    <div class="ml-4 mt-2">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                            Client Phone Numbers
+                        </h3>
+                    </div>
+                    <div class="ml-4 mt-2 flex-shrink-0">
+                        <jet-button @click="this.purchasePhoneNumberModalOpen = true">Purchase Number</jet-button>
+                    </div>
+                </div>
+                <client-phone-number-list :phoneNumbers="this.client_phone_numbers"></client-phone-number-list>
+            </template>
+        </jet-action-section>
 
 
+        <purchase-phone-number-form @selectedPhoneNumberForPurchase="purchasePhoneNumber" />
     </app-layout>
 </template>
 
@@ -27,10 +52,37 @@ import AppLayout from "../../Layouts/AppLayout";
 import JetActionSection from '@/Jetstream/ActionSection';
 import SlideOver from "../../Components/SlideOver";
 import ClientPhoneNumberSection from "./Partials/ClientPhoneNumberSection";
-
+import JetSectionBorder from '@/Jetstream/SectionBorder'
+import JetButton from '@/Jetstream/Button';
+import ClientPhoneNumberList from "./Partials/ClientPhoneNumberList";
+import PurchasePhoneNumberForm from "./Partials/PurchasePhoneNumberForm";
 export default defineComponent({
     name: "ClientEdit",
-    components: {ClientPhoneNumberSection, UpdateClientForm, AppLayout, JetActionSection, SlideOver},
+    components: {ClientPhoneNumberSection, UpdateClientForm, AppLayout, JetActionSection, SlideOver, JetSectionBorder, JetButton, ClientPhoneNumberList, PurchasePhoneNumberForm },
+    data: () => ({
+        clientPhoneNumbers: [],
+        purchasePhoneNumberModalOpen: false,
+    }),
+
+    mounted() {
+        if (typeof $page !== "undefined") {
+            this.clientPhoneNumbers = $page.client.clientPhoneNumbers;
+        }
+    },
+
+    methods: {
+
+        /**
+         *
+         * @param phoneNumber
+         */
+        purchasePhoneNumber(phoneNumber) {
+            console.log(phoneNumber);
+            /*axios.post('/clients/'+this.client.id +'/purchase-phone-number', {
+                phoneNumber: phoneNumber
+            })*/
+        }
+    }
 })
 </script>
 
