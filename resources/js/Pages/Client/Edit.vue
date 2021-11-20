@@ -18,7 +18,7 @@
 
         <jet-action-section>
             <template #title>
-                Client Configuration
+                Phone Number Configuration
             </template>
 
             <template #description>
@@ -29,7 +29,7 @@
                 <div class="-ml-4 -mt-2 flex mb-4 items-center justify-between flex-wrap sm:flex-nowrap">
                     <div class="ml-4 mt-2">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">
-                            Client Phone Numbers
+                            Phone Numbers
                         </h3>
                     </div>
                     <div class="ml-4 mt-2 flex-shrink-0">
