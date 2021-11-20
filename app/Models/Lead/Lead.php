@@ -99,7 +99,7 @@ class Lead extends Model
 
     protected $fillable = [
         'client_id', 'lead_type_id', 'customer_id', 'first_name', 'last_name', 'full_name', 'lead_status_id',
-        'lead_disposition_id', 'lead_provider_id', 'meta_data', 'campaign_id'
+        'lead_disposition_id', 'lead_provider_id', 'meta_data', 'campaign_id', 'import_at'
     ];
 
     /**

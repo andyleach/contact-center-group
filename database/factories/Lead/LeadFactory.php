@@ -56,6 +56,36 @@ class LeadFactory extends Factory
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
+    public function forDelayedImport(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'lead_status_id' => LeadStatus::AWAITING_IMPORT,
+                'import_at' => now()->addDays(rand(1,30))
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is suspended.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function asRecentlyImported(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'lead_status_id' => LeadStatus::IMPORT_COMPLETED,
+                'import_at' => now()->subSeconds(rand(1,30)),
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is suspended.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
     public function forImmediateImport(): Factory
     {
         return $this->state(function (array $attributes) {
