@@ -13,7 +13,7 @@ use App\Models\Customer\CustomerPhoneNumber;
 use App\Models\Customer\Customer;
 use App\Models\Lead\Lead;
 use App\Models\Sequence\Sequence;
-use App\Models\LeadList\LeadList;
+use App\Models\Campaign\Campaign;
 
 class CreateLeadsTable extends Migration
 {
@@ -62,7 +62,7 @@ class CreateLeadsTable extends Migration
             $table->string('last_name');
             $table->string('full_name');
             $table->foreignIdFor(Client::class, 'client_id')->constrained();
-            $table->foreignIdFor(LeadList::class, 'lead_list_id')
+            $table->foreignIdFor(Campaign::class, 'campaign_id')
                 ->nullable()->constrained();
             $table->foreignIdFor(LeadType::class, 'lead_type_id')->constrained();
             $table->foreignIdFor(LeadStatus::class, 'lead_status_id')->constrained();

@@ -18,9 +18,9 @@ class CreateSubAccountUnderTwilioListener implements ShouldQueue, ShouldBeUnique
      * @throws TwilioException
      */
     public function handle(ClientCreated $clientCreated) {
-        $account = app(TwilioService::class)->createSubAccount($clientCreated->client->label);
+        /*$account = app(TwilioService::class)->createSubAccount($clientCreated->client->label);
 
         $clientCreated->client->twilio_sid = $account->sid;
-        $clientCreated->client->save();
+        $clientCreated->client->save();*/
     }
 }

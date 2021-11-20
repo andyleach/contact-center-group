@@ -77,7 +77,7 @@ class LeadData extends AbstractDataTransferObject {
      */
     public array $secondary_email_addresses = [];
 
-    public ?int $lead_list_id = null;
+    public ?int $campaign_id = null;
 
     /**
      * @var Carbon $import_at With a lead list, we may not want to import all of our leads at once.  Should another

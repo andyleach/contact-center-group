@@ -22,7 +22,7 @@ class LeadService {
             'lead_disposition_id' => null,
             'lead_type_id' => $data->lead_type_id,
             'lead_provider_id' => $data->lead_provider_id,
-            'lead_list_id' => $data->lead_list_id,
+            'campaign_id' => $data->campaign_id,
         ]);
 
         $phoneNumbers = $data->getAllPhoneNumbers();

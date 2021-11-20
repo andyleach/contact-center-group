@@ -29,8 +29,8 @@ class LeadResource extends JsonResource
             'client_id' => $this->resource->client_id,
             'client' => new ClientResource($this->resource->client),
             // Lead List
-            'lead_list_id' => $this->resource->lead_list_id,
-            'lead_list' => new LeadListResource($this->resource->leadList),
+            'campaign_id' => $this->resource->campaign_id,
+            'campaign' => new CampaignResource($this->resource->campaign),
             // Lead Type
             'lead_type_id' => $this->resource->lead_type_id,
             'lead_type' => new LeadTypeResource($this->resource->leadType),

@@ -6,7 +6,7 @@ use App\Contracts\SupportsSequencingContract;
 use App\Events\Lead\LeadCreated;
 use App\Models\Client\Client;
 use App\Models\Customer\Customer;
-use App\Models\LeadList\LeadList;
+use App\Models\Campaign\Campaign;
 use App\Models\Pivot\LeadSequence;
 use App\Models\Sequence\Sequence;
 use Carbon\Carbon;
@@ -64,7 +64,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array $meta_data
  * @method static Builder|Lead whereMetaData($value)
  * @method static Builder|Lead awaitingImport()
- * @property-read LeadList|null $leadList
+ * @property-read Campaign|null $leadList
  * @method static Builder|Lead readyForImportOnDay(\Carbon\Carbon $dayToBeChecked)
  * @property-read \App\Models\Lead\LeadProvider $leadProvider
  * @property-read Sequence|null $sequence
@@ -99,7 +99,7 @@ class Lead extends Model
 
     protected $fillable = [
         'client_id', 'lead_type_id', 'customer_id', 'first_name', 'last_name', 'full_name', 'lead_status_id',
-        'lead_disposition_id', 'lead_provider_id', 'meta_data', 'lead_list_id'
+        'lead_disposition_id', 'lead_provider_id', 'meta_data', 'campaign_id'
     ];
 
     /**
@@ -125,8 +125,8 @@ class Lead extends Model
         return $this->belongsTo(LeadDisposition::class, 'lead_disposition_id');
     }
 
-    public function leadList(): BelongsTo {
-        return $this->belongsTo(LeadList::class, 'lead_list_id');
+    public function campaign(): BelongsTo {
+        return $this->belongsTo(Campaign::class, 'campaign_id');
     }
 
     public function leadProvider(): BelongsTo {
